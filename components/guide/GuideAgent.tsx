@@ -94,7 +94,7 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
       {open && (
         <section
           aria-label="Guide"
-          className="w-full rounded-2xl border border-line bg-paper-raised p-4 shadow-lg"
+          className="max-h-[55vh] w-full overflow-y-auto rounded-2xl border border-line bg-paper-raised p-4 shadow-lg"
         >
           {HINTS_ENABLED && (
             <div className="mb-3 flex gap-2">

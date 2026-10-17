@@ -9,7 +9,7 @@ export function DebugPanel() {
   const [open, setOpen] = useState(false);
 
   return (
-    <aside className="fixed bottom-4 left-4 z-30 max-w-[calc(100vw-2rem)]">
+    <aside className="fixed bottom-20 left-4 z-30 max-w-[calc(100vw-2rem)]">
       <div className="rounded-2xl border border-line bg-paper-raised/95 p-2 shadow-lg shadow-ink/10 backdrop-blur">
         <button
           type="button"

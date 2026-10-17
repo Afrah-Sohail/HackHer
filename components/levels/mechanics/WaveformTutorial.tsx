@@ -12,7 +12,7 @@ function MiniGrid() {
   const picks = [1, 3, 2, 1];
   return (
     <div
-      className="mx-auto grid w-48 gap-1 rounded-xl bg-ink p-2"
+      className="mx-auto grid w-48 gap-1 rounded-xl bg-void p-2"
       aria-hidden="true"
     >
       {[1, 2, 3].map((channel) => (
@@ -21,7 +21,7 @@ function MiniGrid() {
             <span
               key={step}
               className={`${cell} ${
-                pick === channel ? "bg-copper" : "bg-paper-raised/10"
+                pick === channel ? "bg-copper" : "bg-ink/10"
               }`}
             />
           ))}
@@ -46,7 +46,7 @@ function Legend() {
         </li>
       ))}
       <li className="flex items-center gap-3">
-        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-ink">
+        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-void">
           <span className="h-2 w-2 rounded-full bg-red-500" />
         </span>
         Channel the jammer is blocking

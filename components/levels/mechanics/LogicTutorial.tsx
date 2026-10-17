@@ -34,7 +34,7 @@ function GateCards() {
           key={gate.name}
           className="rounded-xl border border-line bg-paper-raised p-3 text-center"
         >
-          <p className="inline-block rounded-lg bg-ink px-3 py-1 text-sm font-semibold text-paper-raised">
+          <p className="inline-block rounded-lg border border-signal/40 bg-void px-3 py-1 text-sm font-semibold text-ink">
             {gate.name}
           </p>
           <p className="mt-2 text-sm font-medium text-ink">{gate.rule}</p>

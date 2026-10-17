@@ -149,7 +149,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
           : "\u00a0"}
       </p>
 
-      <div className="overflow-x-auto rounded-2xl border border-line bg-ink p-3 text-paper-raised sm:p-4">
+      <div className="overflow-x-auto rounded-2xl border border-line bg-void p-3 text-ink sm:p-4">
         <div
           className="grid min-w-[20rem] gap-1.5"
           style={{
@@ -160,7 +160,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
         >
           <span
             aria-hidden="true"
-            className="self-end text-[10px] tracking-wide text-paper/60 uppercase"
+            className="self-end text-[10px] tracking-wide text-ink-soft uppercase"
           >
             Step
           </span>
@@ -171,7 +171,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
               className={`rounded-md text-center text-xs leading-6 ${
                 phase === "plan" && step === nextStep
                   ? "bg-copper font-semibold text-paper-raised"
-                  : "text-paper/70"
+                  : "text-ink-soft"
               }`}
             >
               {step + 1}
@@ -279,8 +279,8 @@ function ChannelRow({
 
   return (
     <>
-      <span className="flex flex-col justify-center text-xs leading-tight text-paper/80">
-        <span className="font-medium text-paper-raised">Ch {channel}</span>
+      <span className="flex flex-col justify-center text-xs leading-tight text-ink-soft">
+        <span className="font-medium text-ink">Ch {channel}</span>
         <span className="text-[10px]">{frequency} MHz</span>
       </span>
       {STEPS.map((step) => {
@@ -291,10 +291,10 @@ function ChannelRow({
         const outcome =
           selected && result ? (result.ok ? "clear" : "jammed") : null;
 
-        let style = "bg-paper-raised/10 hover:bg-paper-raised/20";
+        let style = "bg-ink/10 hover:bg-ink/20";
         if (selected) style = "bg-copper text-paper-raised";
         if (outcome === "clear") style = "bg-signal text-paper-raised";
-        if (outcome === "jammed") style = "bg-red-700 text-paper-raised";
+        if (outcome === "jammed") style = "bg-red-700 text-white";
         if (selected && previewHere) style += " ring-2 ring-red-400";
 
         return (
@@ -307,7 +307,7 @@ function ChannelRow({
               outcome ? `, ${outcome}` : ""
             }`}
             onClick={() => onPick(step, channel)}
-            className={`relative flex h-9 items-center justify-center rounded-lg text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper-raised disabled:cursor-default ${style}`}
+            className={`relative flex h-9 items-center justify-center rounded-lg text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-default ${style}`}
           >
             {outcome === "clear" && "✓"}
             {outcome === "jammed" && "✕"}

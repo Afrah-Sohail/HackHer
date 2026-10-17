@@ -52,7 +52,7 @@ export function LevelShell({
               ? "Clearing this floor opens the victory screen."
               : "Clearing this floor unlocks the next one."}
         </p>
-        <Button onClick={completeLevel} disabled={!canComplete}>
+        <Button onClick={() => completeLevel()} disabled={!canComplete}>
           Complete Level
         </Button>
       </footer>

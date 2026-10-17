@@ -160,7 +160,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
             }}
             className={`rounded-lg px-4 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-40 ${
               armed === gate
-                ? "bg-ink text-paper-raised ring-2 ring-copper"
+                ? "bg-copper text-paper-raised ring-2 ring-ink"
                 : "border border-line bg-paper-raised text-ink hover:border-ink"
             }`}
           >
@@ -346,7 +346,7 @@ function Board({
             style={place(slot)}
             className={`absolute flex h-11 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1.5 rounded-lg text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
               gate
-                ? "bg-ink text-paper-raised"
+                ? "border-2 border-signal bg-void text-ink"
                 : `border-2 border-dashed bg-paper-raised text-copper ${
                     armed ? "border-copper" : "border-copper/50"
                   }`
@@ -357,7 +357,7 @@ function Board({
               <span
                 aria-hidden="true"
                 className={`h-2 w-2 rounded-full ${
-                  value ? "bg-signal" : "bg-paper-raised/30"
+                  value ? "bg-signal" : "bg-ink/30"
                 }`}
               />
             )}

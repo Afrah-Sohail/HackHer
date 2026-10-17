@@ -4,20 +4,51 @@
   --font-sans: var(--font-outfit), "Avenir Next", "Segoe UI", sans-serif;
   --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --color-ink: #1a1612;
-  --color-ink-soft: #5c5348;
-  --color-paper: #f3eee6;
-  --color-paper-raised: #fffaf3;
-  --color-line: #e0d5c6;
-  --color-copper: #9a4e24;
-  --color-copper-deep: #6f3518;
-  --color-signal: #1b5e54;
-  --color-signal-soft: #e5f3ef;
+  --color-ink: #f4f0ff;
+  --color-ink-soft: #b7aed4;
+  --color-paper: #070414;
+  --color-paper-raised: #140c2e;
+  --color-line: #3d2f6e;
+  --color-copper: #f0c36a;
+  --color-copper-deep: #c9843a;
+  --color-signal: #8ae7ff;
+  --color-signal-soft: #172844;
+  --color-void: #05030f;
+  --animate-steam: steam-rise 3.2s ease-in infinite;
+  --animate-tube: tube-glow 2.4s ease-in-out infinite;
+}
+
+@keyframes steam-rise {
+  0% {
+    transform: translateY(8px) scale(0.8);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(-72px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes tube-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 body {
+  background-color: var(--color-paper);
+  /* Milky Way photo, darkened so text on top stays readable. */
   background-image:
-    radial-gradient(circle at 8% -12%, rgb(154 78 36 / 0.1), transparent 36%),
-    radial-gradient(circle at 100% 0%, rgb(27 94 84 / 0.1), transparent 32%);
+    linear-gradient(rgb(7 4 20 / 0.5), rgb(7 4 20 / 0.72)),
+    url("/milky-way.jpg");
+  background-size: cover;
+  background-position: center;
   background-attachment: fixed;
 }

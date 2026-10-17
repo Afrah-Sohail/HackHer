@@ -37,16 +37,19 @@ export function LevelShell({
     <>
     <PlanetBackdrop planet={story.planet} />
     <article className="overflow-hidden rounded-3xl border border-line bg-paper-raised/75 shadow-sm">
-      <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-line px-5 py-2 sm:px-8">
+      <header className="relative flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-line px-5 py-2 sm:px-8">
         <h1 className="font-display text-xl leading-tight text-ink sm:text-2xl">
           <strong className="font-bold">{level.pioneer}</strong>
           <span className="font-normal">: {level.heading}</span>
         </h1>
+        {/* A popover, so opening it never pushes the game down. */}
         <details className="group text-lg text-ink-soft">
           <summary className="cursor-pointer select-none text-copper hover:text-ink">
             About this level
           </summary>
-          <p className="mt-2 max-w-2xl leading-6">{level.narrative}</p>
+          <p className="absolute top-full right-4 z-20 mt-1 w-[min(28rem,calc(100%-2rem))] rounded-2xl border border-line bg-paper-raised p-4 text-base leading-7 text-ink shadow-xl sm:right-8">
+            {level.narrative}
+          </p>
         </details>
       </header>
       <section aria-label={`${level.mechanicLabel}${isStub ? " shell" : ""}`} className="px-5 py-4 sm:px-8">

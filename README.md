@@ -1,6 +1,6 @@
-# Lost in Computation
+# HackHer
 
-Lost in Computation is a cosmic puzzle game about women who shaped computing. Six short levels each teach one computer science idea through a real pioneer's work: play the puzzle, read the story, and ask **Sparkles**, the unicorn guide, when you want more.
+HackHer is a cosmic puzzle game about women who shaped computing. Six short levels each teach one computer science idea through a real pioneer's work: play the puzzle, read the story, and ask **Sparkles**, the unicorn guide, when you want more.
 
 Play it at [hack-her-two.vercel.app](https://hack-her-two.vercel.app).
 
@@ -56,4 +56,4 @@ On Vercel, add `GEMINI_API_KEY` as an environment variable for Production, then 
 
 ## Credits
 
-Made by Afrah Sohail, Emily New, and Valentina Sanchez-patout.
+This project was made by Afrah Sohail, Emily New, and Valentina Sanchez-patout.

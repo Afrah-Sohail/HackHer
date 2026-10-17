@@ -4,8 +4,9 @@ import { useLayoutEffect, useRef } from "react";
 import { LevelRouter } from "@/components/levels/LevelRouter";
 import { useGame } from "@/state/game-context";
 
-const MIN_ZOOM = 0.55;
-const HEADROOM = 0.96;
+const MIN_ZOOM = 0.7;
+// Room kept for Sparkles' feedback bubble, so the box does not resize when it shows.
+const RESERVE = 90;
 
 // Shrinks the game just enough to fit on one screen, so nobody has to scroll
 // up and down while playing.
@@ -17,7 +18,7 @@ export function GameView() {
     const el = ref.current;
     if (!el) return;
 
-    // The zoom is picked once per level (with a little headroom) and then only
+    // The zoom is picked once per level (with room for the feedback bubble) and then only
     // goes down if a later round really needs it, so the game box stays the
     // same size as you play.
     let locked: number | null = null;
@@ -27,13 +28,11 @@ export function GameView() {
       const room = window.innerHeight - (header?.getBoundingClientRect().height ?? 0);
       // Measure at full size, then pick the zoom (no paint in between).
       el.style.zoom = "1";
-      const need = Math.min(1, Math.max(MIN_ZOOM, room / el.offsetHeight));
-      locked =
-        locked === null
-          ? need < 1
-            ? Math.max(MIN_ZOOM, need * HEADROOM)
-            : 1
-          : Math.min(locked, need);
+      const height = el.offsetHeight;
+      const clamp = (value: number) => Math.min(1, Math.max(MIN_ZOOM, value));
+      // The first fit leaves room for the feedback bubble; after that the zoom
+      // only drops if the content truly no longer fits.
+      locked = locked === null ? clamp(room / (height + RESERVE)) : Math.min(locked, clamp(room / height));
       el.style.zoom = locked < 0.995 ? String(locked) : "1";
     };
 

@@ -95,7 +95,7 @@ export function VictoryScreen() {
             </Speech>
           )}
           <p className="text-center font-display text-3xl text-ink">{score} pts</p>
-          <ul className="grid gap-1 text-sm text-ink-soft sm:grid-cols-2">
+          <ul className="mx-auto grid w-full max-w-md gap-1 text-sm text-ink-soft sm:grid-cols-2 sm:gap-x-10">
             {JOURNEY.map((planet, i) => (
               <li key={planet.planet} className="flex justify-between gap-3">
                 <span className="text-ink">{planet.name}</span>

@@ -5,6 +5,7 @@ import { LEVEL_COUNT } from "@/level-manager/types";
 import { useGame } from "@/state/game-context";
 import { Button } from "@/components/ui/Button";
 import { UnicornSays } from "@/components/guide/Unicorn";
+import { StarConfetti } from "@/components/ui/StarConfetti";
 import { GUIDE_NAME } from "@/guide/config";
 
 export function VictoryScreen() {
@@ -13,6 +14,7 @@ export function VictoryScreen() {
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 sm:py-16">
+      <StarConfetti count={90} seed={11} />
       <p className="text-xs font-medium tracking-[0.18em] text-copper uppercase">
         Level 6 complete
       </p>

@@ -31,27 +31,36 @@ export function TutorialDialog({
         role="dialog"
         aria-modal="true"
         aria-label="How to play"
-        className="max-h-full w-full max-w-lg overflow-y-auto rounded-2xl border-2 border-copper/40 bg-paper-raised p-5 shadow-2xl sm:p-6"
+        className="max-h-full w-full max-w-2xl overflow-y-auto rounded-3xl border-2 border-copper/40 bg-paper-raised p-6 shadow-2xl sm:p-8"
       >
-        <p className="text-xs font-medium tracking-[0.16em] text-copper uppercase">
+        <p className="text-sm font-medium tracking-[0.16em] text-copper uppercase">
           How to play · {index + 1} of {steps.length}
         </p>
-        <h2 className="mt-1 font-display text-2xl text-ink">{step.title}</h2>
-        <div className="my-5">{step.visual}</div>
-        <UnicornSays size={56}>
-          <span className="text-[15px] leading-7">{step.body}</span>
+        <h2 className="mt-1 font-display text-3xl text-ink sm:text-4xl">{step.title}</h2>
+        <div className="my-6" style={{ zoom: 1.3 }}>
+          {step.visual}
+        </div>
+        <UnicornSays size={72}>
+          <span className="text-lg leading-8 sm:text-xl sm:leading-9">{step.body}</span>
         </UnicornSays>
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-          <Button variant="ghost" onClick={onDone}>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+          <Button variant="ghost" className="px-5 py-3 text-lg" onClick={onDone}>
             Skip
           </Button>
           <div className="flex gap-2">
             {index > 0 && (
-              <Button variant="secondary" onClick={() => setIndex(index - 1)}>
+              <Button
+                variant="secondary"
+                className="px-7 py-3 text-lg"
+                onClick={() => setIndex(index - 1)}
+              >
                 Back
               </Button>
             )}
-            <Button onClick={isLast ? onDone : () => setIndex(index + 1)}>
+            <Button
+              className="px-9 py-3 text-lg"
+              onClick={isLast ? onDone : () => setIndex(index + 1)}
+            >
               {isLast ? "Let's play!" : "Next"}
             </Button>
           </div>

@@ -98,8 +98,8 @@ const STEPS: Step[] = [
     title: "How to play",
     body: (
       <>
-        Pick a gate, tap a <strong>dashed slot</strong>. Tap the circles to
-        test. Make every row match!
+        <strong>Drag</strong> a gate onto a dashed slot (or tap a gate, then the
+        slot). Tap the circles to test. Make every row match!
       </>
     ),
     visual: <MiniBoard />,

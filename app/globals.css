@@ -92,3 +92,32 @@ button:not(:disabled):not([data-plain]):active {
     transition: none;
   }
 }
+
+/* Star confetti (components/ui/StarConfetti.tsx) */
+.confetti-star {
+  animation-name: confetti-fall;
+  animation-timing-function: cubic-bezier(0.25, 0.6, 0.5, 1);
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+  line-height: 1;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translate3d(0, -12vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--sway), 112vh, 0) rotate(var(--rot));
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti-star {
+    display: none;
+  }
+}

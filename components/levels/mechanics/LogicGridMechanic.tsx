@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { UnicornSays } from "@/components/guide/Unicorn";
 import { LogicTutorial } from "./LogicTutorial";
@@ -18,6 +18,19 @@ import {
 } from "./logic-rules";
 
 const GATES: Gate[] = ["AND", "OR", "NOT"];
+
+type Drag = {
+  gate: Gate;
+  /** Slot the gate came from, or null when dragged from the toolbox. */
+  fromSlot: string | null;
+  startX: number;
+  startY: number;
+  x: number;
+  y: number;
+  moved: boolean;
+  /** Slot currently under the pointer. */
+  over: string | null;
+};
 
 function Dot({ on }: { on: boolean | null }) {
   if (on === null) {
@@ -41,6 +54,9 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
   const [switches, setSwitches] = useState<Record<string, boolean>>({});
   const [message, setMessage] = useState<string | null>(null);
   const [showTutorial, setShowTutorial] = useState(true);
+  const [drag, setDrag] = useState<Drag | null>(null);
+  const dragRef = useRef<Drag | null>(null);
+  const suppressClick = useRef(false);
   const closeTutorial = useCallback(() => setShowTutorial(false), []);
 
   const round = ROUNDS[roundIndex];
@@ -48,34 +64,130 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
   const solved = isSolved(round, placed);
   const live = evaluate(round, placed, withDefaults(round, switches));
 
-  function placeGate(slotId: string) {
-    const slot = round.slots.find((s) => s.id === slotId);
+  // Put `gate` in a slot (used by both tap-to-place and drag-and-drop).
+  // `fromSlot` is set when an already-placed gate is being moved.
+  function tryPlace(slotId: string, gate: Gate, fromSlot: string | null = null) {
+    const slot = round.slots.find((item) => item.id === slotId);
     if (!slot || solved) return;
 
+    if (GATE_ARITY[gate] !== slot.from.length) {
+      setMessage(
+        gate === "NOT"
+          ? "NOT takes one wire. This slot has two."
+          : `${gate} needs two wires. This slot has one.`,
+      );
+      return;
+    }
+
+    const next = { ...placed, [slotId]: gate };
+    if (fromSlot && fromSlot !== slotId) next[fromSlot] = null;
+    setPlaced(next);
+    setMessage(null);
+    if (isLastRound && isSolved(round, next)) onCleared?.();
+  }
+
+  // Tap flow: pick a gate, then tap a slot (or tap a filled slot to empty it).
+  function placeGate(slotId: string) {
+    if (suppressClick.current || solved) return;
     if (!armed) {
       if (placed[slotId]) {
         setPlaced({ ...placed, [slotId]: null });
         setMessage(null);
       } else {
-        setMessage("Pick a gate first.");
+        setMessage("Drag a gate onto the slot.");
       }
       return;
     }
-
-    if (GATE_ARITY[armed] !== slot.from.length) {
-      setMessage(
-        armed === "NOT"
-          ? "NOT takes one wire. This slot has two."
-          : `${armed} needs two wires. This slot has one.`,
-      );
-      return;
-    }
-
-    const next = { ...placed, [slotId]: armed };
-    setPlaced(next);
-    setMessage(null);
-    if (isLastRound && isSolved(round, next)) onCleared?.();
+    tryPlace(slotId, armed);
   }
+
+  // Drag flow: pointer events work for mouse and touch.
+  function startDrag(
+    event: ReactPointerEvent,
+    gate: Gate,
+    fromSlot: string | null,
+  ) {
+    if (solved || event.button !== 0) return;
+    const next: Drag = {
+      gate,
+      fromSlot,
+      startX: event.clientX,
+      startY: event.clientY,
+      x: event.clientX,
+      y: event.clientY,
+      moved: false,
+      over: null,
+    };
+    dragRef.current = next;
+    setDrag(next);
+  }
+
+  function finishDrop(d: Drag, target: string | null) {
+    if (target) {
+      tryPlace(target, d.gate, d.fromSlot);
+    } else if (d.fromSlot) {
+      // Dragged a placed gate off the board: take it out.
+      setPlaced((prev) => ({ ...prev, [d.fromSlot as string]: null }));
+      setMessage(null);
+    }
+  }
+
+  const dropRef = useRef(finishDrop);
+  useEffect(() => {
+    dropRef.current = finishDrop;
+  });
+
+  const dragging = drag !== null;
+  useEffect(() => {
+    if (!dragging) return;
+    const slotAt = (x: number, y: number) =>
+      document
+        .elementFromPoint(x, y)
+        ?.closest("[data-slot]")
+        ?.getAttribute("data-slot") ?? null;
+
+    const onMove = (event: PointerEvent) => {
+      const d = dragRef.current;
+      if (!d) return;
+      const moved =
+        d.moved ||
+        Math.hypot(event.clientX - d.startX, event.clientY - d.startY) > 8;
+      const next: Drag = {
+        ...d,
+        x: event.clientX,
+        y: event.clientY,
+        moved,
+        over: moved ? slotAt(event.clientX, event.clientY) : null,
+      };
+      dragRef.current = next;
+      setDrag(next);
+    };
+    const onUp = (event: PointerEvent) => {
+      const d = dragRef.current;
+      dragRef.current = null;
+      setDrag(null);
+      // A press without movement is a normal tap; the click handlers deal with it.
+      if (!d || !d.moved) return;
+      suppressClick.current = true;
+      setTimeout(() => {
+        suppressClick.current = false;
+      }, 0);
+      dropRef.current(d, slotAt(event.clientX, event.clientY));
+    };
+    const onCancel = () => {
+      dragRef.current = null;
+      setDrag(null);
+    };
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onCancel);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onCancel);
+    };
+  }, [dragging]);
 
   function nextRound() {
     const next = ROUNDS[roundIndex + 1];
@@ -130,11 +242,15 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
               type="button"
               aria-pressed={armed === gate}
               disabled={solved}
+              onPointerDown={(event) => startDrag(event, gate, null)}
+              onDragStart={(event) => event.preventDefault()}
               onClick={() => {
+                if (suppressClick.current) return;
                 setArmed(armed === gate ? null : gate);
                 setMessage(null);
               }}
-              className={`rounded-2xl px-8 py-4 text-xl font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-40 ${
+              style={{ cursor: solved ? "default" : "grab" }}
+              className={`touch-none select-none rounded-2xl px-8 py-4 text-xl font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-40 ${
                 armed === gate
                   ? "bg-copper text-paper-raised ring-4 ring-ink"
                   : "border-2 border-line bg-paper-raised text-ink hover:border-ink"
@@ -144,7 +260,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
             </button>
           ))}
           <span className="text-base text-ink-soft">
-            {armed ? "Now tap a slot ↓" : "Pick a gate"}
+            {armed ? "Now tap a slot ↓" : "Drag a gate onto a slot ↓"}
           </span>
         </div>
 
@@ -154,11 +270,25 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
           signals={live}
           switches={switches}
           armed={armed}
+          dragGate={drag?.moved ? drag.gate : null}
+          dragOver={drag?.moved ? drag.over : null}
+          dragFrom={drag?.moved ? drag.fromSlot : null}
           onSwitch={(id) =>
             setSwitches((prev) => ({ ...prev, [id]: !prev[id] }))
           }
           onSlot={placeGate}
+          onSlotPointerDown={startDrag}
         />
+
+        {drag?.moved && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none fixed z-[80] -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 border-signal bg-void px-8 py-4 text-xl font-semibold text-ink shadow-2xl"
+            style={{ left: drag.x, top: drag.y }}
+          >
+            {drag.gate}
+          </div>
+        )}
 
         <p className="min-h-6 text-base text-copper" aria-live="polite">
           {message ?? " "}
@@ -240,16 +370,28 @@ function Board({
   signals,
   switches,
   armed,
+  dragGate,
+  dragOver,
+  dragFrom,
   onSwitch,
   onSlot,
+  onSlotPointerDown,
 }: {
   round: Round;
   placed: Placed;
   signals: Signals;
   switches: Record<string, boolean>;
   armed: Gate | null;
+  dragGate: Gate | null;
+  dragOver: string | null;
+  dragFrom: string | null;
   onSwitch: (id: string) => void;
   onSlot: (id: string) => void;
+  onSlotPointerDown: (
+    event: ReactPointerEvent,
+    gate: Gate,
+    fromSlot: string | null,
+  ) => void;
 }) {
   const pos: Record<string, { x: number; y: number }> = {};
   for (const input of round.inputs) pos[input.id] = input;
@@ -325,18 +467,32 @@ function Board({
       {round.slots.map((slot) => {
         const gate = placed[slot.id];
         const value = signals[slot.id];
+        const fits = dragGate !== null && GATE_ARITY[dragGate] === slot.from.length;
+        const hovering = dragOver === slot.id;
+        const dragRing = hovering
+          ? fits
+            ? "ring-4 ring-signal"
+            : "ring-4 ring-red-500"
+          : fits
+            ? "ring-2 ring-copper/70"
+            : "";
         return (
           <button
             key={slot.id}
             type="button"
+            data-slot={slot.id}
+            onPointerDown={gate ? (event) => onSlotPointerDown(event, gate, slot.id) : undefined}
+            onDragStart={(event) => event.preventDefault()}
             onClick={() => onSlot(slot.id)}
             aria-label={`Slot ${slot.id}: ${gate ?? "empty"}`}
-            style={place(slot)}
-            className={`absolute flex h-14 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-2 rounded-2xl text-xl font-semibold transition sm:h-16 sm:w-28 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
+            style={{ ...place(slot), ...(gate ? { cursor: "grab" } : {}) }}
+            className={`${gate ? "touch-none select-none" : ""} absolute flex h-14 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-2 rounded-2xl text-xl font-semibold transition sm:h-16 sm:w-28 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${dragRing} ${
+              dragFrom === slot.id ? "opacity-40" : ""
+            } ${
               gate
                 ? "border-2 border-signal bg-void text-ink"
                 : `border-2 border-dashed bg-paper-raised text-copper ${
-                    armed ? "border-copper" : "border-copper/50"
+                    armed || fits ? "border-copper" : "border-copper/50"
                   }`
             }`}
           >

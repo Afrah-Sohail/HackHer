@@ -52,3 +52,43 @@ body {
   background-position: center;
   background-attachment: fixed;
 }
+
+/* Tactile feedback for every real button: lift on hover, press on click.
+   Static labels (see components/ui/Tag.tsx) deliberately get none of this. */
+button {
+  transition:
+    transform 140ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  button:not(:disabled):not([data-plain]):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgb(240 195 106 / 0.2);
+    filter: brightness(1.08);
+  }
+}
+
+button:not(:disabled):not([data-plain]):active {
+  transform: translateY(1px) scale(0.96);
+  box-shadow: none;
+  filter: brightness(0.95);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button {
+    transition: none;
+  }
+}

@@ -15,6 +15,7 @@ export function GameHeader() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <button
             type="button"
+            data-plain
             onClick={showWelcome}
             className="font-display text-2xl tracking-tight text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-copper"
           >
@@ -27,7 +28,7 @@ export function GameHeader() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="rounded-full bg-ink px-2.5 py-1 text-xs font-medium tracking-wide text-paper-raised">
+          <span className="text-xs font-semibold tracking-[0.14em] text-copper uppercase">
             {inLobby ? "Lobby" : clearedArchive ? "Archive clear" : `Level ${level.floor}`}
           </span>
           <span className="font-medium text-ink">

@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { UnicornSays } from "@/components/guide/Unicorn";
 import { LogicTutorial } from "./LogicTutorial";
 import {
   GATE_ARITY,
@@ -184,14 +185,16 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
         <div className="flex flex-wrap items-center gap-3">
           {solved ? (
             <>
-              <p className="text-sm leading-6 text-signal" aria-live="polite">
-                <strong>
-                  {isLastRound
-                    ? "Cipher cracked! Level cleared."
-                    : "Circuit works!"}
-                </strong>{" "}
-                <span className="text-ink-soft">{round.lesson}</span>
-              </p>
+              <UnicornSays tone="happy" className="w-full">
+                <span aria-live="polite" className="block">
+                  <strong className="text-signal">
+                    {isLastRound
+                      ? "Cipher cracked! Level cleared."
+                      : "Circuit works!"}
+                  </strong>{" "}
+                  <span className="text-ink-soft">{round.lesson}</span>
+                </span>
+              </UnicornSays>
               {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
             </>
           ) : (
@@ -347,17 +350,18 @@ function Board({
 
       <div
         style={place(round.outputPos)}
-        className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1"
+        className="pointer-events-none absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 select-none"
       >
+        <span className="text-[10px] tracking-wide text-ink-soft uppercase">Output</span>
         <span
           role="img"
           aria-label={`${round.outputLabel}: ${
             outputOn === null ? "not connected" : outputOn ? "on" : "off"
           }`}
-          className={`h-9 w-9 rounded-full border-2 transition ${
+          className={`h-9 w-9 rounded-full transition ${
             outputOn
-              ? "border-signal bg-signal shadow-[0_0_16px_var(--color-signal)]"
-              : "border-line bg-paper-raised"
+              ? "bg-signal shadow-[0_0_20px_var(--color-signal)]"
+              : "bg-ink/10 shadow-[inset_0_2px_6px_rgb(0_0_0/0.5)]"
           }`}
         />
         <span className="max-w-20 text-center text-[11px] leading-tight text-ink-soft">

@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Tag } from "@/components/ui/Tag";
+import { UnicornSays } from "@/components/guide/Unicorn";
 import { WaveformTutorial } from "./WaveformTutorial";
 import {
   CHANNEL_COUNT,
@@ -144,12 +146,12 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
             className="flex items-center gap-2 text-sm font-medium text-ink"
             aria-hidden="true"
           >
-            <span className="rounded-full bg-signal/20 px-3 py-1">📡 Sender</span>
+            <Tag tone="signal" size="md">📡 Sender</Tag>
             <span className="flex-1 border-t-2 border-dashed border-copper/60" />
             <span className="text-copper">▶</span>
-            <span className="rounded-full bg-signal/20 px-3 py-1">
+            <Tag tone="signal" size="md">
               🚀 Receiver
-            </span>
+            </Tag>
           </div>
           <p className="mt-3 text-[15px] leading-6 text-ink">
             <strong className="text-copper">Your goal:</strong> choose one
@@ -299,27 +301,28 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
           )}
           {phase === "result" && delivered && (
             <>
-              <p className="text-sm leading-6 text-signal" aria-live="polite">
-                <strong>
-                  {isLastRound
-                    ? "Message delivered through every jammer! Level cleared."
-                    : "Message delivered!"}
-                </strong>{" "}
-                <span className="text-ink-soft">{round.lesson}</span>
-              </p>
+              <UnicornSays tone="happy" className="w-full">
+                <span aria-live="polite" className="block">
+                  <strong className="text-signal">
+                    {isLastRound
+                      ? "Message delivered through every jammer! Level cleared."
+                      : "Message delivered!"}
+                  </strong>{" "}
+                  <span className="text-ink-soft">{round.lesson}</span>
+                </span>
+              </UnicornSays>
               {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
             </>
           )}
           {phase === "result" && !delivered && (
             <>
-              <p
-                className="text-sm leading-6 text-copper-deep"
-                aria-live="polite"
-              >
-                <strong>Jammed!</strong>{" "}
-                {describeFailure(results[firstFailure], firstFailure)} ⚡ marks
-                everything it blocked.
-              </p>
+              <UnicornSays tone="oops" className="w-full">
+                <span aria-live="polite" className="block">
+                  <strong className="text-copper">Jammed!</strong>{" "}
+                  {describeFailure(results[firstFailure], firstFailure)} ⚡ marks
+                  everything it blocked.
+                </span>
+              </UnicornSays>
               <Button onClick={editPattern}>Try again</Button>
             </>
           )}

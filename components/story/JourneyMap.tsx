@@ -35,6 +35,8 @@ type MapProps = {
   travel?: Travel;
   /** You have made it to the end of the line. */
   atHome?: boolean;
+  /** Cap the height, so a scene with the map fits on one screen. */
+  compact?: boolean;
 };
 
 const SPARKS = Array.from({ length: 10 }, (_, i) => {
@@ -275,7 +277,11 @@ function MapSvg({
 export function JourneyMap(props: MapProps) {
   return (
     <>
-      <MapSvg {...props} layout="wide" className="hidden w-full md:block" />
+      <MapSvg
+        {...props}
+        layout="wide"
+        className={`hidden w-full md:block ${props.compact ? "mx-auto max-h-[34vh]" : ""}`}
+      />
       <MapSvg {...props} layout="tall" className="mx-auto block w-full max-w-sm md:hidden" />
     </>
   );

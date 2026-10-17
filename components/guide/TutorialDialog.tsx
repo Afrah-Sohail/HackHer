@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
+import { BodyPortal } from "@/components/ui/BodyPortal";
 import { UnicornSays } from "./Unicorn";
 
 export type TutorialStep = { title: string; body: ReactNode; visual: ReactNode };
@@ -26,6 +27,7 @@ export function TutorialDialog({
   }, [onDone]);
 
   return (
+    <BodyPortal>
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-void/80 p-4 backdrop-blur-sm">
       <section
         role="dialog"
@@ -76,5 +78,6 @@ export function TutorialDialog({
         </div>
       </section>
     </div>
+    </BodyPortal>
   );
 }

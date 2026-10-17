@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { JourneyMap, type Travel } from "@/components/story/JourneyMap";
-import { Speech } from "@/components/story/Speech";
+import { ArrivalChat } from "@/components/story/ArrivalChat";
 import { JOURNEY } from "@/story/journey";
 import { useGame } from "@/state/game-context";
 
@@ -83,28 +83,18 @@ export function TravelScreen() {
   );
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col justify-center gap-6 px-4 py-8 sm:px-6">
-      <JourneyMap current={to} completed={completed} unlocked={unlocked} travel={travel} />
+    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col justify-center gap-3 px-4 py-4 sm:px-6">
+      <JourneyMap current={to} completed={completed} unlocked={unlocked} travel={travel} compact />
 
       <p
-        className="text-center font-display text-2xl text-ink sm:text-3xl"
+        className="text-center font-display text-xl text-ink sm:text-2xl"
         aria-live="polite"
       >
         {status}
       </p>
 
       {landed ? (
-        <div className="mx-auto grid w-full max-w-2xl gap-3">
-          <Speech speaker="you">Not again! Ugh. Okay, I&apos;m on {destination.name}.</Speech>
-          <Speech speaker="sparkles">
-            Don&apos;t worry! Someone here can help you fix it!
-          </Speech>
-          <div className="mt-2 flex justify-center">
-            <Button className="px-10 py-3.5 text-lg" onClick={arrive}>
-              Look around {destination.name} →
-            </Button>
-          </div>
-        </div>
+        <ArrivalChat index={to} onDone={arrive} />
       ) : (
         <div className="flex justify-center">
           <Button

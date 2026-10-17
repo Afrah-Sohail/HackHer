@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type CSSProperties } from "react";
+import { BodyPortal } from "@/components/ui/BodyPortal";
 
 const COLORS = [
   "text-copper",
@@ -46,6 +47,7 @@ export function StarConfetti({ count = 44, seed = 7 }: { count?: number; seed?: 
   }));
 
   return (
+    <BodyPortal>
     <div
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-[70] overflow-hidden"
@@ -69,5 +71,6 @@ export function StarConfetti({ count = 44, seed = 7 }: { count?: number; seed?: 
         </span>
       ))}
     </div>
+    </BodyPortal>
   );
 }

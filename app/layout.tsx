@@ -15,7 +15,7 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   title: "HackHer",
   description:
-    "Six floors of computing history, from Ada Lovelace to Adele Goldberg.",
+    "Six levels of computing history, from Ada Lovelace to Adele Goldberg.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

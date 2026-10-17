@@ -187,7 +187,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
               <p className="text-sm leading-6 text-signal" aria-live="polite">
                 <strong>
                   {isLastRound
-                    ? "Cipher cracked! Floor cleared."
+                    ? "Cipher cracked! Level cleared."
                     : "Circuit works!"}
                 </strong>{" "}
                 <span className="text-ink-soft">{round.lesson}</span>

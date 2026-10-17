@@ -37,7 +37,7 @@ export const LEVELS = [
     pioneer: "Joan Clarke",
     concept: "Logic Gates (AND / OR / NOT)",
     narrative:
-      "Joan Clarke was a cryptanalyst at Bletchley Park, where ciphers were broken by strict logical rules. This floor is the board those rules will be built on.",
+      "Joan Clarke was a cryptanalyst at Bletchley Park, where ciphers were broken by strict logical rules. This level is the board those rules will be built on.",
     blurb:
       "Did you know a codebreaker helped crack Nazi messages at Bletchley Park? Joan Clarke used sharp **logic** to break Enigma ciphers. Computers still run on that kind of thinking: **AND, OR and NOT** gates that turn simple yes/no rules into big decisions. 🔐✨",
     mechanicId: "logic-grid",

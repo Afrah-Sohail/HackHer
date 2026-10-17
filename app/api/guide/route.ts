@@ -22,9 +22,12 @@ function buildPrompt(
 
   if (mode === "background") {
     return (
-      `${context}\n\nWrite 2 or 3 short paragraphs (about 150 words total) ` +
-      `about who ${level.pioneer} was, why her work mattered, and how it ` +
-      `connects to the concept "${level.concept}". End with one surprising fact.`
+      `${context}\n\nWrite about 60 words, in at most 3 short sentences or one ` +
+      `short paragraph, about ${level.pioneer}. Open with a surprising, ` +
+      `attention-grabbing hook, then say in plain words what she did and why ` +
+      `it still matters today (tie it to "${level.concept}"). Do not greet the ` +
+      `player or say "Welcome". Keep it upbeat, a little playful, and easy to ` +
+      `read for a 12 to 16 year old.`
     );
   }
 
@@ -75,6 +78,7 @@ export async function POST(request: Request) {
           "Content-Type": "application/json",
           "x-goog-api-key": apiKey,
         },
+        signal: AbortSignal.timeout(20000),
         body: JSON.stringify({
           systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
           contents: [
@@ -85,7 +89,7 @@ export async function POST(request: Request) {
           ],
           generationConfig: {
             temperature: 0.7,
-            maxOutputTokens: 500,
+            maxOutputTokens: 2000,
             thinkingConfig: { thinkingBudget: 0 },
           },
         }),
@@ -97,8 +101,14 @@ export async function POST(request: Request) {
     }
 
     const data = (await response.json()) as {
-      candidates?: { content?: { parts?: { text?: string }[] } }[];
+      candidates?: {
+        finishReason?: string;
+        content?: { parts?: { text?: string }[] };
+      }[];
     };
+    if (data.candidates?.[0]?.finishReason !== "STOP") {
+      return Response.json({ error: "Guide was cut off." }, { status: 502 });
+    }
     const text = data.candidates?.[0]?.content?.parts
       ?.map((part) => part.text ?? "")
       .join("")

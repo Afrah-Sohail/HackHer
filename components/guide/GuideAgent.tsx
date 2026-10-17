@@ -51,7 +51,7 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
     setFailed(false);
 
     if (nextTab === "background") {
-      const cacheKey = `guide:background:${level.slug}`;
+      const cacheKey = `guide:background:v2:${level.slug}`;
       const cached = readCache(cacheKey);
       if (cached) {
         setText(cached);

@@ -5,7 +5,7 @@ import { LevelRouter } from "@/components/levels/LevelRouter";
 import { useGame } from "@/state/game-context";
 
 const MIN_ZOOM = 0.55;
-const HEADROOM = 0.9;
+const HEADROOM = 0.96;
 
 // Shrinks the game just enough to fit on one screen, so nobody has to scroll
 // up and down while playing.
@@ -53,7 +53,7 @@ export function GameView() {
   }, [level.index]);
 
   return (
-    <div ref={ref} className="mx-auto w-full max-w-6xl px-4 py-3 sm:px-6">
+    <div ref={ref} className="mx-auto w-full max-w-[1400px] px-4 py-3 sm:px-6">
       <LevelRouter level={level} />
     </div>
   );

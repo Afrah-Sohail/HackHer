@@ -34,7 +34,7 @@ export type LevelDefinition = {
   mechanicLabel: string;
 };
 
-export type GameScreen = "welcome" | "playing" | "travel" | "victory";
+export type GameScreen = "welcome" | "opening" | "playing" | "travel" | "victory";
 
 export function isLevelIndex(index: number): index is LevelIndex {
   return Number.isInteger(index) && index >= 0 && index < LEVEL_COUNT;

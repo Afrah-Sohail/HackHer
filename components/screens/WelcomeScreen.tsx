@@ -22,8 +22,8 @@ export function WelcomeScreen() {
       </p>
 
       <p className="mt-5 max-w-2xl text-base leading-7 text-ink-soft sm:text-lg sm:leading-8">
-        You&apos;re an alien stuck in our solar system, and your rocket keeps breaking
-        down. On every planet, a real woman who shaped computing teaches you
+        You&apos;re an alien who flew in to study the Sun, but on the way home your
+        rocket keeps breaking down. On every planet, a real woman who shaped computing teaches you
         her big idea, and you use it to fix the rocket.
       </p>
 

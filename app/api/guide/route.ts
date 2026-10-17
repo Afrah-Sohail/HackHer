@@ -30,10 +30,10 @@ function buildPrompt(
   topic: LearnTopic,
 ): string {
   const context =
-    `Floor ${level.floor}: ${level.title}\n` +
+    `Level ${level.floor}: ${level.title}\n` +
     `Pioneer: ${level.pioneer}\n` +
     `Concept: ${level.concept}\n` +
-    `Floor story: ${level.narrative}`;
+    `Level story: ${level.narrative}`;
 
   if (mode === "learn") {
     const facts = FACTS[level.slug][topic].map((fact) => `- ${fact}`).join("\n");
@@ -41,7 +41,7 @@ function buildPrompt(
       `${context}\n\nThe player already read this overview, so do not repeat it:\n` +
       `${level.blurb}\n\nVERIFIED FACTS (the only facts you may use):\n${facts}\n\n` +
       `Write about 60 words on ${TOPIC_BRIEF[topic]} (subject: ${level.pioneer}). ` +
-      `Use ONLY the verified facts above; the floor details at the top are for orientation only, so take no claims from them and make no claims about modern technology unless a fact says so. Do not add any name, date, number, ` +
+      `Use ONLY the verified facts above; the level details at the top are for orientation only, so take no claims from them and make no claims about modern technology unless a fact says so. Do not add any name, date, number, ` +
       `quote or claim that is not in that list, and do not guess. Pick the 2 or 3 ` +
       `most interesting facts. Open with a hook, no greeting, no "Welcome". Keep it ` +
       `upbeat, a little playful, and easy to read for a 12 to 16 year old. ` +
@@ -54,7 +54,7 @@ function buildPrompt(
       ? "a gentle nudge that only points the player toward the right way of thinking"
       : "a more specific hint that narrows the approach";
   return (
-    `${context}\n\nThe player is stuck on this floor's puzzle (mechanic: ` +
+    `${context}\n\nThe player is stuck on this level's puzzle (mechanic: ` +
     `${level.mechanicLabel}). Give ${strength} in at most 2 sentences. ` +
     `Never give the full solution.`
   );

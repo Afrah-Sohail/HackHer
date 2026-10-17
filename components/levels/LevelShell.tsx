@@ -17,16 +17,16 @@ export function LevelShell({
   canComplete?: boolean;
 }) {
   const { completeLevel } = useGame();
-  // Floors with a real game pass canComplete; stub floors leave it unset.
+  // Levels with a real game pass canComplete; stub levels leave it unset.
   const isStub = canCompleteProp === undefined;
   const canComplete = canCompleteProp ?? true;
-  const isFinalFloor = level.floor === 6;
+  const isFinalLevel = level.floor === 6;
 
   return (
     <article className="overflow-hidden rounded-3xl border border-line bg-paper-raised shadow-sm">
       <header className="border-b border-line px-5 py-6 sm:px-8">
         <p className="text-xs font-medium tracking-[0.18em] text-copper uppercase">
-          Floor {level.floor}
+          Level {level.floor}
         </p>
         <h1 className="mt-2 font-display text-3xl leading-tight text-ink sm:text-4xl">
           {level.title}
@@ -47,10 +47,10 @@ export function LevelShell({
       <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-line bg-paper px-5 py-4 sm:px-8">
         <p className="text-sm text-ink-soft">
           {!canComplete
-            ? "Win the challenge above to clear this floor."
-            : isFinalFloor
-              ? "Clearing this floor opens the victory screen."
-              : "Clearing this floor unlocks the next one."}
+            ? "Win the challenge above to clear this level."
+            : isFinalLevel
+              ? "Clearing this level opens the victory screen."
+              : "Clearing this level unlocks the next one."}
         </p>
         <Button onClick={() => completeLevel()} disabled={!canComplete}>
           Complete Level

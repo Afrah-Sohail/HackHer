@@ -302,7 +302,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
               <p className="text-sm leading-6 text-signal" aria-live="polite">
                 <strong>
                   {isLastRound
-                    ? "Message delivered through every jammer! Floor cleared."
+                    ? "Message delivered through every jammer! Level cleared."
                     : "Message delivered!"}
                 </strong>{" "}
                 <span className="text-ink-soft">{round.lesson}</span>

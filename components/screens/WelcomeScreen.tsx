@@ -18,11 +18,11 @@ export function WelcomeScreen() {
         HackHer
       </h1>
       <p className="mt-3 text-sm font-medium tracking-[0.2em] text-copper uppercase">
-        ✦ Climb six floors, meet six pioneers ✦
+        ✦ Climb six levels, meet six pioneers ✦
       </p>
 
       <p className="mt-6 max-w-md text-base leading-7 text-ink-soft sm:text-lg sm:leading-8">
-        Every floor is a puzzle game built around a real breakthrough by a woman
+        Every level is a puzzle game built around a real breakthrough by a woman
         who shaped computing. Crack secret codes, hop radio signals and wire up
         logic with Ada, Hedy, Joan and more, and pick up the big ideas behind
         them along the way. No experience needed, just curiosity.

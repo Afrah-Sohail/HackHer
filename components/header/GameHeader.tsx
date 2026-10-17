@@ -23,22 +23,22 @@ export function GameHeader() {
           <p className="text-sm text-ink-soft">
             <span className="font-medium text-ink">{score}</span> pts
             <span className="px-2 text-line">/</span>
-            {cleared}/{LEVEL_COUNT} floors
+            {cleared}/{LEVEL_COUNT} levels
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <span className="rounded-full bg-ink px-2.5 py-1 text-xs font-medium tracking-wide text-paper-raised">
-            {inLobby ? "Lobby" : clearedArchive ? "Archive clear" : `Floor ${level.floor}`}
+            {inLobby ? "Lobby" : clearedArchive ? "Archive clear" : `Level ${level.floor}`}
           </span>
           <span className="font-medium text-ink">
-            {inLobby ? "Choose a floor" : level.pioneer}
+            {inLobby ? "Choose a level" : level.pioneer}
           </span>
           {inLobby ? null : <ConceptBadge label={level.concept} />}
         </div>
         <div
           className="h-1 overflow-hidden rounded-full bg-line"
           role="meter"
-          aria-label="Floors cleared"
+          aria-label="Levels cleared"
           aria-valuemin={0}
           aria-valuemax={LEVEL_COUNT}
           aria-valuenow={cleared}

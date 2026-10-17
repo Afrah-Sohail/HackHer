@@ -235,7 +235,7 @@ export function AnalyticalEngineGame({ level }: { level: LevelDefinition }) {
       <header className="flex flex-wrap items-end justify-between gap-4 border-b border-line px-5 py-5 sm:px-8">
         <div>
           <p className="text-xs font-medium tracking-[0.18em] text-copper uppercase">
-            Floor {level.floor} · {level.pioneer}
+            Level {level.floor} · {level.pioneer}
           </p>
           <h1 className="mt-1 font-display text-3xl text-ink sm:text-4xl">
             The Analytical Engine

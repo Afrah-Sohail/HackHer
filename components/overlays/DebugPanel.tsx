@@ -38,7 +38,7 @@ export function DebugPanel() {
                       : "bg-paper text-ink hover:bg-signal-soft"
                   }`}
                 >
-                  Floor {level.floor}
+                  Level {level.floor}
                 </button>
               );
             })}

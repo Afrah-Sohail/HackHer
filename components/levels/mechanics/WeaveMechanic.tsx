@@ -437,7 +437,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
             <>
               <p className="text-sm leading-6 text-signal" aria-live="polite">
                 <strong>
-                  {isLastRound ? "Tapestry complete! Floor cleared." : "Perfect weave!"}
+                  {isLastRound ? "Tapestry complete! Level cleared." : "Perfect weave!"}
                 </strong>{" "}
                 <span className="text-ink-soft">{round.lesson}</span>
               </p>

@@ -30,7 +30,8 @@ export const JOURNEY: readonly PlanetStory[] = [
     problem: "The autopilot repeats tiny steps one by one, and froze.",
     arrival: [
       { speaker: "narrator", text: "🔥 Your rocket sputters and crash-lands on Mercury." },
-      { speaker: "you", text: "The Sun scan was soooo cool! But KABOOM, we're crashing on Mercury, hold my antennae! Ouch, my bum! The autopilot does everything one teeny step at a time, and now it's frozen." },
+      { speaker: "you", text: "The Sun scan was soooo cool! But KABOOM, we're crashing on Mercury, hold my antennae! Ouch, my bum!" },
+      { speaker: "you", text: "Okay, let me poke around... aha! The autopilot does everything one teeny step at a time, and now it's frozen." },
       {
         speaker: "woman",
         text: "Oh, you poor thing, welcome to Mercury! I'm Ada Lovelace. Let's get you fixed up. A machine follows a list of steps, and a loop repeats them for you, just like a loom. Come, I'll show you how to program the autopilot.",

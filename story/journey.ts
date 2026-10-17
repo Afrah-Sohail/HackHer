@@ -34,7 +34,7 @@ export const JOURNEY: readonly PlanetStory[] = [
       { speaker: "you", text: "Okay, let me poke around... aha! The autopilot does everything one teeny step at a time, and now it's frozen." },
       {
         speaker: "woman",
-        text: "Oh, you poor thing, welcome to Mercury! I'm Ada Lovelace. Let's get you fixed up. A machine follows a list of steps, and a loop repeats them for you, just like a loom. Come, I'll show you how to program the autopilot.",
+        text: "Welcome to Mercury! I'm Ada Lovelace. I've been thinking about machines like yours for a long time. A machine follows a list of steps, and a loop repeats them for you, just like a loom. Let me show you how to program your autopilot.",
       },
       { speaker: "sparkles", text: "Ooh, I love a good loom! You've got this, I'm right here." },
     ],
@@ -50,7 +50,7 @@ export const JOURNEY: readonly PlanetStory[] = [
       { speaker: "you", text: "Bleep bloop, my radio is just screaming static! Mom's gonna ground me if I can't call home!" },
       {
         speaker: "woman",
-        text: "Welcome to Venus, dear traveler! I'm Hedy Lamarr. Don't worry about the storms. If a jammer can't guess your channel, it can't block you, so we'll hop between channels together and get your signal through.",
+        text: "Welcome to Venus! I'm Hedy Lamarr. Those storms are a nuisance, but this is a problem I know well. If a jammer can't guess your channel, it can't block you. Let's hop between channels and get your signal through.",
       },
       { speaker: "sparkles", text: "Hopping is my specialty! Let's hop that signal through." },
     ],
@@ -66,7 +66,7 @@ export const JOURNEY: readonly PlanetStory[] = [
       { speaker: "you", text: "Yikes, the ignition lock is all scrambled. I tried the code '1234' and it laughed at me." },
       {
         speaker: "woman",
-        text: "Hello there, welcome to Mars! I'm Joan Clarke. Tea's on, and the lock is no trouble at all. We cracked secret codes with a little logic: AND, OR and NOT. Let's wire up the gates together.",
+        text: "Welcome to Mars! I'm Joan Clarke. A scrambled lock is a puzzle I enjoy. We cracked secret codes with careful logic: AND, OR and NOT. Let's wire up the gates and see what opens it.",
       },
       { speaker: "sparkles", text: "Logic puzzles are the best. You've totally got this!" },
     ],
@@ -82,7 +82,7 @@ export const JOURNEY: readonly PlanetStory[] = [
       { speaker: "you", text: "The flight computer lost its numbers. Which way is home?" },
       {
         speaker: "woman",
-        text: "Welcome to Jupiter, friend! We're Katherine Johnson, Dorothy Vaughan and Mary Jackson, so glad you dropped in. A function is a rule that turns one number into another. Let's find the rule, and we'll find your way home.",
+        text: "Welcome to Jupiter! We're Katherine Johnson, Dorothy Vaughan and Mary Jackson. Numbers are our trade. A function is a rule that turns one number into another. Find the rule, and you'll find your way home.",
       },
       { speaker: "sparkles", text: "Three brilliant women! I'll stand here looking sparkly." },
     ],
@@ -98,7 +98,7 @@ export const JOURNEY: readonly PlanetStory[] = [
       { speaker: "you", text: "Beep beep BEEP! Every alarm is going off and I think one of them is just my snack timer!" },
       {
         speaker: "woman",
-        text: "Welcome to Saturn, sweetheart! I'm Margaret Hamilton. Those alarms sound scary, but we can sort it out. When memory runs short, we run the most important jobs first. That's a priority queue.",
+        text: "Welcome to Saturn! I'm Margaret Hamilton. Alarms are never fun, but they're solvable. When memory runs short, run the most important jobs first. That's a priority queue.",
       },
       { speaker: "sparkles", text: "I can't press buttons, but I can shout 'critical jobs first!' very loudly." },
     ],
@@ -114,7 +114,7 @@ export const JOURNEY: readonly PlanetStory[] = [
       { speaker: "you", text: "My repair bots are in a tangle. One is vacuuming the ceiling and nobody knows who's supposed to fix the engine!" },
       {
         speaker: "woman",
-        text: "Welcome to Uranus, I'm so happy you're here! I'm Adele Goldberg. Those bots just need a little guidance. A class is a blueprint, and objects are built from it. Give them a blueprint and they'll work together.",
+        text: "Welcome to Uranus! I'm Adele Goldberg. Your bots are missing a design, not a repair. A class is a blueprint, and objects are built from it. Give them a blueprint and they'll work together.",
       },
       { speaker: "sparkles", text: "I love the bots! Moral support only, sorry." },
     ],

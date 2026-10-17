@@ -73,17 +73,25 @@ function finishLevel(
   };
 }
 
+function isFreshGame(state: GameState): boolean {
+  return !state.levels.some((level) => level.completed);
+}
+
 export function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case "start": {
       const index = action.index ?? firstPlayableIndex(state.levels);
       // A brand-new game opens at the Sun, before the rocket breaks down.
-      if (action.index === undefined && !state.levels.some((level) => level.completed)) {
+      if (action.index === undefined && isFreshGame(state)) {
         return { ...enterLevel(state, index), screen: "opening" };
       }
       return enterLevel(state, index);
     }
     case "select-level":
+      // Tapping Mercury on a fresh game also plays the Sun opening.
+      if (action.index === 0 && isFreshGame(state)) {
+        return { ...enterLevel(state, 0), screen: "opening" };
+      }
       return enterLevel(state, action.index);
     case "complete-level":
       return finishLevel(state, state.currentLevelIndex, action.score);

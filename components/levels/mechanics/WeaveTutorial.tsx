@@ -91,9 +91,11 @@ const STEPS: Step[] = [
     title: "The loop shortcut",
     body: (
       <>
-        Short on chips? Add a <strong>🔁 Repeat block</strong>. Tap it to open
-        it, drop threads inside, then choose how many times to repeat. Four
-        chips can weave a very long pattern!
+        Short on chips? Tap chips on your punch card to{" "}
+        <strong>select</strong> them, then tap{" "}
+        <strong>🔁 Repeat these</strong>. Use the <strong>− and +</strong>{" "}
+        buttons to choose how many times to repeat. Four chips can weave a very
+        long pattern!
       </>
     ),
     visual: <LoopDemo />,

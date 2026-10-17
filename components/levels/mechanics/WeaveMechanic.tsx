@@ -58,6 +58,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
   const [roundIndex, setRoundIndex] = useState(0);
   const [cards, setCards] = useState<Card[]>([]);
   const [focusId, setFocusId] = useState<number | null>(null);
+  const [selected, setSelected] = useState<number[]>([]);
   const [phase, setPhase] = useState<Phase>("build");
   const [revealed, setRevealed] = useState(0);
   const [message, setMessage] = useState<string | null>(null);
@@ -117,23 +118,71 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
     setFocusId(id);
   }
 
-  function removeCard(id: number) {
+  function removeBlock(id: number) {
     if (phase !== "build") return;
     setCards((prev) => prev.filter((card) => card.id !== id));
     setFocusId((current) => (current === id ? null : current));
+    setSelected([]);
     setMessage(null);
   }
 
-  function removeBodyThread(cardId: number, bodyId: number) {
+  function toggleSelect(id: number) {
+    if (phase !== "build") return;
+    setMessage(null);
+    setSelected((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
+    );
+  }
+
+  function removeSelected() {
     if (phase !== "build") return;
     setCards((prev) =>
-      prev.map((card) =>
-        card.id === cardId && card.kind === "repeat"
-          ? { ...card, body: card.body.filter((item) => item.id !== bodyId) }
-          : card,
-      ),
+      prev
+        .filter((card) => !(card.kind === "thread" && selected.includes(card.id)))
+        .map((card) =>
+          card.kind === "repeat"
+            ? { ...card, body: card.body.filter((item) => !selected.includes(item.id)) }
+            : card,
+        ),
     );
+    setSelected([]);
     setMessage(null);
+  }
+
+  // Wrap the selected main-card threads into a new Repeat block.
+  function repeatSelected() {
+    if (phase !== "build" || !round.repeatAvailable) return;
+    const picked = cards.filter(
+      (card): card is Extract<Card, { kind: "thread" }> =>
+        card.kind === "thread" && selected.includes(card.id),
+    );
+    if (picked.length === 0 || picked.length !== selected.length) {
+      setMessage(
+        "Select thread chips on the main card (not inside a Repeat block) to repeat them.",
+      );
+      return;
+    }
+    if (used + 1 > round.budget) {
+      setMessage(
+        "Out of chips! A Repeat block costs 1 chip too. Remove a chip first.",
+      );
+      return;
+    }
+    const firstIndex = cards.findIndex((card) => card.id === picked[0].id);
+    const block: Card = {
+      id: nextId.current++,
+      kind: "repeat",
+      times: MIN_REPEAT,
+      body: picked.map((card) => ({ id: card.id, thread: card.thread })),
+    };
+    setCards((prev) => {
+      const rest = prev.filter((card) => !picked.some((item) => item.id === card.id));
+      rest.splice(Math.min(firstIndex, rest.length), 0, block);
+      return rest;
+    });
+    setSelected([]);
+    setFocusId(null);
+    setMessage("Now choose how many times to repeat with the − and + buttons.");
   }
 
   function changeTimes(id: number, delta: number) {
@@ -157,6 +206,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
     }
     setMessage(null);
     setFocusId(null);
+    setSelected([]);
     setRevealed(0);
     setPhase("weaving");
   }
@@ -170,6 +220,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
     setRoundIndex((index) => index + 1);
     setCards([]);
     setFocusId(null);
+    setSelected([]);
     setRevealed(0);
     setMessage(null);
     setPhase("build");
@@ -298,7 +349,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
           className="min-h-24 rounded-2xl border border-line bg-paper p-3"
         >
           <p className="mb-2 text-[10px] tracking-wide text-ink-soft uppercase">
-            2. Your punch card (tap a chip to remove it)
+            2. Your punch card (tap chips to select them)
           </p>
           {cards.length === 0 && (
             <p className="text-sm text-ink-soft">
@@ -312,9 +363,12 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
                   key={card.id}
                   type="button"
                   disabled={locked}
-                  onClick={() => removeCard(card.id)}
-                  aria-label={`Remove ${THREADS[card.thread].name} thread`}
-                  className={`flex h-10 w-10 items-center justify-center rounded-lg text-lg transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${THREADS[card.thread].className}`}
+                  aria-pressed={selected.includes(card.id)}
+                  onClick={() => toggleSelect(card.id)}
+                  aria-label={`${THREADS[card.thread].name} thread (tap to select)`}
+                  className={`flex h-10 w-10 items-center justify-center rounded-lg text-lg transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${THREADS[card.thread].className} ${
+                    selected.includes(card.id) ? "-translate-y-1 ring-2 ring-ink" : ""
+                  }`}
                 >
                   {THREADS[card.thread].symbol}
                 </button>
@@ -327,43 +381,33 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
                       : "border-copper/40"
                   }`}
                 >
-                  <div className="mb-2 flex flex-wrap items-center gap-2 text-xs">
-                    <button
-                      type="button"
-                      disabled={locked}
-                      aria-pressed={focusId === card.id}
-                      onClick={() =>
-                        setFocusId((current) => (current === card.id ? null : card.id))
-                      }
-                      className="font-semibold text-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper"
-                    >
-                      🔁 Repeat
-                    </button>
+                  <div className="mb-2 flex flex-wrap items-center gap-2 text-sm">
+                    <span className="font-semibold text-copper">🔁 Repeat</span>
                     <button
                       type="button"
                       disabled={locked || card.times <= MIN_REPEAT}
                       onClick={() => changeTimes(card.id, -1)}
                       aria-label="Repeat fewer times"
-                      className="h-6 w-6 rounded-md border border-line text-ink disabled:opacity-40"
+                      className="h-8 w-8 rounded-lg border border-line text-lg text-ink transition hover:border-copper disabled:opacity-30"
                     >
                       −
                     </button>
-                    <span className="min-w-6 text-center font-semibold text-ink">
-                      ×{card.times}
+                    <span className="min-w-14 text-center font-semibold text-ink">
+                      ×{card.times} times
                     </span>
                     <button
                       type="button"
                       disabled={locked || card.times >= MAX_REPEAT}
                       onClick={() => changeTimes(card.id, 1)}
                       aria-label="Repeat more times"
-                      className="h-6 w-6 rounded-md border border-line text-ink disabled:opacity-40"
+                      className="h-8 w-8 rounded-lg border border-line text-lg text-ink transition hover:border-copper disabled:opacity-30"
                     >
                       +
                     </button>
                     <button
                       type="button"
                       disabled={locked}
-                      onClick={() => removeCard(card.id)}
+                      onClick={() => removeBlock(card.id)}
                       aria-label="Remove repeat block"
                       className="ml-1 text-ink-soft hover:text-ink"
                     >
@@ -376,9 +420,12 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
                         key={item.id}
                         type="button"
                         disabled={locked}
-                        onClick={() => removeBodyThread(card.id, item.id)}
-                        aria-label={`Remove ${THREADS[item.thread].name} thread from repeat block`}
-                        className={`flex h-10 w-10 items-center justify-center rounded-lg text-lg hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${THREADS[item.thread].className}`}
+                        aria-pressed={selected.includes(item.id)}
+                        onClick={() => toggleSelect(item.id)}
+                        aria-label={`${THREADS[item.thread].name} thread in repeat block (tap to select)`}
+                        className={`flex h-10 w-10 items-center justify-center rounded-lg text-lg transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${THREADS[item.thread].className} ${
+                          selected.includes(item.id) ? "-translate-y-1 ring-2 ring-ink" : ""
+                        }`}
                       >
                         {THREADS[item.thread].symbol}
                       </button>
@@ -387,19 +434,58 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
                       <span className="text-xs text-ink-soft">
                         {focusId === card.id
                           ? "Tap a thread above to add it in here"
-                          : "Tap 🔁 Repeat to add threads in here"}
+                          : "Empty block"}
                       </span>
                     )}
                   </div>
-                  {focusId === card.id && card.body.length > 0 && (
-                    <p className="mt-2 text-[11px] text-copper">
-                      Adding here. Tap 🔁 Repeat again to go back to the main card.
-                    </p>
-                  )}
+                  <button
+                    type="button"
+                    disabled={locked}
+                    aria-pressed={focusId === card.id}
+                    onClick={() =>
+                      setFocusId((current) => (current === card.id ? null : card.id))
+                    }
+                    className={`mt-2 rounded-lg px-2.5 py-1 text-xs font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
+                      focusId === card.id
+                        ? "bg-copper text-paper-raised"
+                        : "border border-copper/60 text-copper hover:bg-copper/10"
+                    }`}
+                  >
+                    {focusId === card.id ? "✓ Done adding" : "+ Add threads here"}
+                  </button>
                 </div>
               ),
             )}
           </div>
+
+          {selected.length > 0 && phase === "build" && (
+            <div
+              className="mt-3 flex flex-wrap items-center gap-2 rounded-xl bg-copper/10 p-2"
+              role="group"
+              aria-label="Selected chips"
+            >
+              <span className="text-xs text-copper">{selected.length} selected:</span>
+              {round.repeatAvailable && (
+                <Button className="px-3 py-1.5 text-xs" onClick={repeatSelected}>
+                  🔁 Repeat these
+                </Button>
+              )}
+              <Button
+                variant="secondary"
+                className="px-3 py-1.5 text-xs"
+                onClick={removeSelected}
+              >
+                Remove
+              </Button>
+              <Button
+                variant="ghost"
+                className="px-3 py-1.5 text-xs"
+                onClick={() => setSelected([])}
+              >
+                Deselect
+              </Button>
+            </div>
+          )}
         </div>
 
         <p className="min-h-5 text-sm text-copper" aria-live="polite">
@@ -417,6 +503,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
                 onClick={() => {
                   setCards([]);
                   setFocusId(null);
+                  setSelected([]);
                   setMessage(null);
                 }}
                 disabled={cards.length === 0}
@@ -449,7 +536,8 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
               <p className="text-sm leading-6 text-copper" aria-live="polite">
                 <strong>Not quite.</strong>{" "}
                 {describeMismatch(woven, round.target, mismatch)} Red outlines mark
-                the wrong threads.
+                the wrong threads.{cards.some((card) => card.kind === "repeat") &&
+                  " Tip: check how many times your 🔁 block repeats (− and +)."}
               </p>
               <Button onClick={tryAgain}>Try again</Button>
             </>

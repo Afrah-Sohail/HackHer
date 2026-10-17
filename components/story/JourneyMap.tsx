@@ -77,6 +77,7 @@ function MapSvg({
   const { w, h } = VIEW[layout];
   const R = PLANET_RADIUS;
   const uid = `-${layout}`;
+  const started = completed.some(Boolean) || Boolean(travel);
 
   let pose: { x: number; y: number; angle: number } | null = null;
   const trail: { x: number; y: number; r: number; o: number }[] = [];
@@ -92,7 +93,8 @@ function MapSvg({
       }
     }
   } else {
-    const spot = pts[atHome ? 7 : Math.min(current, 5) + 1];
+    // Before any planet is fixed, the rocket is still parked at the Sun.
+    const spot = pts[atHome ? 7 : started ? Math.min(current, 5) + 1 : 0];
     pose = { x: spot.x + R * 0.95, y: spot.y - R * 1.05, angle: 24 };
   }
 
@@ -119,8 +121,8 @@ function MapSvg({
       </defs>
 
       {Array.from({ length: 7 }, (_, i) => {
-        // The first stretch (Sun to the first planet) is always flown.
-        const flown = i === 0 || completed[i - 1];
+        // The first stretch (Sun to the first planet) is flown once you have left.
+        const flown = i === 0 ? started || Boolean(atHome) : completed[i - 1];
         return (
           <path
             key={i}

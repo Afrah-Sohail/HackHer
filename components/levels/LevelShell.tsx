@@ -10,11 +10,16 @@ import { GuideAgent } from "@/components/guide/GuideAgent";
 export function LevelShell({
   level,
   children,
+  canComplete: canCompleteProp,
 }: {
   level: LevelDefinition;
   children: ReactNode;
+  canComplete?: boolean;
 }) {
   const { completeLevel } = useGame();
+  // Floors with a real game pass canComplete; stub floors leave it unset.
+  const isStub = canCompleteProp === undefined;
+  const canComplete = canCompleteProp ?? true;
   const isFinalFloor = level.floor === 6;
 
   return (
@@ -35,17 +40,25 @@ export function LevelShell({
       </header>
       <section aria-label={level.mechanicLabel} className="px-5 py-6 sm:px-8">
         <p className="mb-4 text-xs font-medium tracking-[0.16em] text-ink-soft uppercase">
-          {level.mechanicLabel} shell
+          {level.mechanicLabel}{isStub ? " shell" : ""}
         </p>
         {children}
       </section>
       <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-line bg-paper px-5 py-4 sm:px-8">
         <p className="text-sm text-ink-soft">
-          {isFinalFloor
-            ? "Clearing this floor opens the victory screen."
-            : "Clearing this floor unlocks the next one."}
+          {!canComplete
+            ? "Win the challenge above to clear this floor."
+            : isFinalFloor
+              ? "Clearing this floor opens the victory screen."
+              : "Clearing this floor unlocks the next one."}
         </p>
+<<<<<<< HEAD
         <Button onClick={() => completeLevel()}>Complete Level</Button>
+=======
+        <Button onClick={() => completeLevel()} disabled={!canComplete}>
+          Complete Level
+        </Button>
+>>>>>>> origin/main
       </footer>
       <GuideAgent key={level.slug} level={level} />
     </article>

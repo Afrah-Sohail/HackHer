@@ -44,6 +44,7 @@
 
 body {
   background-color: var(--color-paper);
+<<<<<<< HEAD
   background-image:
     radial-gradient(1px 1px at 7% 14%, rgb(255 255 255 / 0.9), transparent 1px),
     radial-gradient(1px 1px at 18% 68%, rgb(255 255 255 / 0.7), transparent 1px),
@@ -57,5 +58,13 @@ body {
     radial-gradient(ellipse at 12% -8%, rgb(118 52 190 / 0.55), transparent 46%),
     radial-gradient(ellipse at 88% 0%, rgb(28 78 170 / 0.42), transparent 42%),
     radial-gradient(ellipse at 50% 115%, rgb(156 42 120 / 0.38), transparent 52%);
+=======
+  /* Milky Way photo, darkened so text on top stays readable. */
+  background-image:
+    linear-gradient(rgb(7 4 20 / 0.5), rgb(7 4 20 / 0.72)),
+    url("/milky-way.jpg");
+  background-size: cover;
+  background-position: center;
+>>>>>>> origin/main
   background-attachment: fixed;
 }

@@ -20,14 +20,16 @@ export function WelcomeScreen() {
         HackHer
       </h1>
       <p className="mt-3 text-sm font-medium tracking-[0.2em] text-copper uppercase">
-        ✦ Climb six levels, meet six pioneers ✦
+        ✦ Six levels, eight pioneers ✦
       </p>
 
-      <p className="mt-6 max-w-md text-base leading-7 text-ink-soft sm:text-lg sm:leading-8">
-        Every level is a puzzle game built around a real breakthrough by a woman
-        who shaped computing. Crack secret codes, hop radio signals and wire up
-        logic with Ada, Hedy, Joan and more, and pick up the big ideas behind
-        them along the way. No experience needed, just curiosity.
+      <p className="mt-6 max-w-xl text-base leading-7 text-ink-soft sm:text-lg sm:leading-8">
+        Six short puzzle games, each inspired by real women who shaped
+        computing. Weave patterns with loops (Ada), hop past a radio jammer
+        (Hedy), wire up logic gates (Joan), find the rule behind a rocket
+        launch (the Hidden Figures), keep Apollo&apos;s computer running
+        (Margaret) and build with classes and objects (Adele). No experience
+        needed, just curiosity.
       </p>
 
       <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ink-soft">

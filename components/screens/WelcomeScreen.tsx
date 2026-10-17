@@ -18,7 +18,7 @@ export function WelcomeScreen() {
         Lost in Computation
       </h1>
       <p className="mt-3 text-sm font-medium tracking-[0.2em] text-copper uppercase">
-        Fly home
+        Flying home: a (very bumpy) space odyssey
       </p>
 
       <p className="mt-5 max-w-2xl text-base leading-7 text-ink-soft sm:text-lg sm:leading-8">

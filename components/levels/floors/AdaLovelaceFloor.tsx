@@ -1,14 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import type { LevelDefinition } from "@/level-manager/types";
-import { AnalyticalEngineGame } from "@/components/levels/mechanics/AnalyticalEngineGame";
-import { GuideAgent } from "@/components/guide/GuideAgent";
+import { LevelShell } from "@/components/levels/LevelShell";
+import { WeaveMechanic } from "@/components/levels/mechanics/WeaveMechanic";
 
 export function AdaLovelaceFloor({ level }: { level: LevelDefinition }) {
+  const [cleared, setCleared] = useState(false);
+
   return (
-    <>
-      <AnalyticalEngineGame level={level} />
-      <GuideAgent key={level.slug} level={level} />
-    </>
+    <LevelShell level={level} canComplete={cleared}>
+      <WeaveMechanic onCleared={() => setCleared(true)} />
+    </LevelShell>
   );
 }

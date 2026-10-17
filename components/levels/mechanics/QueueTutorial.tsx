@@ -56,10 +56,9 @@ const STEPS: Step[] = [
     title: "The mission",
     body: (
       <>
-        <strong>Margaret Hamilton</strong> led the team that wrote the software
-        for the Apollo spacecraft. Its computer had{" "}
-        <strong>very little memory</strong>, so it could not run everything at
-        once. Your job: decide what runs first.
+        <strong>Margaret Hamilton</strong> wrote Apollo&apos;s software for a
+        computer with <strong>very little memory</strong>. Decide what runs
+        first!
       </>
     ),
     visual: (
@@ -69,13 +68,11 @@ const STEPS: Step[] = [
     ),
   },
   {
-    title: "How a priority queue works",
+    title: "The queue",
     body: (
       <>
-        The computer goes down the <strong>queue</strong> from the top. Each job
-        needs some <strong>memory squares</strong>. If a job still fits, it
-        runs. If it doesn&apos;t, it gets <strong>dropped</strong>. So the jobs
-        at the top get the memory first.
+        The computer runs jobs from the <strong>top</strong>. If a job
+        doesn&apos;t fit in memory, it gets <strong>dropped</strong>.
       </>
     ),
     visual: <MemoryDemo />,
@@ -84,10 +81,8 @@ const STEPS: Step[] = [
     title: "How to play",
     body: (
       <>
-        Use the <strong>▲ and ▼</strong> buttons to reorder the queue. Put the
-        most important jobs on top so they never get dropped. The green and red
-        tags show what would run. When every must-run job is safe, press{" "}
-        <strong>Run the computer</strong>.
+        Use <strong>▲ ▼</strong> to reorder. Keep the must-run jobs safe, then
+        press <strong>Run</strong>.
       </>
     ),
     visual: <QueueDemo />,

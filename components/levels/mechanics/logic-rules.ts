@@ -30,7 +30,7 @@ export const ROUNDS: readonly Round[] = [
   {
     title: "The double check",
     story:
-      "The codebreaking machine should only stop when BOTH clues are true. Wire up the rule.",
+      "Stop the machine only when BOTH clues are true.",
     inputs: [
       { id: "A", label: "Letters match", x: 10, y: 18 },
       { id: "B", label: "Rotors match", x: 10, y: 42 },
@@ -40,12 +40,12 @@ export const ROUNDS: readonly Round[] = [
     outputLabel: "Stop machine",
     outputPos: { x: 90, y: 30 },
     target: (v) => v.A && v.B,
-    lesson: "AND is strict: it only turns on when every input is on.",
+    lesson: "AND needs both.",
   },
   {
     title: "Either clue",
     story:
-      "A guess stays alive if EITHER clue fits. Just one is enough to keep checking it.",
+      "Keep the guess if EITHER clue fits.",
     inputs: [
       { id: "A", label: "Fits spot 1", x: 10, y: 18 },
       { id: "B", label: "Fits spot 2", x: 10, y: 42 },
@@ -55,24 +55,24 @@ export const ROUNDS: readonly Round[] = [
     outputLabel: "Keep guess",
     outputPos: { x: 90, y: 30 },
     target: (v) => v.A || v.B,
-    lesson: "OR is relaxed: it turns on when at least one input is on.",
+    lesson: "OR needs just one.",
   },
   {
     title: "Never itself",
     story:
-      "Fun fact: the Enigma machine never turned a letter into itself. So if a guess makes a letter match itself, it must be wrong. Throw it out!",
+      "Enigma never turned a letter into itself. Toss those guesses!",
     inputs: [{ id: "A", label: "Letter maps to itself", x: 10, y: 30 }],
     slots: [{ id: "g1", from: ["A"], x: 50, y: 30 }],
     outputFrom: "g1",
     outputLabel: "Keep guess",
     outputPos: { x: 90, y: 30 },
     target: (v) => !v.A,
-    lesson: "NOT flips a signal: on becomes off, and off becomes on.",
+    lesson: "NOT flips it.",
   },
   {
     title: "The full rule",
     story:
-      "Put it all together. Keep a guess if (the crib fits spot 1 OR spot 2) AND the letter does NOT map to itself.",
+      "Keep a guess if A or B fits, and not C.",
     inputs: [
       { id: "A", label: "Fits spot 1", x: 8, y: 14 },
       { id: "B", label: "Fits spot 2", x: 8, y: 30 },
@@ -87,8 +87,7 @@ export const ROUNDS: readonly Round[] = [
     outputLabel: "Keep guess",
     outputPos: { x: 92, y: 35 },
     target: (v) => (v.A || v.B) && !v.C,
-    lesson:
-      "Big decisions are just small gates chained together. That's how every computer works.",
+    lesson: "Small gates chained together make big decisions.",
   },
 ];
 

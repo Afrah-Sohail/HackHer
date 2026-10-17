@@ -61,10 +61,11 @@ const STEPS: Step[] = [
     body: (
       <>
         It&apos;s World War II. Your radio-controlled torpedo is being{" "}
-        <strong>jammed</strong>: the enemy blasts noise on your channel so
-        your signal never arrives. Hedy Lamarr&apos;s clever fix: don&apos;t
-        stay on one channel. <strong>Hop</strong> between channels so the
-        jammer can never keep up.
+        <strong>jammed</strong>: the enemy blasts noise on your channel so your
+        signal never arrives. <strong>Hedy Lamarr</strong>, a Hollywood star
+        and self-taught inventor, had a clever fix: don&apos;t stay on one
+        channel. <strong>Hop</strong> between channels so the jammer can never
+        keep up.
       </>
     ),
     visual: (
@@ -77,10 +78,8 @@ const STEPS: Step[] = [
     title: "How to play",
     body: (
       <>
-        Each <strong>column</strong> is one moment in time (a step). In every
-        column, tap <strong>one channel</strong> to say where your signal will
-        be at that moment. Fill all 8 columns, then press{" "}
-        <strong>Transmit</strong>.
+        Each column is a step. Tap <strong>one channel</strong> per column,
+        then press <strong>Transmit</strong>.
       </>
     ),
     visual: <MiniGrid />,
@@ -89,11 +88,8 @@ const STEPS: Step[] = [
     title: "Beat the jammer",
     body: (
       <>
-        Every round the jammer follows a rule, shown above the grid. If you
-        land on a channel it&apos;s blocking, that step gets jammed. Clear all
-        8 steps to win the round. Stuck? Switch on{" "}
-        <strong>Show jammer&apos;s next move</strong> to see what it&apos;ll
-        block.
+        <strong>⚡</strong> marks channels the jammer blocks. Land on a clear
+        one every step.
       </>
     ),
     visual: <Legend />,

@@ -28,7 +28,8 @@ export function LevelShell({
           Level {level.floor}
         </p>
         <h1 className="mt-1 font-display text-2xl leading-tight text-ink sm:text-3xl">
-          {level.title}
+          <strong className="font-bold">{level.pioneer}</strong>
+          <span className="font-normal">: {level.heading}</span>
         </h1>
         <div className="mt-3">
           <details className="group text-sm text-ink-soft">

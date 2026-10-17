@@ -63,11 +63,9 @@ const STEPS: Step[] = [
     title: "The mission",
     body: (
       <>
-        It&apos;s the early days of the space race. Mathematicians like{" "}
-        <strong>Katherine Johnson</strong>, <strong>Dorothy Vaughan</strong>{" "}
-        and <strong>Mary Jackson</strong> worked out where a rocket must be at
-        every moment. Your job: find the <strong>rule</strong> behind
-        mission control&apos;s numbers.
+        <strong>Katherine Johnson</strong>, <strong>Dorothy Vaughan</strong> and{" "}
+        <strong>Mary Jackson</strong> found the math behind rocket flights.
+        Find the <strong>rule</strong> behind mission control&apos;s numbers!
       </>
     ),
     visual: (
@@ -77,13 +75,11 @@ const STEPS: Step[] = [
     ),
   },
   {
-    title: "Meet the function machine",
+    title: "The function machine",
     body: (
       <>
-        A <strong>function</strong> is a machine: you feed in an{" "}
-        <strong>input</strong> (the second after liftoff), it applies a{" "}
-        <strong>rule</strong>, and out comes an <strong>output</strong> (the
-        altitude). Put in the same input and you always get the same output.
+        Put in a number, a <strong>rule</strong> changes it, and a new number
+        comes out. Same input, same output.
       </>
     ),
     visual: <MachineDemo />,
@@ -92,10 +88,9 @@ const STEPS: Step[] = [
     title: "How to play",
     body: (
       <>
-        Use the <strong>− and +</strong> buttons to change the numbers in the
-        machine. Compare <strong>Needed</strong> with <strong>Yours</strong> in
-        the table, and watch your dots on the graph. When every row matches,
-        press <strong>Launch</strong>!
+        Change the numbers with <strong>− +</strong> until{" "}
+        <strong>Yours</strong> matches <strong>Needed</strong>. Then press
+        Launch!
       </>
     ),
     visual: <TableDemo />,

@@ -70,10 +70,8 @@ const STEPS: Step[] = [
     title: "The mission",
     body: (
       <>
-        You&apos;re at <strong>Bletchley Park</strong>, where codebreakers like
-        Joan Clarke cracked secret messages using strict logic. Every decision
-        came down to simple rules: &quot;if this AND that, then…&quot;. Your
-        job: build circuits that follow the rules.
+        <strong>Joan Clarke</strong> cracked codes at Bletchley Park using
+        strict logic. Build circuits that follow the rules!
       </>
     ),
     visual: (
@@ -83,12 +81,11 @@ const STEPS: Step[] = [
     ),
   },
   {
-    title: "Meet the logic gates",
+    title: "Meet the gates",
     body: (
       <>
-        Signals are either <strong>ON</strong> or <strong>OFF</strong>. A gate
-        takes signals in and decides what comes out. These three are all you
-        need.
+        Signals are <strong>ON</strong> or <strong>OFF</strong>. Gates decide
+        what comes out.
       </>
     ),
     visual: <GateCards />,
@@ -97,10 +94,8 @@ const STEPS: Step[] = [
     title: "How to play",
     body: (
       <>
-        Pick a gate, then <strong>tap an empty slot</strong> (the dashed box)
-        to place it. Tap the switches on the left to test your circuit. The
-        table shows what the circuit <em>should</em> do versus what it{" "}
-        <em>actually</em> does. Make every row match to win the round.
+        Pick a gate, tap a <strong>dashed slot</strong>. Tap the circles to
+        test. Make every row match!
       </>
     ),
     visual: <MiniBoard />,

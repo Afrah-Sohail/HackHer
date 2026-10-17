@@ -27,7 +27,7 @@ function Dot({ on }: { on: boolean | null }) {
     <span
       role="img"
       aria-label={on ? "On" : "Off"}
-      className={`inline-block h-3.5 w-3.5 rounded-full ${
+      className={`inline-block h-4 w-4 rounded-full ${
         on ? "bg-signal" : "border border-ink-soft/50 bg-transparent"
       }`}
     />
@@ -57,7 +57,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
         setPlaced({ ...placed, [slotId]: null });
         setMessage(null);
       } else {
-        setMessage("Pick a gate first (AND, OR or NOT), then tap a slot.");
+        setMessage("Pick a gate first.");
       }
       return;
     }
@@ -65,8 +65,8 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
     if (GATE_ARITY[armed] !== slot.from.length) {
       setMessage(
         armed === "NOT"
-          ? "NOT works on a single wire, but this slot has two wires coming in."
-          : `${armed} needs two wires coming in, but this slot only has one.`,
+          ? "NOT takes one wire. This slot has two."
+          : `${armed} needs two wires. This slot has one.`,
       );
       return;
     }
@@ -98,14 +98,14 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
       )}
       <div className="grid gap-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-sm font-medium text-ink">
-            Round {roundIndex + 1} of {ROUNDS.length}: {round.title}
+          <p className="text-base font-semibold text-ink">
+            Round {roundIndex + 1} of {ROUNDS.length}
           </p>
-          <ol className="flex gap-1.5" aria-label="Round progress">
+          <ol className="flex gap-2" aria-label="Round progress">
             {ROUNDS.map((r, i) => (
               <li
                 key={r.title}
-                className={`h-2 w-8 rounded-full ${
+                className={`h-2.5 w-10 rounded-full ${
                   i < roundIndex || (i === roundIndex && solved)
                     ? "bg-signal"
                     : i === roundIndex
@@ -117,17 +117,13 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
           </ol>
         </div>
 
-        <p className="rounded-xl border border-copper/30 bg-copper/5 px-4 py-3 text-sm leading-6 text-ink">
-          <span className="font-semibold text-copper-deep">Rule: </span>
-          {round.story}
-        </p>
+        <p className="font-display text-2xl text-ink sm:text-3xl">{round.story}</p>
 
         <div
-          className="flex flex-wrap items-center gap-2"
+          className="flex flex-wrap items-center gap-3"
           role="group"
           aria-label="Gate toolbox"
         >
-          <span className="text-sm text-ink-soft">1. Pick a gate:</span>
           {GATES.map((gate) => (
             <button
               key={gate}
@@ -138,16 +134,18 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
                 setArmed(armed === gate ? null : gate);
                 setMessage(null);
               }}
-              className={`rounded-lg px-4 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-40 ${
+              className={`rounded-2xl px-8 py-4 text-xl font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-40 ${
                 armed === gate
-                  ? "bg-copper text-paper-raised ring-2 ring-ink"
-                  : "border border-line bg-paper-raised text-ink hover:border-ink"
+                  ? "bg-copper text-paper-raised ring-4 ring-ink"
+                  : "border-2 border-line bg-paper-raised text-ink hover:border-ink"
               }`}
             >
               {gate}
             </button>
           ))}
-          <span className="text-sm text-ink-soft">2. Tap a slot.</span>
+          <span className="text-base text-ink-soft">
+            {armed ? "Now tap a slot ↓" : "Pick a gate"}
+          </span>
         </div>
 
         <Board
@@ -162,11 +160,11 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
           onSlot={placeGate}
         />
 
-        <p className="min-h-5 text-sm text-copper-deep" aria-live="polite">
+        <p className="min-h-6 text-base text-copper" aria-live="polite">
           {message ?? " "}
         </p>
 
-        <ul className="grid gap-1 text-sm text-ink-soft sm:grid-cols-2">
+        <ul className="grid gap-1 text-base text-ink-soft sm:grid-cols-2">
           {round.inputs.map((input) => (
             <li key={input.id}>
               <span className="font-semibold text-ink">{input.id}</span> ={" "}
@@ -188,29 +186,36 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
               <UnicornSays tone="happy" className="w-full">
                 <span aria-live="polite" className="block">
                   <strong className="text-signal">
-                    {isLastRound
-                      ? "Cipher cracked! Level cleared."
-                      : "Circuit works!"}
+                    {isLastRound ? "Level cleared!" : "It works!"}
                   </strong>{" "}
                   <span className="text-ink-soft">{round.lesson}</span>
                 </span>
               </UnicornSays>
-              {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
+              {!isLastRound && (
+                <Button className="px-10 py-3.5 text-lg" onClick={nextRound}>
+                  Next round
+                </Button>
+              )}
             </>
           ) : (
             <>
               <Button
                 variant="secondary"
+                className="px-6 py-3 text-base"
                 onClick={() => {
                   setPlaced(emptyPlaced(round));
                   setMessage(null);
                 }}
                 disabled={Object.values(placed).every((gate) => gate === null)}
               >
-                Clear gates
+                Clear
               </Button>
-              <Button variant="ghost" onClick={() => setShowTutorial(true)}>
-                How to play
+              <Button
+                variant="ghost"
+                className="px-4 py-3 text-base"
+                onClick={() => setShowTutorial(true)}
+              >
+                Help
               </Button>
             </>
           )}
@@ -274,7 +279,7 @@ function Board({
   });
 
   return (
-    <div className="relative h-60 w-full rounded-2xl border border-line bg-paper sm:h-72">
+    <div className="relative h-72 w-full rounded-3xl border border-line bg-paper sm:h-[26rem]">
       <svg
         viewBox="0 0 100 60"
         preserveAspectRatio="none"
@@ -289,7 +294,7 @@ function Board({
             x2={wire.b.x}
             y2={wire.b.y}
             vectorEffect="non-scaling-stroke"
-            strokeWidth={3}
+            strokeWidth={5}
             strokeLinecap="round"
             className={wire.on ? "stroke-signal" : "stroke-line"}
           />
@@ -306,7 +311,7 @@ function Board({
             aria-label={`Input ${input.id}: ${input.label}, ${on ? "on" : "off"}`}
             onClick={() => onSwitch(input.id)}
             style={place(input)}
-            className={`absolute flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
+            className={`absolute flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-xl font-semibold transition sm:h-16 sm:w-16 sm:text-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
               on
                 ? "bg-signal text-paper-raised"
                 : "border-2 border-line bg-paper-raised text-ink"
@@ -327,7 +332,7 @@ function Board({
             onClick={() => onSlot(slot.id)}
             aria-label={`Slot ${slot.id}: ${gate ?? "empty"}`}
             style={place(slot)}
-            className={`absolute flex h-11 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1.5 rounded-lg text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
+            className={`absolute flex h-14 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-2 rounded-2xl text-xl font-semibold transition sm:h-16 sm:w-28 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
               gate
                 ? "border-2 border-signal bg-void text-ink"
                 : `border-2 border-dashed bg-paper-raised text-copper ${
@@ -339,7 +344,7 @@ function Board({
             {gate && value !== null && (
               <span
                 aria-hidden="true"
-                className={`h-2 w-2 rounded-full ${
+                className={`h-3 w-3 rounded-full ${
                   value ? "bg-signal" : "bg-ink/30"
                 }`}
               />
@@ -352,19 +357,19 @@ function Board({
         style={place(round.outputPos)}
         className="pointer-events-none absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 select-none"
       >
-        <span className="text-[10px] tracking-wide text-ink-soft uppercase">Output</span>
+        <span className="text-xs tracking-wide text-ink-soft uppercase">Output</span>
         <span
           role="img"
           aria-label={`${round.outputLabel}: ${
             outputOn === null ? "not connected" : outputOn ? "on" : "off"
           }`}
-          className={`h-9 w-9 rounded-full transition ${
+          className={`h-14 w-14 rounded-full transition sm:h-16 sm:w-16 ${
             outputOn
               ? "bg-signal shadow-[0_0_20px_var(--color-signal)]"
               : "bg-ink/10 shadow-[inset_0_2px_6px_rgb(0_0_0/0.5)]"
           }`}
         />
-        <span className="max-w-20 text-center text-[11px] leading-tight text-ink-soft">
+        <span className="max-w-24 text-center text-sm leading-tight text-ink-soft">
           {round.outputLabel}
         </span>
       </div>
@@ -385,14 +390,14 @@ function RequirementsTable({
 }) {
   return (
     <div className="overflow-x-auto rounded-2xl border border-line bg-paper-raised">
-      <table className="w-full text-center text-sm">
-        <caption className="px-4 pt-3 pb-1 text-left text-xs font-medium tracking-[0.14em] text-ink-soft uppercase">
-          Does your circuit follow the rule?
+      <table className="w-full text-center text-base">
+        <caption className="px-4 pt-4 pb-1 text-left text-xs font-medium tracking-[0.14em] text-ink-soft uppercase">
+          Rule check
         </caption>
         <thead>
-          <tr className="text-xs text-ink-soft">
+          <tr className="text-sm text-ink-soft">
             {round.inputs.map((input) => (
-              <th key={input.id} scope="col" className="px-3 py-2 font-medium">
+              <th key={input.id} scope="col" className="px-3 py-3 font-medium">
                 {input.id}
               </th>
             ))}
@@ -420,17 +425,17 @@ function RequirementsTable({
                 }`}
               >
                 {round.inputs.map((input) => (
-                  <td key={input.id} className="px-3 py-2">
+                  <td key={input.id} className="px-3 py-3">
                     <Dot on={row[input.id]} />
                   </td>
                 ))}
-                <td className="px-3 py-2">
+                <td className="px-3 py-3">
                   <Dot on={expected} />
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-3 py-3">
                   <Dot on={actual ?? null} />
                 </td>
-                <td className="px-3 py-2 font-semibold">
+                <td className="px-3 py-3 text-lg font-semibold">
                   {actual === null || actual === undefined ? (
                     <span className="text-ink-soft">·</span>
                   ) : match ? (

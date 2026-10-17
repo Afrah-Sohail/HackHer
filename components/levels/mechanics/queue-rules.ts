@@ -35,7 +35,7 @@ export const ROUNDS: readonly Round[] = [
   {
     title: "Order matters",
     story:
-      "Margaret Hamilton led the team that wrote Apollo's flight software. Its computer had very little memory. In this practice round, memory fits only 3 jobs. Reorder the queue so both critical jobs run.",
+      "Memory fits 3 jobs. Put both critical jobs on top.",
     capacity: 3,
     tasks: [
       { id: "lights", name: "Cabin lights", priority: "routine", cost: 1 },
@@ -46,12 +46,12 @@ export const ROUNDS: readonly Round[] = [
     ],
     mustRun: ["critical"],
     lesson:
-      "The computer works down the queue until memory runs out. Whatever is at the top gets the memory first.",
+      "The top of the queue gets memory first.",
   },
   {
     title: "Big jobs, small memory",
     story:
-      "Jobs now take different amounts of memory (the little squares). Memory fits 7 squares. Both critical jobs and the important one must run.",
+      "Memory fits 7 squares. Keep the critical and important jobs.",
     capacity: 7,
     tasks: [
       { id: "log", name: "Data log", priority: "routine", cost: 1 },
@@ -62,12 +62,12 @@ export const ROUNDS: readonly Round[] = [
     ],
     mustRun: ["critical", "important"],
     lesson:
-      "A priority queue puts the most important jobs first, so they always get the memory they need.",
+      "A priority queue puts important jobs first.",
   },
   {
     title: "Apollo 11 alarms",
     story:
-      "July 20, 1969, minutes from landing. The computer is overloaded with extra work and flashes alarms 1201 and 1202. Hamilton's team designed the software to run by priority. Show the computer what matters most.",
+      "Apollo 11: too much work at once! Keep critical and important jobs running.",
     capacity: 6,
     tasks: [
       { id: "rendezvous", name: "Rendezvous radar", priority: "routine", cost: 3 },
@@ -78,12 +78,12 @@ export const ROUNDS: readonly Round[] = [
     ],
     mustRun: ["critical", "important"],
     lesson:
-      "That is what happened on Apollo 11: the computer dropped lower-priority tasks and kept running the landing tasks.",
+      "Apollo 11 dropped low-priority tasks and kept landing.",
   },
   {
     title: "Every alarm at once",
     story:
-      "Seven jobs are fighting for 8 squares of memory. Keep every critical and important job running, and let the routine ones wait.",
+      "Seven jobs, 8 squares. Keep critical and important jobs.",
     capacity: 8,
     tasks: [
       { id: "telemetry", name: "Telemetry", priority: "routine", cost: 2 },
@@ -96,7 +96,7 @@ export const ROUNDS: readonly Round[] = [
     ],
     mustRun: ["critical", "important"],
     lesson:
-      "Priority scheduling is a core idea in modern operating systems and safety-critical software.",
+      "Operating systems use priority queues too.",
   },
 ];
 
@@ -122,5 +122,5 @@ export function describeMiss(missed: readonly Task[]): string {
   const names = missed
     .map((task) => `${task.name} (${PRIORITY_LABEL[task.priority].toLowerCase()})`)
     .join(" and ");
-  return `${names} never ran: the computer ran out of memory before reaching ${missed.length === 1 ? "it" : "them"}.`;
+  return `${names} got dropped. Move ${missed.length === 1 ? "it" : "them"} up.`;
 }

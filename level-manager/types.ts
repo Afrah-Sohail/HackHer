@@ -21,7 +21,10 @@ export type LevelDefinition = {
   index: LevelIndex;
   floor: number;
   slug: string;
+  /** Full title, "Name: heading". */
   title: string;
+  /** The part after the pioneer name, e.g. "The Analytical Engine". */
+  heading: string;
   pioneer: string;
   concept: string;
   narrative: string;

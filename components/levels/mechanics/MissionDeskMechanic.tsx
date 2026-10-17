@@ -47,23 +47,23 @@ function Stepper({
   const locked = fixed || disabled;
   return (
     <div
-      className={`rounded-xl border-2 px-3 py-2 text-center ${
+      className={`rounded-2xl border-2 px-4 py-3 text-center ${
         fixed ? "border-line bg-paper/60" : "border-copper/60 bg-paper"
       }`}
     >
-      <p className="text-[10px] tracking-wide text-ink-soft uppercase">{label}</p>
-      <div className="mt-1 flex items-center justify-center gap-2">
+      <p className="text-xs tracking-wide text-ink-soft uppercase">{label}</p>
+      <div className="mt-2 flex items-center justify-center gap-3">
         <button
           type="button"
           disabled={locked || value <= min}
           onClick={() => onChange(value - 1)}
           aria-label={`${label}: decrease`}
-          className="h-8 w-8 rounded-lg border border-line text-lg text-ink transition hover:border-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-30"
+          className="h-12 w-12 rounded-xl border border-line text-2xl text-ink transition hover:border-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-30"
         >
           −
         </button>
         <span
-          className="min-w-10 text-center font-display text-3xl text-ink"
+          className="min-w-14 text-center font-display text-5xl text-ink"
           aria-live="polite"
         >
           {value}
@@ -73,12 +73,12 @@ function Stepper({
           disabled={locked || value >= max}
           onClick={() => onChange(value + 1)}
           aria-label={`${label}: increase`}
-          className="h-8 w-8 rounded-lg border border-line text-lg text-ink transition hover:border-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-30"
+          className="h-12 w-12 rounded-xl border border-line text-2xl text-ink transition hover:border-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-30"
         >
           +
         </button>
       </div>
-      {fixed && <p className="mt-1 text-[10px] text-ink-soft">fixed</p>}
+      {fixed && <p className="mt-1 text-xs text-ink-soft">fixed</p>}
     </div>
   );
 }
@@ -121,7 +121,7 @@ function Graph({
   return (
     <svg
       viewBox="0 0 100 56"
-      className="mx-auto w-full max-w-2xl rounded-2xl border border-line bg-void"
+      className="mx-auto w-full max-w-4xl rounded-3xl border border-line bg-void"
       role="img"
       aria-label="Graph of altitude against seconds after liftoff. Hollow gold circles are mission control's targets; filled dots are your rocket."
     >
@@ -260,14 +260,14 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
       {showTutorial && <MissionTutorial onDone={closeTutorial} />}
       <div className="grid gap-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-sm font-medium text-ink">
-            Round {roundIndex + 1} of {ROUNDS.length}: {round.title}
+          <p className="text-base font-semibold text-ink">
+            Round {roundIndex + 1} of {ROUNDS.length}
           </p>
-          <ol className="flex gap-1.5" aria-label="Round progress">
+          <ol className="flex gap-2" aria-label="Round progress">
             {ROUNDS.map((r, i) => (
               <li
                 key={r.title}
-                className={`h-2 w-8 rounded-full ${
+                className={`h-2.5 w-10 rounded-full ${
                   i < roundIndex || (i === roundIndex && phase === "result" && allOk)
                     ? "bg-signal"
                     : i === roundIndex
@@ -279,16 +279,17 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
           </ol>
         </div>
 
-        <div className="rounded-xl border border-line bg-paper-raised/60 p-4">
-          <p className="text-[15px] leading-6 text-ink">
-            <strong className="text-copper">Your goal:</strong> tune the
-            function machine so your rocket&apos;s altitude matches mission
-            control&apos;s numbers at <strong>every second</strong>.
+        <div>
+          <p className="font-display text-2xl text-ink sm:text-3xl">
+            Match mission control
+            <span className="ml-3 text-base font-sans text-ink-soft sm:text-lg">
+              every second
+            </span>
           </p>
-          <p className="mt-2 text-sm leading-6 text-ink-soft">{round.story}</p>
+          <p className="mt-1 text-base text-ink-soft">{round.story}</p>
         </div>
 
-        <div className="grid gap-3 rounded-2xl border border-line bg-void p-4">
+        <div className="grid gap-4 rounded-3xl border border-line bg-void p-4 sm:p-7">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             <Pill>second x</Pill>
             <span aria-hidden="true" className="text-copper">
@@ -320,7 +321,7 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
             </span>
             <Pill>altitude y</Pill>
           </div>
-          <p className="text-center font-mono text-sm text-copper">
+          <p className="text-center font-mono text-lg text-copper sm:text-xl">
             {formatRule(a, b)}
           </p>
         </div>
@@ -335,22 +336,22 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
         />
 
         <div className="overflow-x-auto rounded-2xl border border-line bg-paper-raised">
-          <table className="w-full text-center text-sm">
+          <table className="w-full text-center text-base">
             <caption className="px-4 pt-3 pb-1 text-left text-xs font-medium tracking-[0.14em] text-ink-soft uppercase">
-              Does your rocket match mission control?
+              Rocket check
             </caption>
             <thead>
               <tr className="text-xs text-ink-soft">
-                <th scope="col" className="px-3 py-2 font-medium">
+                <th scope="col" className="px-3 py-3 font-medium">
                   Second
                 </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Needed (km)
+                <th scope="col" className="px-3 py-3 font-medium">
+                  Needed
                 </th>
-                <th scope="col" className="px-3 py-2 font-medium">
-                  Yours (km)
+                <th scope="col" className="px-3 py-3 font-medium">
+                  Yours
                 </th>
-                <th scope="col" className="px-3 py-2 font-medium">
+                <th scope="col" className="px-3 py-3 font-medium">
                   <span className="sr-only">Match</span>
                 </th>
               </tr>
@@ -360,10 +361,10 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
                 const marked = phase === "result" || (phase === "launching" && i < revealed);
                 return (
                   <tr key={row.x} className="border-t border-line">
-                    <td className="px-3 py-2 text-ink">{row.x}</td>
-                    <td className="px-3 py-2 text-copper">{row.needed}</td>
-                    <td className="px-3 py-2 text-ink">{row.yours}</td>
-                    <td className="px-3 py-2 font-semibold">
+                    <td className="px-3 py-3 text-lg text-ink">{row.x}</td>
+                    <td className="px-3 py-3 text-lg text-copper">{row.needed}</td>
+                    <td className="px-3 py-3 text-lg text-ink">{row.yours}</td>
+                    <td className="px-3 py-3 text-lg font-semibold">
                       {marked ? (
                         row.ok ? (
                           <span className="text-signal">✓</span>
@@ -384,14 +385,20 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
         <div className="flex flex-wrap items-center gap-3">
           {phase === "build" && (
             <>
-              <Button onClick={launch}>Launch 🚀</Button>
-              <Button variant="ghost" onClick={() => setShowTutorial(true)}>
-                How to play
+              <Button className="px-10 py-3.5 text-lg" onClick={launch}>
+                Launch 🚀
+              </Button>
+              <Button
+                variant="ghost"
+                className="px-4 py-3 text-base"
+                onClick={() => setShowTutorial(true)}
+              >
+                Help
               </Button>
             </>
           )}
           {phase === "launching" && (
-            <p className="text-sm text-ink-soft" aria-live="polite">
+            <p className="text-lg text-ink-soft" aria-live="polite">
               Launching…
             </p>
           )}
@@ -400,12 +407,16 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
               <UnicornSays tone="happy" className="w-full">
                 <span aria-live="polite" className="block">
                   <strong className="text-signal">
-                    {isLastRound ? "Right on course! Level cleared." : "Perfect launch!"}
+                    {isLastRound ? "Level cleared!" : "Perfect launch!"}
                   </strong>{" "}
                   <span className="text-ink-soft">{round.lesson}</span>
                 </span>
               </UnicornSays>
-              {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
+              {!isLastRound && (
+                <Button className="px-10 py-3.5 text-lg" onClick={nextRound}>
+                  Next round
+                </Button>
+              )}
             </>
           )}
           {phase === "result" && !allOk && firstMiss && (
@@ -415,7 +426,9 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
                   <strong className="text-copper">Off course.</strong> {describeMiss(firstMiss)}
                 </span>
               </UnicornSays>
-              <Button onClick={tryAgain}>Try again</Button>
+              <Button className="px-10 py-3.5 text-lg" onClick={tryAgain}>
+                Try again
+              </Button>
             </>
           )}
         </div>

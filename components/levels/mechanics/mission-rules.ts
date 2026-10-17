@@ -18,46 +18,46 @@ export const ROUNDS: readonly Round[] = [
   {
     title: "Add a boost",
     story:
-      "Before electronic computers, human \"computers\" like Dorothy Vaughan's team worked out numbers like these by hand. Mission control needs the altitude each second. Your machine only adds a boost. How big?",
+      "Dorothy Vaughan's team worked these out by hand. Add the right boost.",
     inputs: [1, 2, 3, 4],
     aFixed: 1,
     bFixed: null,
     solution: { a: 1, b: 2 },
     lesson:
-      "A function takes an input, applies a rule, and gives an output. Here the rule was \"add 2\".",
+      "A function turns an input into an output using a rule.",
   },
   {
     title: "Scale it up",
     story:
-      "Engineers like Mary Jackson ran wind-tunnel experiments, hunting for rules that link one measurement to another. This time your machine multiplies. Which number turns each second into mission control's altitude?",
+      "Now multiply instead of adding.",
     inputs: [1, 2, 3, 4],
     aFixed: null,
     bFixed: 0,
     solution: { a: 3, b: 0 },
     lesson:
-      "Same input, same output, every time. Multiplying scales every result by the same amount.",
+      "Same input, same output. Every time.",
   },
   {
     title: "Both together",
     story:
-      "Now the rule uses both blocks: multiply first, then add a boost. Use the table to work out each number.",
+      "Use both: multiply, then add.",
     inputs: [1, 2, 3, 4],
     aFixed: null,
     bFixed: null,
     solution: { a: 2, b: 1 },
     lesson:
-      "Functions can chain steps together: multiply, then add. Computers do this billions of times a second.",
+      "Functions can chain steps together.",
   },
   {
     title: "The real trajectory",
     story:
-      "Katherine Johnson calculated flight paths like this one. Before John Glenn's orbit, he asked for her to double-check the computer's numbers. Find the rule and get the rocket on course!",
+      "Katherine Johnson checked numbers like these for John Glenn. Find the rule!",
     inputs: [1, 2, 3, 4, 5],
     aFixed: null,
     bFixed: null,
     solution: { a: 3, b: -2 },
     lesson:
-      "You found the rule behind the numbers. That's what a trajectory is: a function that tells you where to be at every moment.",
+      "You found the rule behind the trajectory!",
   },
 ];
 
@@ -82,7 +82,7 @@ export function check(round: Round, a: number, b: number): RowResult[] {
 
 export function describeMiss(row: RowResult): string {
   const direction = row.yours < row.needed ? "too low" : "too high";
-  return `At second ${row.x} your rocket was at ${row.yours} km, but mission control needs ${row.needed} km (${direction}).`;
+  return `Second ${row.x}: you're at ${row.yours} km, need ${row.needed} (${direction}).`;
 }
 
 export function formatRule(a: number, b: number): string {

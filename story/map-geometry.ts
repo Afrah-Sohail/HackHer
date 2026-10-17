@@ -1,4 +1,5 @@
-// Geometry for the squiggly journey path: six planets plus Home at the end.
+// Geometry for the squiggly journey path: the Sun at the start, six planets,
+// then Home at the end (node 0 is the Sun, node 1 is the first planet).
 // Everything (the drawn path, the planets and the flying rocket) uses these
 // same curves, so the rocket follows the line exactly.
 
@@ -6,20 +7,20 @@ export type Layout = "wide" | "tall";
 export type Pt = { x: number; y: number };
 export type Seg = [Pt, Pt, Pt, Pt];
 
-export const NODE_COUNT = 7; // 6 planets + Home
+export const NODE_COUNT = 8; // Sun + 6 planets + Home
 export const PLANET_RADIUS = 30;
 
 export const VIEW: Record<Layout, { w: number; h: number }> = {
   wide: { w: 1000, h: 290 },
-  tall: { w: 360, h: 780 },
+  tall: { w: 360, h: 885 },
 };
 
 export function nodes(layout: Layout): Pt[] {
   if (layout === "wide") {
-    const ys = [180, 95, 180, 95, 180, 95, 150];
-    return ys.map((y, i) => ({ x: 85 + i * 138, y }));
+    const ys = [95, 180, 95, 180, 95, 180, 95, 150];
+    return ys.map((y, i) => ({ x: 70 + i * 123, y }));
   }
-  const xs = [110, 250, 110, 250, 110, 250, 180];
+  const xs = [250, 110, 250, 110, 250, 110, 250, 180];
   return xs.map((x, i) => ({ x, y: 75 + i * 105 }));
 }
 

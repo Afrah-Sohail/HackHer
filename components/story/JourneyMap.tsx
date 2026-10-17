@@ -81,7 +81,8 @@ function MapSvg({
   let pose: { x: number; y: number; angle: number } | null = null;
   const trail: { x: number; y: number; r: number; o: number }[] = [];
   if (travel) {
-    const seg = segment(layout, travel.from);
+    // Segment 0 runs Sun to the first planet, so planet `from` starts at 1.
+    const seg = segment(layout, travel.from + 1);
     const p = bezier(seg, travel.t);
     pose = { x: p.x, y: p.y, angle: heading(seg, travel.t) + travel.wobble };
     if (travel.broken) {
@@ -91,7 +92,7 @@ function MapSvg({
       }
     }
   } else {
-    const spot = pts[atHome ? 6 : Math.min(current, 5)];
+    const spot = pts[atHome ? 7 : Math.min(current, 5) + 1];
     pose = { x: spot.x + R * 0.95, y: spot.y - R * 1.05, angle: 24 };
   }
 
@@ -106,22 +107,51 @@ function MapSvg({
         <filter id={`map-gray${uid}`}>
           <feColorMatrix type="saturate" values="0" />
         </filter>
+        <radialGradient id={`map-sun${uid}`} cx="40%" cy="38%" r="75%">
+          <stop offset="0" stopColor="#fff7c2" />
+          <stop offset="0.55" stopColor="#ffc93c" />
+          <stop offset="1" stopColor="#f2711c" />
+        </radialGradient>
+        <radialGradient id={`map-sun-glow${uid}`} cx="50%" cy="50%" r="50%">
+          <stop offset="0.5" stopColor="#ffb02e" stopOpacity="0.55" />
+          <stop offset="1" stopColor="#ffb02e" stopOpacity="0" />
+        </radialGradient>
       </defs>
 
-      {Array.from({ length: 6 }, (_, i) => (
-        <path
-          key={i}
-          d={segmentPath(layout, i)}
-          fill="none"
-          strokeWidth={completed[i] ? 6 : 5}
-          strokeLinecap="round"
-          strokeDasharray={completed[i] ? undefined : "1 14"}
-          className={completed[i] ? "stroke-signal" : "stroke-ink-soft/60"}
-        />
-      ))}
+      {Array.from({ length: 7 }, (_, i) => {
+        // The first stretch (Sun to the first planet) is always flown.
+        const flown = i === 0 || completed[i - 1];
+        return (
+          <path
+            key={i}
+            d={segmentPath(layout, i)}
+            fill="none"
+            strokeWidth={flown ? 6 : 5}
+            strokeLinecap="round"
+            strokeDasharray={flown ? undefined : "1 14"}
+            className={flown ? "stroke-signal" : "stroke-ink-soft/60"}
+          />
+        );
+      })}
+
+      {/* The Sun: where the trip started */}
+      <g transform={`translate(${pts[0].x} ${pts[0].y})`} aria-hidden="true">
+        <circle r={R + 14} fill={`url(#map-sun-glow${uid})`} />
+        <circle r={R + 2} fill={`url(#map-sun${uid})`} />
+        <text
+          x={layout === "tall" ? (pts[0].x < w / 2 ? R + 18 : -(R + 18)) : 0}
+          y={layout === "tall" ? 7 : R + 30}
+          textAnchor={layout === "tall" ? (pts[0].x < w / 2 ? "start" : "end") : "middle"}
+          fontSize={layout === "tall" ? 22 : 19}
+          fontWeight={500}
+          className="fill-ink"
+        >
+          Sun
+        </text>
+      </g>
 
       {JOURNEY.map((story, i) => {
-        const p = pts[i];
+        const p = pts[i + 1];
         const reached = unlocked[i];
         const done = completed[i];
         const isCurrent = reached && !done && i === current;
@@ -187,7 +217,7 @@ function MapSvg({
       })}
 
       {/* Home: the end of the line */}
-      <g transform={`translate(${pts[6].x} ${pts[6].y})`}>
+      <g transform={`translate(${pts[7].x} ${pts[7].y})`}>
         {atHome && <circle r="40" fill="none" stroke="#f0c36a" strokeWidth="4" className="map-pulse" />}
         <text
           fontSize="50"
@@ -199,7 +229,7 @@ function MapSvg({
           ⭐
         </text>
         <text
-          x={layout === "tall" ? (pts[6].x < w / 2 ? 44 : -44) : 0}
+          x={layout === "tall" ? (pts[7].x < w / 2 ? 44 : -44) : 0}
           y={layout === "tall" ? 7 : 52}
           textAnchor={layout === "tall" ? "middle" : "middle"}
           fontSize={layout === "tall" ? 22 : 19}

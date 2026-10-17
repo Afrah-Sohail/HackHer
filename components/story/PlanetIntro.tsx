@@ -31,7 +31,7 @@ export function PlanetIntro({
   const last = shown >= story.arrival.length;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-void/50 p-4">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-void/90 p-4 backdrop-blur-md">
       <section
         role="dialog"
         aria-modal="true"

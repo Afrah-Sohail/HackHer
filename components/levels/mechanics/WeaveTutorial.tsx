@@ -10,7 +10,7 @@ function Swatch({ thread }: { thread: Thread }) {
   return (
     <span
       aria-hidden="true"
-      className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-base ${THREADS[thread].className}`}
+      className={`inline-flex h-10 w-10 items-center justify-center rounded-lg text-xl ${THREADS[thread].className}`}
     >
       {THREADS[thread].symbol}
     </span>
@@ -31,11 +31,11 @@ function PatternDemo() {
   return (
     <div className="mx-auto grid w-fit gap-3 text-xs text-ink-soft">
       <div>
-        <p className="mb-1 uppercase tracking-wide">Target pattern</p>
+        <p className="mb-1 uppercase tracking-wide">Pattern</p>
         <Row threads={["A", "B", "C"]} />
       </div>
       <div>
-        <p className="mb-1 uppercase tracking-wide">Your weave</p>
+        <p className="mb-1 uppercase tracking-wide">Yours</p>
         <Row threads={["A", "B", "C"]} />
       </div>
     </div>
@@ -61,16 +61,16 @@ function LoopDemo() {
 
 const STEPS: Step[] = [
   {
-    title: "The mission",
+    title: "Program the loom",
     body: (
       <>
-        Ada Lovelace saw that a machine could follow a list of instructions,
-        just like a <strong>Jacquard loom</strong> weaves patterns from punched
-        cards. Today <em>you</em> program the loom to weave a pattern.
+        <strong>Ada Lovelace</strong> saw that a machine could follow a list of
+        steps, like a <strong>loom</strong> weaving a pattern. Now you program
+        the loom!
       </>
     ),
     visual: (
-      <p className="text-center text-5xl" aria-hidden="true">
+      <p className="text-center text-6xl" aria-hidden="true">
         🧵 → 🧶
       </p>
     ),
@@ -79,10 +79,8 @@ const STEPS: Step[] = [
     title: "How to play",
     body: (
       <>
-        Tap a thread chip to add it to your <strong>punch card</strong>. The
-        loom weaves your threads <strong>in order</strong>. Make{" "}
-        <strong>your weave</strong> match the <strong>target pattern</strong>,
-        but watch your chip budget!
+        Tap symbols to build your <strong>punch card</strong>. The loom weaves
+        them in order. <strong>Match the pattern!</strong>
       </>
     ),
     visual: <PatternDemo />,
@@ -91,11 +89,8 @@ const STEPS: Step[] = [
     title: "The loop shortcut",
     body: (
       <>
-        Short on chips? Tap chips on your punch card to{" "}
-        <strong>select</strong> them, then tap{" "}
-        <strong>🔁 Repeat these</strong>. Use the <strong>− and +</strong>{" "}
-        buttons to choose how many times to repeat. Four chips can weave a very
-        long pattern!
+        Writing the same thing again and again? Tap <strong>🔁 Repeat</strong>{" "}
+        to loop it, then pick how many times with <strong>− +</strong>.
       </>
     ),
     visual: <LoopDemo />,

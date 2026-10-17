@@ -9,7 +9,7 @@ export const LEVELS = [
     pioneer: "Ada Lovelace",
     concept: "Sequences & Loops",
     narrative:
-      "Ada Lovelace described how Babbage's Analytical Engine could follow a sequence of operations, and repeat a pattern the way a Jacquard loom repeats a weave.",
+      "Ada Lovelace described how Babbage's Analytical Engine could follow a sequence of operations, and repeat a pattern the way a loom repeats a weave.",
     blurb:
       "Did you know the world's first computer programmer lived in Victorian England? Ada Lovelace realized a machine could follow **sequences** and repeat steps in **loops**, just like a loom weaving a pattern. She even imagined computers making art and music, about a century before anyone built one. 👩‍💻✨",
     mechanicId: "loom",

@@ -21,10 +21,10 @@ export const FACTS: Record<string, FactSheet> = {
       "She described her approach to math as \"poetical science\".",
     ],
     work: [
-      "Babbage designed the Analytical Engine, a mechanical general-purpose computer that was never built in her lifetime; it was to be controlled by punched cards, an idea borrowed from the Jacquard loom.",
+      "Babbage designed the Analytical Engine, a mechanical general-purpose computer that was never built in her lifetime; it was to be controlled by punched cards, an idea borrowed from weaving looms.",
       "In 1842-43 she translated an article about the engine by Luigi Menabrea and added her own Notes, which were about three times longer than the article.",
       "Her Note G laid out a step-by-step method for the engine to calculate Bernoulli numbers, often called the first published computer program.",
-      "She wrote that the engine weaves algebraic patterns just as the Jacquard loom weaves flowers and leaves.",
+      "She compared the engine to a loom: it weaves algebraic patterns the way a loom weaves flowers and leaves.",
       "She imagined such a machine could work with more than numbers, for example composing music, if rules could be written for it.",
     ],
     legacy: [

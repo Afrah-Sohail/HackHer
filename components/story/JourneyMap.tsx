@@ -42,7 +42,7 @@ const SPARKS = Array.from({ length: 10 }, (_, i) => {
   return { dx: Math.cos(angle) * 52, dy: Math.sin(angle) * 52 };
 });
 
-function Explosion({ x, y }: { x: number; y: number }) {
+export function Explosion({ x, y }: { x: number; y: number }) {
   return (
     <g transform={`translate(${x} ${y})`} aria-hidden="true">
       <circle className="boom-core" r="26" fill="#fde68a" />

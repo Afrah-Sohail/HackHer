@@ -77,6 +77,10 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case "start": {
       const index = action.index ?? firstPlayableIndex(state.levels);
+      // A brand-new game opens at the Sun, before the rocket breaks down.
+      if (action.index === undefined && !state.levels.some((level) => level.completed)) {
+        return { ...enterLevel(state, index), screen: "opening" };
+      }
       return enterLevel(state, index);
     }
     case "select-level":
@@ -103,7 +107,9 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       return finishLevel(state, state.currentLevelIndex);
     }
     case "arrive":
-      return state.screen === "travel" ? { ...state, screen: "playing" } : state;
+      return state.screen === "travel" || state.screen === "opening"
+        ? { ...state, screen: "playing" }
+        : state;
     case "show-welcome":
       return { ...state, screen: "welcome" };
     case "restart":

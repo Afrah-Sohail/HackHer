@@ -24,12 +24,10 @@ export function WelcomeScreen() {
       </p>
 
       <p className="mt-6 max-w-xl text-base leading-7 text-ink-soft sm:text-lg sm:leading-8">
-        Six short puzzle games, each inspired by real women who shaped
-        computing. Weave patterns with loops (Ada), hop past a radio jammer
-        (Hedy), wire up logic gates (Joan), find the rule behind a rocket
-        launch (the Hidden Figures), keep Apollo&apos;s computer running
-        (Margaret) and build with classes and objects (Adele). No experience
-        needed, just curiosity.
+        Six short puzzle games inspired by real women who shaped computing.
+        Weave patterns with loops, outsmart a radio jammer, wire up logic
+        gates, plot a rocket&apos;s path, keep Apollo&apos;s computer running
+        and build with classes and objects.
       </p>
 
       <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ink-soft">

@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-outfit), "Avenir Next", "Segoe UI", sans-serif;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-ink: #1a1612;
+  --color-ink-soft: #5c5348;
+  --color-paper: #f3eee6;
+  --color-paper-raised: #fffaf3;
+  --color-line: #e0d5c6;
+  --color-copper: #9a4e24;
+  --color-copper-deep: #6f3518;
+  --color-signal: #1b5e54;
+  --color-signal-soft: #e5f3ef;
+}
+
+body {
+  background-image:
+    radial-gradient(circle at 8% -12%, rgb(154 78 36 / 0.1), transparent 36%),
+    radial-gradient(circle at 100% 0%, rgb(27 94 84 / 0.1), transparent 32%);
+  background-attachment: fixed;
+}

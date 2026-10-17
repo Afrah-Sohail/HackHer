@@ -9,7 +9,10 @@ export function PlanetBackdrop({ planet }: { planet: PlanetId }) {
   const radius = "max(80vh, 65vw)";
   const scale = `(${radius} / ${photo.r})`;
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+    >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={photo.src}
@@ -24,7 +27,17 @@ export function PlanetBackdrop({ planet }: { planet: PlanetId }) {
           bottom: `calc(${-(photo.height - photo.cy)} * ${scale})`,
           clipPath: photo.clip,
           // Fade out the black space around the planet so only it shows.
-          maskImage: `radial-gradient(circle at calc(${photo.cx} * ${scale}) calc(${photo.cy} * ${scale}), #000 calc(${photo.r * (photo.keep ?? 1)} * ${scale} - 3px), transparent calc(${photo.r * (photo.keep ?? 1)} * ${scale}))`,
+          ...(photo.luma
+            ? {
+                maskImage: `url(${photo.src})`,
+                WebkitMaskImage: `url(${photo.src})`,
+                maskMode: "luminance",
+                maskSize: "100% 100%",
+                WebkitMaskSize: "100% 100%",
+              }
+            : {
+                maskImage: `radial-gradient(circle at calc(${photo.cx} * ${scale}) calc(${photo.cy} * ${scale}), #000 calc(${photo.r * (photo.keep ?? 1)} * ${scale} - 3px), transparent calc(${photo.r * (photo.keep ?? 1)} * ${scale}))`,
+              }),
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-void/25 to-void/60" />

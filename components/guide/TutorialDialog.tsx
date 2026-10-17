@@ -32,6 +32,15 @@ export function TutorialDialog({
         aria-modal="true"
         aria-label="How to play"
         className="max-h-full w-full max-w-2xl overflow-y-auto rounded-3xl border-2 border-copper/40 bg-paper-raised p-6 shadow-2xl sm:p-8"
+        // Star field screened over an indigo-to-blue wash, so the stars stay
+        // bright and the card still matches the purple theme.
+        style={{
+          backgroundImage:
+            'url("/tutorial-stars.jpg"), linear-gradient(160deg, #2b1670 0%, #1d2c80 55%, #1a1452 100%)',
+          backgroundBlendMode: "screen",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
       >
         <p className="text-sm font-medium tracking-[0.16em] text-copper uppercase">
           How to play · {index + 1} of {steps.length}

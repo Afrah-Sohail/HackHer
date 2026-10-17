@@ -77,6 +77,13 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
   const [failed, setFailed] = useState(false);
   const [hintCount, setHintCount] = useState(0);
 
+  // "Who was Hedy Lamarr?" / "Who were the Hidden Figures?" so the button is
+  // clearly about the woman (or women), not a general help button.
+  const isGroup = /[&,]/.test(level.pioneer);
+  const question = isGroup
+    ? `Who were the ${level.heading}?`
+    : `Who was ${level.pioneer}?`;
+
   async function show(next: View) {
     setView(next);
     setFailed(false);
@@ -191,14 +198,27 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
           </div>
         </section>
       )}
-      <Button
-        className="gap-2 pl-2"
-        onClick={() => setOpen((value) => !value)}
-        aria-expanded={open}
-      >
-        {!open && <UnicornAvatar size={28} />}
-        {open ? "Close" : `Ask ${GUIDE_NAME}`}
-      </Button>
+      {open ? (
+        <Button className="px-6 py-3 text-base" onClick={() => setOpen(false)} aria-expanded>
+          Close
+        </Button>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-expanded={false}
+          aria-label={`Ask ${GUIDE_NAME}: ${question}`}
+          className="flex items-center gap-3 rounded-3xl bg-copper py-2 pr-5 pl-2 text-left text-paper-raised shadow-lg hover:bg-copper-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper"
+        >
+          <UnicornAvatar size={44} />
+          <span className="leading-tight">
+            <span className="block text-xs font-medium opacity-80">
+              Ask {GUIDE_NAME}
+            </span>
+            <span className="block text-base font-semibold">{question}</span>
+          </span>
+        </button>
+      )}
     </div>
   );
 }

@@ -2,6 +2,8 @@
 
 import { useGame } from "@/state/game-context";
 import { Button } from "@/components/ui/Button";
+import { UnicornSays } from "@/components/guide/Unicorn";
+import { GUIDE_NAME } from "@/guide/config";
 
 const HIGHLIGHTS = [
   { icon: "🧩", label: "Play puzzles" },
@@ -40,8 +42,16 @@ export function WelcomeScreen() {
         ))}
       </ul>
 
+      <div className="mt-8 w-full max-w-md text-left">
+        <UnicornSays size={64}>
+          <strong className="text-copper">Hi, I&apos;m {GUIDE_NAME}!</strong> I&apos;ll
+          be your guide on the way up. Stuck or curious? Just ask me. Ready to
+          climb?
+        </UnicornSays>
+      </div>
+
       <Button
-        className="mt-10 px-10 py-3 text-base shadow-[0_0_28px_rgb(240_195_106_/_0.35)]"
+        className="mt-8 px-10 py-3 text-base shadow-[0_0_28px_rgb(240_195_106_/_0.35)]"
         onClick={() => start(0)}
       >
         Start

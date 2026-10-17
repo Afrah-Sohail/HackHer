@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { UnicornSays } from "@/components/guide/Unicorn";
 import { ObjectTutorial } from "./ObjectTutorial";
 import {
   METHODS,
@@ -362,27 +363,22 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
           </section>
         </div>
 
-        <p
-          className={`min-h-5 text-sm leading-6 ${
-            feedback?.ok ? "text-signal" : "text-copper"
-          }`}
-          aria-live="polite"
-        >
-          {feedback ? (
-            feedback.ok ? (
-              <>
-                <strong>
-                  {isLastRound ? "Blueprint complete! Level cleared." : "Nice work!"}
-                </strong>{" "}
-                <span className="text-ink-soft">{feedback.text}</span>
-              </>
-            ) : (
-              feedback.text
-            )
-          ) : (
-            " "
+        <div aria-live="polite">
+          {feedback && (
+            <UnicornSays tone={feedback.ok ? "happy" : "oops"}>
+              {feedback.ok ? (
+                <>
+                  <strong className="text-signal">
+                    {isLastRound ? "Blueprint complete! Level cleared." : "Nice work!"}
+                  </strong>{" "}
+                  <span className="text-ink-soft">{feedback.text}</span>
+                </>
+              ) : (
+                feedback.text
+              )}
+            </UnicornSays>
           )}
-        </p>
+        </div>
 
         <div className="flex flex-wrap items-center gap-3">
           {!solved && (

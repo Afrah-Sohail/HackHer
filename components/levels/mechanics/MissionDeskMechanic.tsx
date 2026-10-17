@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
+import { UnicornSays } from "@/components/guide/Unicorn";
 import { MissionTutorial } from "./MissionTutorial";
 import {
   A_RANGE,
@@ -395,20 +396,24 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
           )}
           {phase === "result" && allOk && (
             <>
-              <p className="text-sm leading-6 text-signal" aria-live="polite">
-                <strong>
-                  {isLastRound ? "Right on course! Level cleared." : "Perfect launch!"}
-                </strong>{" "}
-                <span className="text-ink-soft">{round.lesson}</span>
-              </p>
+              <UnicornSays tone="happy" className="w-full">
+                <span aria-live="polite" className="block">
+                  <strong className="text-signal">
+                    {isLastRound ? "Right on course! Level cleared." : "Perfect launch!"}
+                  </strong>{" "}
+                  <span className="text-ink-soft">{round.lesson}</span>
+                </span>
+              </UnicornSays>
               {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
             </>
           )}
           {phase === "result" && !allOk && firstMiss && (
             <>
-              <p className="text-sm leading-6 text-copper" aria-live="polite">
-                <strong>Off course.</strong> {describeMiss(firstMiss)}
-              </p>
+              <UnicornSays tone="oops" className="w-full">
+                <span aria-live="polite" className="block">
+                  <strong className="text-copper">Off course.</strong> {describeMiss(firstMiss)}
+                </span>
+              </UnicornSays>
               <Button onClick={tryAgain}>Try again</Button>
             </>
           )}

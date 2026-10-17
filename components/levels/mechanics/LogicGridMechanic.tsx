@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { UnicornSays } from "@/components/guide/Unicorn";
 import { LogicTutorial } from "./LogicTutorial";
 import {
   GATE_ARITY,
@@ -184,14 +185,16 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
         <div className="flex flex-wrap items-center gap-3">
           {solved ? (
             <>
-              <p className="text-sm leading-6 text-signal" aria-live="polite">
-                <strong>
-                  {isLastRound
-                    ? "Cipher cracked! Level cleared."
-                    : "Circuit works!"}
-                </strong>{" "}
-                <span className="text-ink-soft">{round.lesson}</span>
-              </p>
+              <UnicornSays tone="happy" className="w-full">
+                <span aria-live="polite" className="block">
+                  <strong className="text-signal">
+                    {isLastRound
+                      ? "Cipher cracked! Level cleared."
+                      : "Circuit works!"}
+                  </strong>{" "}
+                  <span className="text-ink-soft">{round.lesson}</span>
+                </span>
+              </UnicornSays>
               {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
             </>
           ) : (

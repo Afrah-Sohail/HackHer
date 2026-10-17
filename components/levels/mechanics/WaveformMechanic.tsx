@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { UnicornSays } from "@/components/guide/Unicorn";
 import { WaveformTutorial } from "./WaveformTutorial";
 import {
   CHANNEL_COUNT,
@@ -299,27 +300,28 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
           )}
           {phase === "result" && delivered && (
             <>
-              <p className="text-sm leading-6 text-signal" aria-live="polite">
-                <strong>
-                  {isLastRound
-                    ? "Message delivered through every jammer! Level cleared."
-                    : "Message delivered!"}
-                </strong>{" "}
-                <span className="text-ink-soft">{round.lesson}</span>
-              </p>
+              <UnicornSays tone="happy" className="w-full">
+                <span aria-live="polite" className="block">
+                  <strong className="text-signal">
+                    {isLastRound
+                      ? "Message delivered through every jammer! Level cleared."
+                      : "Message delivered!"}
+                  </strong>{" "}
+                  <span className="text-ink-soft">{round.lesson}</span>
+                </span>
+              </UnicornSays>
               {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
             </>
           )}
           {phase === "result" && !delivered && (
             <>
-              <p
-                className="text-sm leading-6 text-copper-deep"
-                aria-live="polite"
-              >
-                <strong>Jammed!</strong>{" "}
-                {describeFailure(results[firstFailure], firstFailure)} ⚡ marks
-                everything it blocked.
-              </p>
+              <UnicornSays tone="oops" className="w-full">
+                <span aria-live="polite" className="block">
+                  <strong className="text-copper">Jammed!</strong>{" "}
+                  {describeFailure(results[firstFailure], firstFailure)} ⚡ marks
+                  everything it blocked.
+                </span>
+              </UnicornSays>
               <Button onClick={editPattern}>Try again</Button>
             </>
           )}

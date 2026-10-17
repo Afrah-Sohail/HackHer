@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { UnicornSays } from "@/components/guide/Unicorn";
 import { WeaveTutorial } from "./WeaveTutorial";
 import {
   MAX_REPEAT,
@@ -435,22 +436,26 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
           )}
           {phase === "result" && matches && (
             <>
-              <p className="text-sm leading-6 text-signal" aria-live="polite">
-                <strong>
-                  {isLastRound ? "Tapestry complete! Level cleared." : "Perfect weave!"}
-                </strong>{" "}
-                <span className="text-ink-soft">{round.lesson}</span>
-              </p>
+              <UnicornSays tone="happy" className="w-full">
+                <span aria-live="polite" className="block">
+                  <strong className="text-signal">
+                    {isLastRound ? "Tapestry complete! Level cleared." : "Perfect weave!"}
+                  </strong>{" "}
+                  <span className="text-ink-soft">{round.lesson}</span>
+                </span>
+              </UnicornSays>
               {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
             </>
           )}
           {phase === "result" && !matches && (
             <>
-              <p className="text-sm leading-6 text-copper" aria-live="polite">
-                <strong>Not quite.</strong>{" "}
-                {describeMismatch(woven, round.target, mismatch)} Red outlines mark
-                the wrong threads.
-              </p>
+              <UnicornSays tone="oops" className="w-full">
+                <span aria-live="polite" className="block">
+                  <strong className="text-copper">Not quite.</strong>{" "}
+                  {describeMismatch(woven, round.target, mismatch)} Red outlines mark
+                  the wrong threads.
+                </span>
+              </UnicornSays>
               <Button onClick={tryAgain}>Try again</Button>
             </>
           )}

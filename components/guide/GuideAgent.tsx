@@ -1,19 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { HINTS_ENABLED } from "@/guide/config";
+import { GUIDE_NAME, HINTS_ENABLED } from "@/guide/config";
 import type { LevelDefinition } from "@/level-manager/types";
 import { Button } from "@/components/ui/Button";
 import { ConceptBadge } from "@/components/ui/ConceptBadge";
+import { UnicornAvatar } from "./Unicorn";
 
 type Topic = "life" | "work" | "legacy";
 type View = "overview" | Topic | "hint";
 
-const TOPICS: { id: Topic; label: string }[] = [
-  { id: "life", label: "🌱 Her life" },
-  { id: "work", label: "🛠️ Her work" },
-  { id: "legacy", label: "🌟 Her legacy" },
-];
+function topicsFor(pioneer: string): { id: Topic; label: string }[] {
+  const pronoun = /[&,]/.test(pioneer) ? "Their" : "Her";
+  return [
+    { id: "life", label: `🌱 ${pronoun} life` },
+    { id: "work", label: `🛠️ ${pronoun} work` },
+    { id: "legacy", label: `🌟 ${pronoun} legacy` },
+  ];
+}
 
 // Renders **bold** spans as <strong> without ever injecting HTML.
 function RichText({ text }: { text: string }) {
@@ -120,13 +124,11 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
           className="max-h-[70vh] w-full overflow-y-auto rounded-2xl border-2 border-copper/30 bg-paper-raised p-4 shadow-xl"
         >
           <div className="mb-3 flex items-center gap-3">
-            <span
-              aria-hidden
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-copper text-lg text-paper-raised"
-            >
-              ✦
-            </span>
+            <UnicornAvatar size={52} />
             <div className="min-w-0">
+              <p className="text-[11px] font-medium tracking-[0.14em] text-copper uppercase">
+                {GUIDE_NAME} tells you about
+              </p>
               <p className="font-display text-lg leading-tight text-ink">
                 {level.pioneer}
               </p>
@@ -164,7 +166,9 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
                   ← Overview
                 </Button>
               )}
-              {TOPICS.filter((topic) => topic.id !== view).map((topic) => (
+              {topicsFor(level.pioneer)
+                .filter((topic) => topic.id !== view)
+                .map((topic) => (
                 <Button
                   key={topic.id}
                   variant="secondary"
@@ -187,8 +191,13 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
           </div>
         </section>
       )}
-      <Button onClick={() => setOpen((value) => !value)} aria-expanded={open}>
-        {open ? "Close" : `✦ Who was ${level.pioneer}?`}
+      <Button
+        className="gap-2 pl-2"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+      >
+        {!open && <UnicornAvatar size={28} />}
+        {open ? "Close" : `Ask ${GUIDE_NAME}`}
       </Button>
     </div>
   );

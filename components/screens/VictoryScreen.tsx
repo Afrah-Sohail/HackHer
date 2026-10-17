@@ -4,6 +4,8 @@ import { LEVELS } from "@/level-manager/catalog";
 import { LEVEL_COUNT } from "@/level-manager/types";
 import { useGame } from "@/state/game-context";
 import { Button } from "@/components/ui/Button";
+import { UnicornSays } from "@/components/guide/Unicorn";
+import { GUIDE_NAME } from "@/guide/config";
 
 export function VictoryScreen() {
   const { state, score, cleared, showWelcome, restart } = useGame();
@@ -17,11 +19,14 @@ export function VictoryScreen() {
       <h1 className="mt-3 font-display text-5xl leading-none text-ink sm:text-6xl">
         {archiveCleared ? "The archive is clear." : "Level 6 is clear."}
       </h1>
-      <p className="mt-5 max-w-xl text-base leading-7 text-ink-soft">
-        {archiveCleared
-          ? "All six levels are cleared. The shells are ready for their real mechanics."
-          : "This run reached the last level. Earlier levels can still be cleared from the list."}
-      </p>
+      <div className="mt-6 max-w-xl">
+        <UnicornSays tone="happy" size={72}>
+          <strong className="text-copper">{GUIDE_NAME} cheers!</strong>{" "}
+          {archiveCleared
+            ? "You did it! You learned loops, frequency hopping, logic gates, functions, priority queues and classes, one pioneer at a time. I'm so proud of you!"
+            : "You reached the last level! Earlier levels can still be cleared from the list below."}
+        </UnicornSays>
+      </div>
       <p className="mt-6 font-display text-3xl text-ink">{score} pts</p>
       <ul className="mt-8 divide-y divide-line rounded-2xl border border-line bg-paper-raised">
         {LEVELS.map((level) => {

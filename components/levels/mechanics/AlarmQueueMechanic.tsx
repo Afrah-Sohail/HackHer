@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { UnicornSays } from "@/components/guide/Unicorn";
 import { QueueTutorial } from "./QueueTutorial";
 import {
   PRIORITY_CLASS,
@@ -237,20 +238,24 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
           )}
           {phase === "result" && success && (
             <>
-              <p className="text-sm leading-6 text-signal" aria-live="polite">
-                <strong>
-                  {isLastRound ? "Everything critical survived! Level cleared." : "All must-run jobs ran!"}
-                </strong>{" "}
-                <span className="text-ink-soft">{round.lesson}</span>
-              </p>
+              <UnicornSays tone="happy" className="w-full">
+                <span aria-live="polite" className="block">
+                  <strong className="text-signal">
+                    {isLastRound ? "Everything critical survived! Level cleared." : "All must-run jobs ran!"}
+                  </strong>{" "}
+                  <span className="text-ink-soft">{round.lesson}</span>
+                </span>
+              </UnicornSays>
               {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
             </>
           )}
           {phase === "result" && !success && (
             <>
-              <p className="text-sm leading-6 text-copper" aria-live="polite">
-                <strong>Alarm!</strong> {describeMiss(missed)}
-              </p>
+              <UnicornSays tone="oops" className="w-full">
+                <span aria-live="polite" className="block">
+                  <strong className="text-copper">Alarm!</strong> {describeMiss(missed)}
+                </span>
+              </UnicornSays>
               <Button onClick={tryAgain}>Try again</Button>
             </>
           )}

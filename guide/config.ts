@@ -3,3 +3,6 @@
 export const HINTS_ENABLED = false;
 
 export const GEMINI_MODEL = "gemini-3.1-flash-lite";
+
+// The unicorn who guides the player. Change the name here to rename her everywhere.
+export const GUIDE_NAME = "Lumi";

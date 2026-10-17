@@ -5,6 +5,7 @@ import type { LevelDefinition } from "@/level-manager/types";
 import { useGame } from "@/state/game-context";
 import { Button } from "@/components/ui/Button";
 import { ConceptBadge } from "@/components/ui/ConceptBadge";
+import { GuideAgent } from "@/components/guide/GuideAgent";
 
 export function LevelShell({
   level,
@@ -46,6 +47,7 @@ export function LevelShell({
         </p>
         <Button onClick={completeLevel}>Complete Level</Button>
       </footer>
+      <GuideAgent key={level.slug} level={level} />
     </article>
   );
 }

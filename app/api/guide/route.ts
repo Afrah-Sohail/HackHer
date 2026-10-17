@@ -1,5 +1,6 @@
 import { getLevel } from "@/level-manager/catalog";
 import { GEMINI_MODEL, HINTS_ENABLED } from "@/guide/config";
+import { FACTS } from "@/guide/facts";
 
 type GuideMode = "learn" | "hint";
 type LearnTopic = "life" | "work" | "legacy";
@@ -35,11 +36,14 @@ function buildPrompt(
     `Floor story: ${level.narrative}`;
 
   if (mode === "learn") {
-    const who = level.pioneer;
+    const facts = FACTS[level.slug][topic].map((fact) => `- ${fact}`).join("\n");
     return (
       `${context}\n\nThe player already read this overview, so do not repeat it:\n` +
-      `${level.blurb}\n\nNow write about 60 words on ${TOPIC_BRIEF[topic]} ` +
-      `(subject: ${who}). Open with a hook, no greeting, no "Welcome". Keep it ` +
+      `${level.blurb}\n\nVERIFIED FACTS (the only facts you may use):\n${facts}\n\n` +
+      `Write about 60 words on ${TOPIC_BRIEF[topic]} (subject: ${level.pioneer}). ` +
+      `Use ONLY the verified facts above; the floor details at the top are for orientation only, so take no claims from them and make no claims about modern technology unless a fact says so. Do not add any name, date, number, ` +
+      `quote or claim that is not in that list, and do not guess. Pick the 2 or 3 ` +
+      `most interesting facts. Open with a hook, no greeting, no "Welcome". Keep it ` +
       `upbeat, a little playful, and easy to read for a 12 to 16 year old. ` +
       `Bold the key ideas with **double asterisks**.`
     );
@@ -86,7 +90,7 @@ export async function POST(request: Request) {
     return Response.json({ error: "Unknown level." }, { status: 400 });
   }
 
-  if (mode === "learn" && !isTopic(body.topic)) {
+  if (mode === "learn" && (!isTopic(body.topic) || !FACTS[level.slug])) {
     return Response.json({ error: "Unknown topic." }, { status: 400 });
   }
   const topic: LearnTopic = isTopic(body.topic) ? body.topic : "life";
@@ -101,7 +105,7 @@ export async function POST(request: Request) {
           "Content-Type": "application/json",
           "x-goog-api-key": apiKey,
         },
-        signal: AbortSignal.timeout(10000),
+        signal: AbortSignal.timeout(15000),
         body: JSON.stringify({
           systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
           contents: [
@@ -111,7 +115,7 @@ export async function POST(request: Request) {
             },
           ],
           generationConfig: {
-            temperature: 0.7,
+            temperature: mode === "learn" ? 0.4 : 0.7,
             maxOutputTokens: 2000,
             thinkingConfig: { thinkingBudget: 0 },
           },

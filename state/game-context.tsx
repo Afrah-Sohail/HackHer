@@ -26,6 +26,7 @@ type GameContextValue = {
   completeLevel: (score?: number) => void;
   jumpToLevel: (index: number) => void;
   forceWin: () => void;
+  arrive: () => void;
   showWelcome: () => void;
   restart: () => void;
 };
@@ -51,6 +52,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         }),
       jumpToLevel: (index) => dispatch({ type: "jump-to-level", index }),
       forceWin: () => dispatch({ type: "force-win" }),
+      arrive: () => dispatch({ type: "arrive" }),
       showWelcome: () => dispatch({ type: "show-welcome" }),
       restart: () => dispatch({ type: "restart" }),
     }),

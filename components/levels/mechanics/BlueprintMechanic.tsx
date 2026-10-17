@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Tag } from "@/components/ui/Tag";
 import { UnicornSays } from "@/components/guide/Unicorn";
 import { ObjectTutorial } from "./ObjectTutorial";
+import { PetSprite } from "./PetSprite";
 import {
   METHODS,
   PROPS,
@@ -22,6 +23,16 @@ import {
 type Feedback = { ok: boolean; text: string } | null;
 
 const EMPTY_PET: Pet = { name: "", species: "", color: "" };
+
+// A built pet "is right" when it matches one of the pets mission asked for.
+function matchesRequest(round: { requests: readonly Pet[] }, pet: Pet): boolean {
+  return round.requests.some(
+    (request) =>
+      request.name === pet.name &&
+      request.species === pet.species &&
+      request.color === pet.color,
+  );
+}
 
 function valueOf(pet: Pet, id: PropId): string {
   if (id === "name" || id === "species" || id === "color") return pet[id] || "—";
@@ -299,18 +310,39 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
               {objects.map((pet, index) => (
                 <li
                   key={index}
-                  className="rounded-2xl border border-line bg-paper-raised/60 p-4 text-lg"
+                  className="flex items-start gap-4 rounded-2xl border border-line bg-paper-raised/60 p-4 text-lg"
                 >
+                  <div className="flex w-20 shrink-0 flex-col items-center gap-1">
+                    {round.mode !== "build" || matchesRequest(round, pet) ? (
+                      <PetSprite
+                        species={pet.species}
+                        color={pet.color}
+                        size={80}
+                        className="pet-pop"
+                      />
+                    ) : (
+                      <span
+                        aria-hidden="true"
+                        className="flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-dashed border-line text-3xl text-ink-soft/60"
+                      >
+                        ?
+                      </span>
+                    )}
+                    {round.mode === "build" && matchesRequest(round, pet) && (
+                      <span className="text-sm font-semibold text-signal">✓ {pet.name}</span>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
                   {round.mode === "build" ? (
-                    <div className="grid gap-2 sm:grid-cols-3">
+                    <div className="grid grid-cols-[repeat(auto-fit,minmax(8rem,1fr))] gap-2">
                       {(["name", "species", "color"] as const).map((key) => (
-                        <label key={key} className="grid gap-1 text-sm text-ink-soft">
+                        <label key={key} className="grid min-w-0 gap-1 text-sm text-ink-soft">
                           {PROPS[key].label}
                           <select
                             value={pet[key]}
                             disabled={!editable}
                             onChange={(event) => editPet(index, key, event.target.value)}
-                            className="rounded-xl border border-line bg-void px-3 py-2.5 text-lg text-ink"
+                            className="w-full min-w-0 rounded-xl border border-line bg-void px-3 py-2.5 text-lg text-ink"
                           >
                             <option value="">Choose…</option>
                             {PROPS[key].options?.map((option) => (
@@ -343,6 +375,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                       💬 {greeting(pet)}
                     </p>
                   )}
+                  </div>
                 </li>
               ))}
             </ul>

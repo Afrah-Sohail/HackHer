@@ -23,6 +23,7 @@ export type GameAction =
   | { type: "complete-level"; score?: number }
   | { type: "jump-to-level"; index: number }
   | { type: "force-win" }
+  | { type: "arrive" }
   | { type: "show-welcome" }
   | { type: "restart" };
 
@@ -63,10 +64,11 @@ function finishLevel(
     };
   }
 
+  // The rocket flies to (and breaks down on) the next planet before its level.
   return {
     ...state,
     levels,
-    screen: "playing",
+    screen: "travel",
     currentLevelIndex: nextIndex,
   };
 }
@@ -100,6 +102,8 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
 
       return finishLevel(state, state.currentLevelIndex);
     }
+    case "arrive":
+      return state.screen === "travel" ? { ...state, screen: "playing" } : state;
     case "show-welcome":
       return { ...state, screen: "welcome" };
     case "restart":

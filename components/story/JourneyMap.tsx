@@ -26,14 +26,14 @@ export type Travel = {
 };
 
 type MapProps = {
-  /** Planet where Blip is, or will play next. */
+  /** Planet where you are, or will play next. */
   current: number;
   completed: boolean[];
-  /** Planets Blip has reached (the rest are greyed out). */
+  /** Planets you have reached (the rest are greyed out). */
   unlocked: boolean[];
   onSelect?: (index: number) => void;
   travel?: Travel;
-  /** Blip has made it to the end of the line. */
+  /** You have made it to the end of the line. */
   atHome?: boolean;
 };
 
@@ -100,7 +100,7 @@ function MapSvg({
       viewBox={`0 0 ${w} ${h}`}
       className={className}
       role="img"
-      aria-label="Blip's journey across the planets"
+      aria-label="Your journey across the planets"
     >
       <defs>
         <filter id={`map-gray${uid}`}>

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { GuideAgent } from "@/components/guide/GuideAgent";
 import { StarConfetti } from "@/components/ui/StarConfetti";
 import { PlanetIntro } from "@/components/story/PlanetIntro";
+import { PlanetBackdrop } from "@/components/story/PlanetBackdrop";
 import { JOURNEY } from "@/story/journey";
 
 export function LevelShell({
@@ -35,7 +36,9 @@ export function LevelShell({
   }, [canCompleteProp]);
 
   return (
-    <article className="overflow-hidden rounded-3xl border border-line bg-paper-raised shadow-sm">
+    <>
+    <PlanetBackdrop planet={story.planet} />
+    <article className="overflow-hidden rounded-3xl border border-line bg-paper-raised/75 shadow-sm backdrop-blur-sm">
       <header className="border-b border-line px-5 py-5 sm:px-8">
         <p className="text-xs font-medium tracking-[0.18em] text-copper uppercase">
           Level {level.floor} · {story.name}
@@ -77,5 +80,6 @@ export function LevelShell({
       {canCompleteProp === true && <StarConfetti />}
       <GuideAgent key={level.slug} level={level} />
     </article>
+    </>
   );
 }

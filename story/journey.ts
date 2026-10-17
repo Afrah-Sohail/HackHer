@@ -1,13 +1,11 @@
-// The story that wraps the six games. Blip is an alien trying to fly home out of
-// the solar system, but his rocket keeps breaking down. On every planet he
-// meets one of the women, learns her idea, and uses it to fix the rocket.
-// Sparkles is his space unicorn friend: great moral support, no hands.
+// The story that wraps the six games. You are an alien trying to fly home out of
+// the solar system, but your rocket keeps breaking down. On every planet you
+// meet one of the women, learn her idea, and use it to fix the rocket.
+// Sparkles is your space unicorn friend: great moral support, no hands.
 
-export const ALIEN_NAME = "Blip";
+export type PlanetId = "mercury" | "venus" | "mars" | "jupiter" | "saturn" | "uranus";
 
-export type PlanetId = "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn";
-
-export type Speaker = "narrator" | "blip" | "sparkles" | "woman";
+export type Speaker = "narrator" | "you" | "sparkles" | "woman";
 
 export type Beat = { speaker: Speaker; text: string };
 
@@ -20,19 +18,19 @@ export type PlanetStory = {
   arrival: Beat[];
   /** Shown when the level is solved. */
   fixed: string;
-  /** What Blip says when the rocket breaks down on the way to the next planet. */
+  /** What happens when the rocket breaks down on the way to the next planet. */
   breakdown: string;
 };
 
-// Index matches the level index (0 = Mercury ... 5 = Saturn).
+// Index matches the level index (0 = Mercury ... 5 = Uranus).
 export const JOURNEY: readonly PlanetStory[] = [
   {
     planet: "mercury",
     name: "Mercury",
     problem: "The autopilot repeats tiny steps one by one, and froze.",
     arrival: [
-      { speaker: "narrator", text: "🔥 Blip's rocket sputters and crash-lands on Mercury." },
-      { speaker: "blip", text: "Not again! The autopilot keeps repeating tiny steps, one by one, and now it's frozen." },
+      { speaker: "narrator", text: "🔥 Your rocket sputters and crash-lands on Mercury." },
+      { speaker: "you", text: "Not again! The autopilot keeps repeating tiny steps, one by one, and now it's frozen." },
       {
         speaker: "woman",
         text: "I'm Ada Lovelace. A machine can follow a list of steps, and a loop repeats them for you. Let me show you how to program the autopilot like a loom.",
@@ -45,10 +43,10 @@ export const JOURNEY: readonly PlanetStory[] = [
   {
     planet: "venus",
     name: "Venus",
-    problem: "Storms are jamming the radio, so Blip can't call home.",
+    problem: "Storms are jamming the radio, so you can't call home.",
     arrival: [
       { speaker: "narrator", text: "☁️ The rocket coughs and drops through Venus's thick clouds." },
-      { speaker: "blip", text: "Storms are jamming my radio. I can't even call home!" },
+      { speaker: "you", text: "Storms are jamming my radio. I can't even call home!" },
       {
         speaker: "woman",
         text: "I'm Hedy Lamarr. If a jammer can't guess your channel, it can't block you. Hop between channels and get the signal through.",
@@ -59,12 +57,12 @@ export const JOURNEY: readonly PlanetStory[] = [
     breakdown: "The radio sparks and the fuel line pops!",
   },
   {
-    planet: "earth",
-    name: "Earth",
+    planet: "mars",
+    name: "Mars",
     problem: "The ignition lock is scrambled and won't open.",
     arrival: [
-      { speaker: "narrator", text: "🌍 Smoke trails behind the rocket as it thumps down on Earth." },
-      { speaker: "blip", text: "The ignition lock is scrambled. It won't open without the right code." },
+      { speaker: "narrator", text: "🔴 Smoke trails behind the rocket as it thumps down on Mars." },
+      { speaker: "you", text: "The ignition lock is scrambled. It won't open without the right code." },
       {
         speaker: "woman",
         text: "I'm Joan Clarke. We cracked secret codes with strict logic: AND, OR and NOT. Wire up the gates and the lock will open.",
@@ -75,12 +73,12 @@ export const JOURNEY: readonly PlanetStory[] = [
     breakdown: "A thruster flies off and the rocket spins!",
   },
   {
-    planet: "mars",
-    name: "Mars",
+    planet: "jupiter",
+    name: "Jupiter",
     problem: "The flight computer lost its numbers. Which way is home?",
     arrival: [
-      { speaker: "narrator", text: "🔴 Another bump, another dusty landing, this time on Mars." },
-      { speaker: "blip", text: "The flight computer lost its numbers. Which way is home?" },
+      { speaker: "narrator", text: "🌪️ Your rocket lurches down into Jupiter's stormy clouds." },
+      { speaker: "you", text: "The flight computer lost its numbers. Which way is home?" },
       {
         speaker: "woman",
         text: "We're Katherine Johnson, Dorothy Vaughan and Mary Jackson. A function is a rule that turns one number into another. Find the rule and you'll find your flight path.",
@@ -91,12 +89,12 @@ export const JOURNEY: readonly PlanetStory[] = [
     breakdown: "The flight computer flickers and the engine dies!",
   },
   {
-    planet: "jupiter",
-    name: "Jupiter",
+    planet: "saturn",
+    name: "Saturn",
     problem: "Alarms everywhere: the computer is overloaded with jobs.",
     arrival: [
-      { speaker: "narrator", text: "🌪️ Sparks fly as the rocket limps onto Jupiter." },
-      { speaker: "blip", text: "Alarms everywhere! The computer is overloaded with jobs." },
+      { speaker: "narrator", text: "🪐 Sparks fly as the rocket limps in past Saturn's rings." },
+      { speaker: "you", text: "Alarms everywhere! The computer is overloaded with jobs." },
       {
         speaker: "woman",
         text: "I'm Margaret Hamilton. When memory runs short, run the most important jobs first. That's a priority queue.",
@@ -107,12 +105,12 @@ export const JOURNEY: readonly PlanetStory[] = [
     breakdown: "Every alarm blares at once and the rocket shudders!",
   },
   {
-    planet: "saturn",
-    name: "Saturn",
+    planet: "uranus",
+    name: "Uranus",
     problem: "The repair bots are a mess. Nobody knows who does what.",
     arrival: [
-      { speaker: "narrator", text: "🪐 The rocket bounces off Saturn's rings and lands hard." },
-      { speaker: "blip", text: "My repair bots are a mess, and nobody knows what each one is supposed to do!" },
+      { speaker: "narrator", text: "🧊 The rocket tumbles onto icy, sideways Uranus." },
+      { speaker: "you", text: "My repair bots are a mess, and nobody knows what each one is supposed to do!" },
       {
         speaker: "woman",
         text: "I'm Adele Goldberg. A class is a blueprint, and objects are built from it. Give your bots a blueprint and they'll work together.",

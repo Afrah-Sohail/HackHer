@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { UnicornSays } from "@/components/guide/Unicorn";
 import { GUIDE_NAME } from "@/guide/config";
-import { ALIEN_NAME, type Speaker } from "@/story/journey";
+import type { Speaker } from "@/story/journey";
 import { Alien } from "./Characters";
 
 function WomanAvatar({ label }: { label: string }) {
@@ -15,7 +15,7 @@ function WomanAvatar({ label }: { label: string }) {
   );
 }
 
-// A line of dialogue: Blip, Sparkles, the woman of the planet, or the narrator.
+// A line of dialogue: You, Sparkles, the woman of the planet, or the narrator.
 export function Speech({
   speaker,
   children,
@@ -40,21 +40,21 @@ export function Speech({
       </UnicornSays>
     );
   }
-  const isBlip = speaker === "blip";
+  const isYou = speaker === "you";
   return (
     <div className="flex items-start gap-3">
-      {isBlip ? <Alien size={64} /> : <WomanAvatar label={womanBadge ?? "★"} />}
+      {isYou ? <Alien size={64} /> : <WomanAvatar label={womanBadge ?? "★"} />}
       <div
         className={`min-w-0 flex-1 rounded-2xl rounded-tl-sm border px-4 py-3 ${
-          isBlip ? "border-emerald-300/50 bg-emerald-400/10" : "border-copper/50 bg-copper/10"
+          isYou ? "border-emerald-300/50 bg-emerald-400/10" : "border-copper/50 bg-copper/10"
         }`}
       >
         <span
           className={`mb-0.5 block text-xs font-semibold tracking-wide uppercase ${
-            isBlip ? "text-emerald-300" : "text-copper"
+            isYou ? "text-emerald-300" : "text-copper"
           }`}
         >
-          {isBlip ? ALIEN_NAME : womanName}
+          {isYou ? "You" : womanName}
         </span>
         <span className="text-base text-ink sm:text-lg">{children}</span>
       </div>

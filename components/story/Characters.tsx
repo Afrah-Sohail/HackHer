@@ -1,4 +1,4 @@
-// Blip the alien and his rocket, drawn as small inline SVGs.
+// You (the alien) and your rocket, drawn as small inline SVGs.
 
 export function Alien({ size = 64, className = "" }: { size?: number; className?: string }) {
   return (

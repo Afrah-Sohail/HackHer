@@ -17,7 +17,7 @@ function badgeFor(pioneer: string): string {
     .join("");
 }
 
-// The scene that plays when Blip lands on a planet: what broke, who he meets,
+// The scene that plays when you land on a planet: what broke, who you meet,
 // and what she is about to teach him. It shows before the level's tutorial.
 export function PlanetIntro({
   level,

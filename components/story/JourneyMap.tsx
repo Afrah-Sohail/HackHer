@@ -111,6 +111,13 @@ function MapSvg({
         <filter id={`map-gray${uid}`}>
           <feColorMatrix type="saturate" values="0" />
         </filter>
+        {/* Hides the path behind each stop, so the dots end cleanly at its edge. */}
+        <mask id={`map-cut${uid}`} maskUnits="userSpaceOnUse" x="0" y="0" width={w} height={h}>
+          <rect width={w} height={h} fill="white" />
+          {pts.map((p, i) => (
+            <circle key={i} cx={p.x} cy={p.y} r={R + 7} fill="black" />
+          ))}
+        </mask>
         <radialGradient id={`map-sun${uid}`} cx="40%" cy="38%" r="75%">
           <stop offset="0" stopColor="#fff7c2" />
           <stop offset="0.55" stopColor="#ffc93c" />
@@ -122,6 +129,7 @@ function MapSvg({
         </radialGradient>
       </defs>
 
+      <g mask={`url(#map-cut${uid})`}>
       {Array.from({ length: 7 }, (_, i) => {
         // The first stretch (Sun to the first planet) is flown once you have left.
         const flown = i === 0 ? started || Boolean(atHome) : completed[i - 1];
@@ -137,6 +145,7 @@ function MapSvg({
           />
         );
       })}
+      </g>
 
       {/* The Sun: where the trip started */}
       <g transform={`translate(${pts[0].x} ${pts[0].y})`} aria-hidden="true">
@@ -185,8 +194,6 @@ function MapSvg({
             {isCurrent && (
               <circle r={R + 8} fill="none" stroke="#f0c36a" strokeWidth="4" className="map-pulse" />
             )}
-            {/* A solid backing, so the dotted path never shows through the planet. */}
-            <circle r={R} fill="#150f2e" />
             <circle
               r={R + 6}
               fill="transparent"

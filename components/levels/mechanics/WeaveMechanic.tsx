@@ -222,7 +222,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
       {showTutorial && <WeaveTutorial onDone={closeTutorial} />}
       <div className="grid gap-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-base font-semibold text-ink">
+          <p className="text-lg font-semibold text-ink">
             Round {roundIndex + 1} of {ROUNDS.length}
           </p>
           <ol className="flex gap-2" aria-label="Round progress">
@@ -244,16 +244,15 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
         <div>
           <p className="font-display text-2xl text-ink sm:text-3xl">
             Match the pattern
-            <span className="ml-3 text-base font-sans text-ink-soft sm:text-lg">
+            <span className="ml-3 text-lg font-sans text-ink-soft sm:text-xl">
               aim for {round.budget} chips
             </span>
           </p>
-          <p className="mt-1 text-base text-ink-soft">{round.story}</p>
         </div>
 
         <div className="grid gap-4 rounded-3xl border border-line bg-void p-4 sm:p-5 md:grid-cols-2 md:gap-8">
           <div>
-            <p className="mb-2 text-xs font-medium tracking-wide text-ink-soft uppercase">
+            <p className="mb-2 text-sm font-medium tracking-wide text-ink-soft uppercase">
               Pattern
             </p>
             <div className="flex flex-wrap gap-2" aria-label="Target pattern">
@@ -264,7 +263,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
           </div>
           {phase !== "build" && (
           <div>
-            <p className="mb-2 text-xs font-medium tracking-wide text-ink-soft uppercase">
+            <p className="mb-2 text-sm font-medium tracking-wide text-ink-soft uppercase">
               Yours
             </p>
             <div className="flex flex-wrap gap-2" aria-label="Your weave">
@@ -315,11 +314,11 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
                 className="flex h-16 items-center justify-center gap-2 rounded-2xl border-2 border-copper px-5 text-2xl text-copper transition hover:bg-copper/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-40 sm:h-20 sm:text-3xl"
               >
                 🔁
-                <span className="text-base font-semibold">Repeat</span>
+                <span className="text-lg font-semibold">Repeat</span>
               </button>
             )}
             <span
-              className="ml-auto flex items-center gap-1.5 text-sm text-ink-soft"
+              className="ml-auto flex items-center gap-1.5 text-base text-ink-soft"
               aria-label={`${used} chips used, aim for ${round.budget}`}
             >
               {Array.from({ length: Math.max(round.budget, used) }, (_, i) => (
@@ -346,11 +345,11 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
           aria-label="Punch card"
           className="min-h-28 rounded-3xl border border-line bg-paper p-4 sm:p-5"
         >
-          <p className="mb-3 text-xs font-medium tracking-wide text-ink-soft uppercase">
+          <p className="mb-3 text-sm font-medium tracking-wide text-ink-soft uppercase">
             Punch card
           </p>
           {cards.length === 0 && (
-            <p className="text-base text-ink-soft">Tap a symbol above to start.</p>
+            <p className="text-lg text-ink-soft">Tap a symbol above to start.</p>
           )}
           <div className="flex flex-wrap items-start gap-3">
             {cards.map((card) =>
@@ -404,7 +403,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
                       disabled={locked}
                       onClick={() => removeBlock(card.id)}
                       aria-label="Remove repeat block"
-                      className="ml-1 h-11 w-11 rounded-xl text-lg text-ink-soft hover:text-ink"
+                      className="ml-1 h-11 w-11 rounded-xl text-xl text-ink-soft hover:text-ink"
                     >
                       ✕
                     </button>
@@ -423,7 +422,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
                       </button>
                     ))}
                     {card.body.length === 0 && (
-                      <span className="text-sm text-ink-soft">
+                      <span className="text-base text-ink-soft">
                         {focusId === card.id ? "Tap a symbol above" : "Empty"}
                       </span>
                     )}
@@ -435,7 +434,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
 
         </div>
 
-        <p className="min-h-6 text-base text-copper" aria-live="polite">
+        <p className="min-h-6 text-lg text-copper" aria-live="polite">
           {message ?? " "}
         </p>
 
@@ -443,7 +442,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
           {phase === "build" && (
             <>
               <Button
-                className="px-10 py-3.5 text-lg"
+                className="px-10 py-3.5 text-xl"
                 onClick={weave}
                 disabled={cards.length === 0}
               >
@@ -451,7 +450,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
               </Button>
               <Button
                 variant="secondary"
-                className="px-6 py-3 text-base"
+                className="px-6 py-3 text-lg"
                 onClick={() => {
                   setCards([]);
                   setFocusId(null);
@@ -463,7 +462,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
               </Button>
               <Button
                 variant="ghost"
-                className="px-4 py-3 text-base"
+                className="px-4 py-3 text-lg"
                 onClick={() => setShowTutorial(true)}
               >
                 Help
@@ -471,7 +470,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
             </>
           )}
           {phase === "weaving" && (
-            <p className="text-lg text-ink-soft" aria-live="polite">
+            <p className="text-xl text-ink-soft" aria-live="polite">
               Weaving…
             </p>
           )}
@@ -496,14 +495,14 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
                 </UnicornSays>
               )}
               {canTeachLoop && (
-                <Button className="px-8 py-3.5 text-lg" onClick={showLoop}>
+                <Button className="px-8 py-3.5 text-xl" onClick={showLoop}>
                   Show me the loop
                 </Button>
               )}
               {!isLastRound && (
                 <Button
                   variant={canTeachLoop ? "secondary" : "primary"}
-                  className="px-8 py-3.5 text-lg"
+                  className="px-8 py-3.5 text-xl"
                   onClick={nextRound}
                 >
                   Next round
@@ -521,7 +520,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
                     " Maybe peek at the ×N on your 🔁?"}
                 </span>
               </UnicornSays>
-              <Button className="px-10 py-3.5 text-lg" onClick={tryAgain}>
+              <Button className="px-10 py-3.5 text-xl" onClick={tryAgain}>
                 Try again
               </Button>
             </>

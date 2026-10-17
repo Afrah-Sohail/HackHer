@@ -46,7 +46,7 @@ function Stepper({
 }) {
   return (
     <div className="rounded-2xl border-2 border-copper/60 bg-paper px-3 py-2 text-center">
-      <p className="text-xs tracking-wide text-ink-soft uppercase">{label}</p>
+      <p className="text-sm tracking-wide text-ink-soft uppercase">{label}</p>
       <div className="mt-1 flex items-center justify-center gap-2">
         <button
           type="button"
@@ -257,10 +257,10 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <p className="font-display text-xl text-ink sm:text-2xl">
             Match mission control
-            <span className="ml-2 text-base font-sans text-ink-soft">every second</span>
+            <span className="ml-2 text-lg font-sans text-ink-soft">every second</span>
           </p>
           <div className="flex items-center gap-3">
-            <span className="text-sm font-semibold text-ink">
+            <span className="text-base font-semibold text-ink">
               Round {roundIndex + 1} of {ROUNDS.length}
             </span>
             <ol className="flex gap-1.5" aria-label="Round progress">
@@ -279,7 +279,6 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
             </ol>
           </div>
         </div>
-        <p className="-mt-2 text-sm text-ink-soft sm:text-base">{round.story}</p>
 
         <div className="grid gap-2 rounded-3xl border border-line bg-void p-3 sm:p-4">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
@@ -312,15 +311,15 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
             <Pill>altitude y</Pill>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-            <p className="font-mono text-base text-copper sm:text-lg">{formatRule(a, b)}</p>
+            <p className="font-mono text-lg text-copper sm:text-xl">{formatRule(a, b)}</p>
             {phase === "build" && (
               <div className="flex items-center gap-3">
-                <Button className="px-8 py-3 text-lg" onClick={launch}>
+                <Button className="px-8 py-3 text-xl" onClick={launch}>
                   Launch 🚀
                 </Button>
                 <Button
                   variant="ghost"
-                  className="px-3 py-2.5 text-base"
+                  className="px-3 py-2.5 text-lg"
                   onClick={() => setShowTutorial(true)}
                 >
                   Help
@@ -328,17 +327,17 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
               </div>
             )}
             {phase === "launching" && (
-              <p className="text-lg text-ink-soft" aria-live="polite">
+              <p className="text-xl text-ink-soft" aria-live="polite">
                 Launching…
               </p>
             )}
             {phase === "result" && allOk && !isLastRound && (
-              <Button className="px-8 py-3 text-lg" onClick={nextRound}>
+              <Button className="px-8 py-3 text-xl" onClick={nextRound}>
                 Next round
               </Button>
             )}
             {phase === "result" && !allOk && (
-              <Button className="px-8 py-3 text-lg" onClick={tryAgain}>
+              <Button className="px-8 py-3 text-xl" onClick={tryAgain}>
                 Try again
               </Button>
             )}
@@ -374,16 +373,16 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
           />
 
           <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-paper-raised">
-            <p className="px-4 pt-3 pb-1 text-xs font-medium tracking-[0.14em] text-ink-soft uppercase">
+            <p className="px-4 pt-3 pb-1 text-sm font-medium tracking-[0.14em] text-ink-soft uppercase">
               Rocket check
             </p>
             <div className="flex-1 overflow-x-auto">
             <table
               aria-label="Rocket check"
-              className="h-full w-full text-center text-base"
+              className="h-full w-full text-center text-lg"
             >
               <thead>
-                <tr className="text-xs text-ink-soft">
+                <tr className="text-sm text-ink-soft">
                   <th scope="col" className="px-3 py-2 font-medium">
                     Second
                   </th>
@@ -404,10 +403,10 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
                     phase === "result" || (phase === "launching" && i < revealed);
                   return (
                     <tr key={row.x} className="border-t border-line">
-                      <td className="px-3 py-2 text-lg text-ink">{row.x}</td>
-                      <td className="px-3 py-2 text-lg text-copper">{row.needed}</td>
-                      <td className="px-3 py-2 text-lg text-ink">{row.yours}</td>
-                      <td className="px-3 py-2 text-lg font-semibold">
+                      <td className="px-3 py-2 text-xl text-ink">{row.x}</td>
+                      <td className="px-3 py-2 text-xl text-copper">{row.needed}</td>
+                      <td className="px-3 py-2 text-xl text-ink">{row.yours}</td>
+                      <td className="px-3 py-2 text-xl font-semibold">
                         {marked ? (
                           row.ok ? (
                             <span className="text-signal">✓</span>

@@ -42,7 +42,7 @@ export function LevelShell({
           <strong className="font-bold">{level.pioneer}</strong>
           <span className="font-normal">: {level.heading}</span>
         </h1>
-        <details className="group text-sm text-ink-soft">
+        <details className="group text-base text-ink-soft">
           <summary className="cursor-pointer select-none text-copper hover:text-ink">
             About this level
           </summary>

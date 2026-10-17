@@ -211,7 +211,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
       )}
       <div className="grid gap-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-base font-semibold text-ink">
+          <p className="text-lg font-semibold text-ink">
             Round {roundIndex + 1} of {ROUNDS.length}
           </p>
           <ol className="flex gap-2" aria-label="Round progress">
@@ -260,7 +260,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
               {gate}
             </button>
           ))}
-          <span className="text-base text-ink-soft">
+          <span className="text-lg text-ink-soft">
             {armed ? "Now tap a slot ↓" : "Drag a gate onto a slot ↓"}
           </span>
         </div>
@@ -295,13 +295,13 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
           </BodyPortal>
         )}
 
-        <p className="min-h-6 text-base text-copper" aria-live="polite">
+        <p className="min-h-6 text-lg text-copper" aria-live="polite">
           {message ?? " "}
         </p>
 
           </div>
           <div className="grid gap-3">
-        <ul className="grid gap-1 text-base text-ink-soft">
+        <ul className="grid gap-1 text-lg text-ink-soft">
           {round.inputs.map((input) => (
             <li key={input.id}>
               <span className="font-semibold text-ink">{input.id}</span> ={" "}
@@ -332,7 +332,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
                 </span>
               </UnicornSays>
               {!isLastRound && (
-                <Button className="px-10 py-3.5 text-lg" onClick={nextRound}>
+                <Button className="px-10 py-3.5 text-xl" onClick={nextRound}>
                   Next round
                 </Button>
               )}
@@ -341,7 +341,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
             <>
               <Button
                 variant="secondary"
-                className="px-6 py-3 text-base"
+                className="px-6 py-3 text-lg"
                 onClick={() => {
                   setPlaced(emptyPlaced(round));
                   setMessage(null);
@@ -352,7 +352,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
               </Button>
               <Button
                 variant="ghost"
-                className="px-4 py-3 text-base"
+                className="px-4 py-3 text-lg"
                 onClick={() => setShowTutorial(true)}
               >
                 Help
@@ -523,7 +523,7 @@ function Board({
         style={place(round.outputPos)}
         className="pointer-events-none absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 select-none"
       >
-        <span className="text-xs tracking-wide text-ink-soft uppercase">Output</span>
+        <span className="text-sm tracking-wide text-ink-soft uppercase">Output</span>
         <span
           role="img"
           aria-label={`${round.outputLabel}: ${
@@ -535,7 +535,7 @@ function Board({
               : "bg-ink/10 shadow-[inset_0_2px_6px_rgb(0_0_0/0.5)]"
           }`}
         />
-        <span className="max-w-24 text-center text-sm leading-tight text-ink-soft">
+        <span className="max-w-24 text-center text-base leading-tight text-ink-soft">
           {round.outputLabel}
         </span>
       </div>
@@ -556,12 +556,12 @@ function RequirementsTable({
 }) {
   return (
     <div className="overflow-x-auto rounded-2xl border border-line bg-paper-raised">
-      <table className="w-full text-center text-base">
-        <caption className="px-4 pt-4 pb-1 text-left text-xs font-medium tracking-[0.14em] text-ink-soft uppercase">
+      <table className="w-full text-center text-lg">
+        <caption className="px-4 pt-4 pb-1 text-left text-sm font-medium tracking-[0.14em] text-ink-soft uppercase">
           Rule check
         </caption>
         <thead>
-          <tr className="text-sm text-ink-soft">
+          <tr className="text-base text-ink-soft">
             {round.inputs.map((input) => (
               <th key={input.id} scope="col" className="px-3 py-3 font-medium">
                 {input.id}
@@ -601,7 +601,7 @@ function RequirementsTable({
                 <td className="px-3 py-3">
                   <Dot on={actual ?? null} />
                 </td>
-                <td className="px-3 py-3 text-lg font-semibold">
+                <td className="px-3 py-3 text-xl font-semibold">
                   {actual === null || actual === undefined ? (
                     <span className="text-ink-soft">·</span>
                   ) : match ? (

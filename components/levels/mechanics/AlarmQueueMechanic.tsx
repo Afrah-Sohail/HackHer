@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { Button } from "@/components/ui/Button";
 import { Tag } from "@/components/ui/Tag";
 import { UnicornSays } from "@/components/guide/Unicorn";
@@ -39,6 +45,9 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
   const [phase, setPhase] = useState<Phase>("build");
   const [revealed, setRevealed] = useState(0);
   const [showTutorial, setShowTutorial] = useState(true);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const dragIdRef = useRef<string | null>(null);
+  const rowRefs = useRef<Record<string, HTMLLIElement | null>>({});
   const closeTutorial = useCallback(() => setShowTutorial(false), []);
 
   const round = ROUNDS[roundIndex];
@@ -60,6 +69,57 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
     const timer = setTimeout(() => setRevealed((count) => count + 1), 450);
     return () => clearTimeout(timer);
   }, [phase, revealed, queue.length, success, roundIndex, onCleared]);
+
+  function startDrag(event: ReactPointerEvent, id: string) {
+    if (phase !== "build" || event.button !== 0) return;
+    event.preventDefault();
+    dragIdRef.current = id;
+    setDraggingId(id);
+  }
+
+  // While a job is held, it takes the place of whichever row the pointer is
+  // over, so the other jobs make room and the memory preview updates live.
+  const dragging = draggingId !== null;
+  useEffect(() => {
+    if (!dragging) return;
+
+    const onMove = (event: PointerEvent) => {
+      const id = dragIdRef.current;
+      if (!id) return;
+      if (event.clientY < 90) window.scrollBy(0, -14);
+      else if (event.clientY > window.innerHeight - 90) window.scrollBy(0, 14);
+      setQueue((prev) => {
+        const from = prev.findIndex((task) => task.id === id);
+        if (from === -1) return prev;
+        let to = prev.length - 1;
+        for (let i = 0; i < prev.length; i += 1) {
+          const rect = rowRefs.current[prev[i].id]?.getBoundingClientRect();
+          if (rect && event.clientY <= rect.bottom) {
+            to = i;
+            break;
+          }
+        }
+        if (to === from) return prev;
+        const next = [...prev];
+        const [item] = next.splice(from, 1);
+        next.splice(to, 0, item);
+        return next;
+      });
+    };
+    const stop = () => {
+      dragIdRef.current = null;
+      setDraggingId(null);
+    };
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", stop);
+    window.addEventListener("pointercancel", stop);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", stop);
+      window.removeEventListener("pointercancel", stop);
+    };
+  }, [dragging]);
 
   function move(index: number, delta: number) {
     if (phase !== "build") return;
@@ -153,9 +213,16 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
           </div>
         </div>
 
+        {phase === "build" && (
+          <p className="-mb-2 text-sm text-ink-soft sm:text-base">
+            Drag <span aria-hidden="true">⠿</span> to reorder, or use ▲ ▼.
+          </p>
+        )}
         <ol
           aria-label="Job queue"
-          className="grid gap-3 rounded-3xl border border-line bg-paper p-3 sm:p-4"
+          className={`grid gap-3 rounded-3xl border border-line bg-paper p-3 sm:p-4 ${
+            dragging ? "select-none" : ""
+          }`}
         >
           {queue.map((task, index) => {
             const outcome = outcomes[index];
@@ -164,10 +231,29 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
             return (
               <li
                 key={task.id}
-                className={`flex flex-wrap items-center gap-3 rounded-2xl border px-4 py-3 sm:gap-4 ${
-                  active ? "border-copper bg-copper/10" : "border-line bg-paper-raised/60"
+                ref={(el) => {
+                  rowRefs.current[task.id] = el;
+                }}
+                className={`flex flex-wrap items-center gap-3 rounded-2xl border px-4 py-3 transition-shadow sm:gap-4 ${
+                  draggingId === task.id
+                    ? "border-copper bg-copper/15 shadow-xl ring-2 ring-copper"
+                    : active
+                      ? "border-copper bg-copper/10"
+                      : "border-line bg-paper-raised/60"
                 }`}
               >
+                <span
+                  aria-hidden="true"
+                  onPointerDown={(event) => startDrag(event, task.id)}
+                  className={`touch-none py-2 pr-1 text-2xl leading-none select-none ${
+                    locked ? "text-ink-soft/30" : "text-ink-soft hover:text-ink"
+                  }`}
+                  style={{
+                    cursor: locked ? "default" : dragging ? "grabbing" : "grab",
+                  }}
+                >
+                  ⠿
+                </span>
                 <span className="w-6 text-center text-lg text-ink-soft">{index + 1}</span>
                 <span className="flex flex-col">
                   <button

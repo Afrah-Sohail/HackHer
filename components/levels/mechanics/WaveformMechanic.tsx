@@ -141,7 +141,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
           </ol>
         </div>
 
-        <div className="rounded-2xl border border-line bg-paper-raised/60 p-4 sm:p-5">
+        <div className="rounded-2xl border border-line bg-paper-raised/60 p-3 sm:p-4">
           <div
             className="flex items-center gap-3 text-base font-medium text-ink"
             aria-hidden="true"
@@ -153,13 +153,13 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
               🚀 Receiver
             </Tag>
           </div>
-          <p className="mt-3 font-display text-2xl text-ink sm:text-3xl">
+          <p className="mt-2 font-display text-2xl text-ink sm:text-3xl">
             Hop to a clear channel
             <span className="ml-2 text-base font-sans text-ink-soft sm:text-lg">
               every step
             </span>
           </p>
-          <p className="mt-2 text-base text-ink">
+          <p className="mt-1 text-base text-ink">
             <span className="font-semibold text-red-300">⚡ {round.rule}</span>
           </p>
         </div>
@@ -172,7 +172,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
             : "\u00a0"}
         </p>
 
-        <div className="overflow-x-auto rounded-3xl border border-line bg-void p-3 text-ink sm:p-6">
+        <div className="overflow-x-auto rounded-3xl border border-line bg-void p-3 text-ink sm:p-4">
           <div className="relative min-w-[22rem]">
             <div
               className="grid"
@@ -218,7 +218,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
             <svg
               viewBox={`0 0 ${STEP_COUNT} ${CHANNEL_COUNT}`}
               preserveAspectRatio="none"
-              className="pointer-events-none absolute top-8 left-[3.5rem] z-[1] h-[21rem] w-[calc(100%-3.5rem)]"
+              className="pointer-events-none absolute top-8 left-[3.5rem] z-[1] h-[16.5rem] w-[calc(100%-3.5rem)]"
               aria-hidden="true"
             >
               {pathSegments.map((segment) => (
@@ -349,7 +349,7 @@ function ChannelRow({
 }) {
   return (
     <>
-      <span className="flex h-14 items-center text-base font-semibold text-ink">
+      <span className="flex h-11 items-center text-base font-semibold text-ink">
         Ch {channel}
       </span>
       {STEPS.map((step) => {
@@ -380,7 +380,7 @@ function ChannelRow({
               outcome ? `, ${outcome}` : ""
             }`}
             onClick={() => onPick(step, channel)}
-            className={`relative m-1 flex h-[calc(3.5rem-8px)] items-center justify-center rounded-xl text-xl font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-default ${style}`}
+            className={`relative m-1 flex h-[calc(2.75rem-8px)] items-center justify-center rounded-xl text-xl font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-default ${style}`}
           >
             {outcome === "clear" && "✓"}
             {outcome === "jammed" && "✕"}

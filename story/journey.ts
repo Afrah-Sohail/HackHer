@@ -30,7 +30,7 @@ export const JOURNEY: readonly PlanetStory[] = [
     problem: "The autopilot repeats tiny steps one by one, and froze.",
     arrival: [
       { speaker: "narrator", text: "🔥 Your rocket sputters and crash-lands on Mercury." },
-      { speaker: "you", text: "Not again! The autopilot keeps repeating tiny steps, one by one, and now it's frozen." },
+      { speaker: "you", text: "Ouch, my bum! Not again! The autopilot does everything one teeny step at a time, and now it's frozen. Even my antennae are tingling!" },
       {
         speaker: "woman",
         text: "I'm Ada Lovelace. A machine can follow a list of steps, and a loop repeats them for you. Let me show you how to program the autopilot like a loom.",
@@ -46,7 +46,7 @@ export const JOURNEY: readonly PlanetStory[] = [
     problem: "Storms are jamming the radio, so you can't call home.",
     arrival: [
       { speaker: "narrator", text: "☁️ The rocket coughs and drops through Venus's thick clouds." },
-      { speaker: "you", text: "Storms are jamming my radio. I can't even call home!" },
+      { speaker: "you", text: "Bleep bloop, my radio is just screaming static! Mom's gonna ground me if I can't call home!" },
       {
         speaker: "woman",
         text: "I'm Hedy Lamarr. If a jammer can't guess your channel, it can't block you. Hop between channels and get the signal through.",
@@ -62,7 +62,7 @@ export const JOURNEY: readonly PlanetStory[] = [
     problem: "The ignition lock is scrambled and won't open.",
     arrival: [
       { speaker: "narrator", text: "🔴 Smoke trails behind the rocket as it thumps down on Mars." },
-      { speaker: "you", text: "The ignition lock is scrambled. It won't open without the right code." },
+      { speaker: "you", text: "Yikes, the ignition lock is all scrambled. I tried the code '1234' and it laughed at me." },
       {
         speaker: "woman",
         text: "I'm Joan Clarke. We cracked secret codes with strict logic: AND, OR and NOT. Wire up the gates and the lock will open.",
@@ -75,7 +75,7 @@ export const JOURNEY: readonly PlanetStory[] = [
   {
     planet: "jupiter",
     name: "Jupiter",
-    problem: "The flight computer lost its numbers. Which way is home?",
+    problem: "The flight computer lost all its numbers! I asked it which way is home and it just said 'banana'.",
     arrival: [
       { speaker: "narrator", text: "🌪️ Your rocket lurches down into Jupiter's stormy clouds." },
       { speaker: "you", text: "The flight computer lost its numbers. Which way is home?" },
@@ -94,7 +94,7 @@ export const JOURNEY: readonly PlanetStory[] = [
     problem: "Alarms everywhere: the computer is overloaded with jobs.",
     arrival: [
       { speaker: "narrator", text: "🪐 Sparks fly as the rocket limps in past Saturn's rings." },
-      { speaker: "you", text: "Alarms everywhere! The computer is overloaded with jobs." },
+      { speaker: "you", text: "Beep beep BEEP! Every alarm is going off and I think one of them is just my snack timer!" },
       {
         speaker: "woman",
         text: "I'm Margaret Hamilton. When memory runs short, run the most important jobs first. That's a priority queue.",
@@ -110,7 +110,7 @@ export const JOURNEY: readonly PlanetStory[] = [
     problem: "The repair bots are a mess. Nobody knows who does what.",
     arrival: [
       { speaker: "narrator", text: "🧊 The rocket tumbles onto icy, sideways Uranus." },
-      { speaker: "you", text: "My repair bots are a mess, and nobody knows what each one is supposed to do!" },
+      { speaker: "you", text: "My repair bots are in a tangle. One is vacuuming the ceiling and nobody knows who's supposed to fix the engine!" },
       {
         speaker: "woman",
         text: "I'm Adele Goldberg. A class is a blueprint, and objects are built from it. Give your bots a blueprint and they'll work together.",

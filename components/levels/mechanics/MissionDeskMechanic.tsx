@@ -358,7 +358,7 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
         {phase === "result" && !allOk && firstMiss && (
           <UnicornSays tone="oops" className="w-full">
             <span aria-live="polite" className="block">
-              <strong className="text-copper">Off course.</strong> {describeMiss(firstMiss)}
+              <strong className="text-copper">Almost there!</strong> {describeMiss(firstMiss)}
             </span>
           </UnicornSays>
         )}

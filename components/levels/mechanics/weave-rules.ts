@@ -125,10 +125,10 @@ export function describeMismatch(
   const want = target[index];
   const got = woven[index];
   if (got === undefined) {
-    return `Yours stops at ${woven.length}, the pattern has ${target.length}.`;
+    return `Yours stops at ${woven.length}, but the pattern keeps going to ${target.length}.`;
   }
   if (want === undefined) {
-    return `Yours has ${woven.length}, the pattern has ${target.length}.`;
+    return `Yours has ${woven.length}, a few more than the pattern's ${target.length}.`;
   }
-  return `Spot ${index + 1} should be ${THREADS[want].symbol}, not ${THREADS[got].symbol}.`;
+  return `Spot ${index + 1} wants a ${THREADS[want].symbol} instead of the ${THREADS[got].symbol}.`;
 }

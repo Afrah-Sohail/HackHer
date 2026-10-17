@@ -79,8 +79,8 @@ export function VictoryScreen() {
           {allCleared ? (
             <>
               <Speech speaker="you">
-                I made it! Every planet taught me something new. Thank you,
-                everyone!
+                WOOHOO, I made it! My rocket works, my tummy rumbles, and every
+                planet taught me something new. Thank you, everyone!
               </Speech>
               <Speech speaker="sparkles">
                 I&apos;m so proud of you both. I did the cheering, you did the

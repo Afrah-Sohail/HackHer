@@ -313,7 +313,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
             <>
               <UnicornSays tone="oops" className="w-full">
                 <span aria-live="polite" className="block">
-                  <strong className="text-copper">Jammed!</strong>{" "}
+                  <strong className="text-copper">Oh no, a little jam!</strong>{" "}
                   {describeFailure(results[firstFailure], firstFailure)}
                 </span>
               </UnicornSays>

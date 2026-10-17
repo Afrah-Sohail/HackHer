@@ -110,8 +110,8 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
         ok: false,
         text:
           need > 0
-            ? `Make ${need} more ${need === 1 ? "pet" : "pets"}.`
-            : `No pet matches ${petText(result.unmatched[0])} yet.`,
+            ? `Let's make ${need} more ${need === 1 ? "pet" : "pets"}!`
+            : `Hmm, no pet matches ${petText(result.unmatched[0])} yet.`,
       });
       return;
     }
@@ -122,10 +122,10 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
     if (wrong) {
       setFeedback({
         ok: false,
-        text: `Pets don't need "${METHODS[wrong].label}". Remove it.`,
+        text: `Pets don't need "${METHODS[wrong].label}", so let's take it off.`,
       });
     } else if (!methods.includes("greet")) {
-      setFeedback({ ok: false, text: "Add a method so pets can greet." });
+      setFeedback({ ok: false, text: "Add a method so pets can say hi!" });
     } else {
       win(round.lesson);
     }

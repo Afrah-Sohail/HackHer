@@ -38,14 +38,14 @@ export const ROUNDS: readonly Round[] = [
     title: "Pattern spotter",
     rule: "Jammer blocks your last 2 channels.",
     blocked: (history) => lastUsed(history, 2),
-    lesson: "Switching between two is too easy to spot.",
+    lesson: "Bouncing between just 2 channels gets you jammed: the jammer remembers your last 2. You need a 3rd channel.",
     previewByDefault: false,
   },
   {
     title: "Mastermind",
     rule: "Jammer blocks your last 3 channels.",
     blocked: (history) => lastUsed(history, 3),
-    lesson: "Hedy and composer George Antheil patented hopping in 1942. Ideas like it live on in Bluetooth.",
+    lesson: "The jammer remembers your last 3, so you need 4 different channels. Hedy and composer George Antheil patented hopping in 1942.",
     previewByDefault: false,
   },
 ];
@@ -79,5 +79,7 @@ export function previewBlocked(
 }
 
 export function describeFailure(result: StepResult, step: number): string {
-  return `Step ${step + 1}: Ch ${result.channel} was blocked.`;
+  const base = `Step ${step + 1}: Ch ${result.channel} was blocked.`;
+  if (result.blocked.length < 2) return base;
+  return `${base} The jammer was blocking Ch ${result.blocked.join(" and ")}.`;
 }

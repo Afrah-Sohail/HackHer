@@ -10,13 +10,16 @@ import { GuideAgent } from "@/components/guide/GuideAgent";
 export function LevelShell({
   level,
   children,
-  canComplete = true,
+  canComplete: canCompleteProp,
 }: {
   level: LevelDefinition;
   children: ReactNode;
   canComplete?: boolean;
 }) {
   const { completeLevel } = useGame();
+  // Floors with a real game pass canComplete; stub floors leave it unset.
+  const isStub = canCompleteProp === undefined;
+  const canComplete = canCompleteProp ?? true;
   const isFinalFloor = level.floor === 6;
 
   return (
@@ -37,7 +40,7 @@ export function LevelShell({
       </header>
       <section aria-label={level.mechanicLabel} className="px-5 py-6 sm:px-8">
         <p className="mb-4 text-xs font-medium tracking-[0.16em] text-ink-soft uppercase">
-          {level.mechanicLabel} shell
+          {level.mechanicLabel}{isStub ? " shell" : ""}
         </p>
         {children}
       </section>

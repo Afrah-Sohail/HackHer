@@ -14,7 +14,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "HackHer",
+  title: "Lost in Computation",
   description:
     "Six levels of computing history, from Ada Lovelace to Adele Goldberg.",
 };

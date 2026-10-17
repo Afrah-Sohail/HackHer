@@ -10,9 +10,11 @@ import { GuideAgent } from "@/components/guide/GuideAgent";
 export function LevelShell({
   level,
   children,
+  canComplete = true,
 }: {
   level: LevelDefinition;
   children: ReactNode;
+  canComplete?: boolean;
 }) {
   const { completeLevel } = useGame();
   const isFinalFloor = level.floor === 6;
@@ -41,11 +43,15 @@ export function LevelShell({
       </section>
       <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-line bg-paper px-5 py-4 sm:px-8">
         <p className="text-sm text-ink-soft">
-          {isFinalFloor
-            ? "Clearing this floor opens the victory screen."
-            : "Clearing this floor unlocks the next one."}
+          {!canComplete
+            ? "Win the challenge above to clear this floor."
+            : isFinalFloor
+              ? "Clearing this floor opens the victory screen."
+              : "Clearing this floor unlocks the next one."}
         </p>
-        <Button onClick={completeLevel}>Complete Level</Button>
+        <Button onClick={completeLevel} disabled={!canComplete}>
+          Complete Level
+        </Button>
       </footer>
       <GuideAgent key={level.slug} level={level} />
     </article>

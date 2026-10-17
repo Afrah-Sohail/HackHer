@@ -215,7 +215,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
 
         {phase === "build" && (
           <p className="-mb-2 text-sm text-ink-soft sm:text-base">
-            Drag <span aria-hidden="true">⠿</span> to reorder, or use ▲ ▼.
+            Drag the <span aria-hidden="true">⠿</span> handle to reorder the jobs.
           </p>
         )}
         <ol
@@ -243,9 +243,18 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
                 }`}
               >
                 <span
-                  aria-hidden="true"
+                  role="button"
+                  tabIndex={locked ? -1 : 0}
+                  aria-label={`Move ${task.name}: drag, or use the up and down arrow keys`}
+                  aria-disabled={locked}
                   onPointerDown={(event) => startDrag(event, task.id)}
-                  className={`touch-none py-2 pr-1 text-2xl leading-none select-none ${
+                  onKeyDown={(event) => {
+                    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+                      event.preventDefault();
+                      move(index, event.key === "ArrowUp" ? -1 : 1);
+                    }
+                  }}
+                  className={`touch-none rounded-lg px-2 py-3 text-3xl leading-none select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
                     locked ? "text-ink-soft/30" : "text-ink-soft hover:text-ink"
                   }`}
                   style={{
@@ -255,26 +264,6 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
                   ⠿
                 </span>
                 <span className="w-6 text-center text-lg text-ink-soft">{index + 1}</span>
-                <span className="flex flex-col">
-                  <button
-                    type="button"
-                    disabled={locked || index === 0}
-                    onClick={() => move(index, -1)}
-                    aria-label={`Move ${task.name} up`}
-                    className="h-9 w-11 rounded-lg border border-line text-sm text-ink transition hover:border-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-30"
-                  >
-                    ▲
-                  </button>
-                  <button
-                    type="button"
-                    disabled={locked || index === queue.length - 1}
-                    onClick={() => move(index, 1)}
-                    aria-label={`Move ${task.name} down`}
-                    className="mt-1 h-9 w-11 rounded-lg border border-line text-sm text-ink transition hover:border-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-30"
-                  >
-                    ▼
-                  </button>
-                </span>
                 <Tag tone={PRIORITY_TONE[task.priority]} size="md" caps className="w-28 justify-center">
                   {PRIORITY_LABEL[task.priority]}
                 </Tag>

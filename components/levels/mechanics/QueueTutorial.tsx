@@ -84,8 +84,8 @@ const STEPS: Step[] = [
     title: "How to play",
     body: (
       <>
-        <strong>Drag</strong> jobs by the <strong>⠿</strong> handle to reorder (or
-        use ▲ ▼). Keep the must-run jobs safe, then press <strong>Run</strong>.
+        <strong>Drag</strong> jobs by the <strong>⠿</strong> handle to reorder them.
+        Keep the must-run jobs safe, then press <strong>Run</strong>.
       </>
     ),
     visual: <QueueDemo />,

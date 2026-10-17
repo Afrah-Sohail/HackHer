@@ -73,8 +73,8 @@ export function check(round: Round, a: number, b: number): RowResult[] {
 }
 
 export function describeMiss(row: RowResult): string {
-  const direction = row.yours < row.needed ? "too low" : "too high";
-  return `Second ${row.x}: you're at ${row.yours} km, need ${row.needed} (${direction}).`;
+  const direction = row.yours < row.needed ? "a little low, nudge it up" : "a little high, nudge it down";
+  return `At second ${row.x} you're at ${row.yours} km and we need ${row.needed}. That's ${direction}!`;
 }
 
 export function formatRule(a: number, b: number): string {

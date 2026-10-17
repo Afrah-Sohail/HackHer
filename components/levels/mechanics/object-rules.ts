@@ -131,9 +131,9 @@ export function designCheck(
 
 export function describeDesign(missing: readonly PropId[], extra: readonly PropId[]): string {
   if (missing.length > 0) {
-    return `Pets need "${PROPS[missing[0]].label}".`;
+    return `Pets will need "${PROPS[missing[0]].label}" too!`;
   }
-  return `Pets don't need "${PROPS[extra[0]].label}". Remove it.`;
+  return `Pets don't need "${PROPS[extra[0]].label}", so let's take it out.`;
 }
 
 export function buildCheck(

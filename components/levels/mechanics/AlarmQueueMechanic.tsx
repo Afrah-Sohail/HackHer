@@ -341,7 +341,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
             <>
               <UnicornSays tone="oops" className="w-full">
                 <span aria-live="polite" className="block">
-                  <strong className="text-copper">Alarm!</strong> {describeMiss(missed)}
+                  <strong className="text-copper">Whoops!</strong> {describeMiss(missed)}
                 </span>
               </UnicornSays>
               <Button className="px-10 py-3.5 text-lg" onClick={tryAgain}>

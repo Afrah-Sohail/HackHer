@@ -122,5 +122,5 @@ export function describeMiss(missed: readonly Task[]): string {
   const names = missed
     .map((task) => `${task.name} (${PRIORITY_LABEL[task.priority].toLowerCase()})`)
     .join(" and ");
-  return `${names} got dropped. Move ${missed.length === 1 ? "it" : "them"} up.`;
+  return `${names} didn't get a turn. Try moving ${missed.length === 1 ? "it" : "them"} up a bit!`;
 }

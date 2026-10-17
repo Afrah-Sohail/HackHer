@@ -74,8 +74,8 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
     if (GATE_ARITY[gate] !== slot.from.length) {
       setMessage(
         gate === "NOT"
-          ? "NOT takes one wire. This slot has two."
-          : `${gate} needs two wires. This slot has one.`,
+          ? "NOT only likes one wire, and this slot has two."
+          : `${gate} likes two wires, and this slot has one.`,
       );
       return;
     }
@@ -95,7 +95,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
         setPlaced({ ...placed, [slotId]: null });
         setMessage(null);
       } else {
-        setMessage("Drag a gate onto the slot.");
+        setMessage("Try dragging a gate onto the slot!");
       }
       return;
     }

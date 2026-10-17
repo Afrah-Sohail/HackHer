@@ -79,7 +79,7 @@ export function previewBlocked(
 }
 
 export function describeFailure(result: StepResult, step: number): string {
-  const base = `Step ${step + 1}: Ch ${result.channel} was blocked.`;
+  const base = `Step ${step + 1}: Ch ${result.channel} ran into the jammer.`;
   if (result.blocked.length < 2) return base;
-  return `${base} The jammer was blocking Ch ${result.blocked.join(" and ")}.`;
+  return `${base} The jammer was sitting on Ch ${result.blocked.join(" and ")}, so try hopping somewhere else.`;
 }

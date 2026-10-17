@@ -603,10 +603,10 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
             <>
               <UnicornSays tone="oops" className="w-full">
                 <span aria-live="polite" className="block">
-                  <strong className="text-copper">Not quite.</strong>{" "}
+                  <strong className="text-copper">Almost!</strong>{" "}
                   {describeMismatch(woven, round.target, mismatch)}
                   {cards.some((card) => card.kind === "repeat") &&
-                    " Check the ×N on your 🔁."}
+                    " Maybe peek at the ×N on your 🔁?"}
                 </span>
               </UnicornSays>
               <Button className="px-10 py-3.5 text-lg" onClick={tryAgain}>

@@ -4,6 +4,27 @@ import { useState } from "react";
 import { HINTS_ENABLED } from "@/guide/config";
 import type { LevelDefinition } from "@/level-manager/types";
 import { Button } from "@/components/ui/Button";
+import { ConceptBadge } from "@/components/ui/ConceptBadge";
+
+// Renders **bold** spans as <strong> without ever injecting HTML.
+function RichText({ text }: { text: string }) {
+  return (
+    <>
+      {text.split("**").map((part, i) =>
+        i % 2 === 1 ? (
+          <strong
+            key={i}
+            className="rounded bg-copper/10 px-1 font-semibold text-copper-deep"
+          >
+            {part}
+          </strong>
+        ) : (
+          <span key={i}>{part}</span>
+        ),
+      )}
+    </>
+  );
+}
 
 type Tab = "background" | "hint";
 
@@ -51,7 +72,7 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
     setFailed(false);
 
     if (nextTab === "background") {
-      const cacheKey = `guide:background:v2:${level.slug}`;
+      const cacheKey = `guide:background:v3:${level.slug}`;
       const cached = readCache(cacheKey);
       if (cached) {
         setText(cached);
@@ -94,15 +115,31 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
       {open && (
         <section
           aria-label="Guide"
-          className="max-h-[55vh] w-full overflow-y-auto rounded-2xl border border-line bg-paper-raised p-4 shadow-lg"
+          className="max-h-[55vh] w-full overflow-y-auto rounded-2xl border-2 border-copper/30 bg-paper-raised p-4 shadow-xl"
         >
+          <div className="mb-3 flex items-center gap-3">
+            <span
+              aria-hidden
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-copper text-lg text-paper-raised"
+            >
+              ✦
+            </span>
+            <div className="min-w-0">
+              <p className="font-display text-lg leading-tight text-ink">
+                {level.pioneer}
+              </p>
+              <div className="mt-1">
+                <ConceptBadge label={level.concept} />
+              </div>
+            </div>
+          </div>
           {HINTS_ENABLED && (
             <div className="mb-3 flex gap-2">
               <Button
                 variant={tab === "background" ? "primary" : "secondary"}
                 onClick={() => void load("background")}
               >
-                About {level.pioneer}
+                About her
               </Button>
               <Button
                 variant={tab === "hint" ? "primary" : "secondary"}
@@ -112,21 +149,27 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
               </Button>
             </div>
           )}
-          {loading && <p className="text-sm text-ink-soft">Thinking…</p>}
+          {loading && (
+            <div aria-label="Loading" className="space-y-2">
+              <div className="h-3 w-full animate-pulse rounded bg-line" />
+              <div className="h-3 w-5/6 animate-pulse rounded bg-line" />
+              <div className="h-3 w-2/3 animate-pulse rounded bg-line" />
+            </div>
+          )}
           {!loading && failed && (
             <p className="text-sm leading-6 text-ink-soft">
               The guide is unavailable right now. {level.narrative}
             </p>
           )}
           {!loading && !failed && text && (
-            <p className="text-sm leading-6 whitespace-pre-line text-ink">
-              {text}
+            <p className="text-[15px] leading-7 whitespace-pre-line text-ink">
+              <RichText text={text} />
             </p>
           )}
         </section>
       )}
       <Button onClick={toggle} aria-expanded={open}>
-        {open ? "Close guide" : `Who was ${level.pioneer}?`}
+        {open ? "Close" : `✦ Who was ${level.pioneer}?`}
       </Button>
     </div>
   );

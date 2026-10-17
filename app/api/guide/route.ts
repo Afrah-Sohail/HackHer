@@ -7,7 +7,9 @@ const SYSTEM_PROMPT =
   "You are the friendly in-game guide for HackHer, a puzzle game that teaches " +
   "computing concepts through women who shaped computer science. Write for " +
   "curious teenagers. Be accurate; if you are unsure of a detail, leave it out " +
-  "rather than guess. Plain text only, no markdown, no headings.";
+  "rather than guess. Plain text only: no headings, lists or links. The only " +
+  "formatting allowed is wrapping the 3 or 4 most important words or short " +
+  "phrases in **double asterisks** for bold, and up to 2 relevant emojis.";
 
 function buildPrompt(
   mode: GuideMode,
@@ -27,7 +29,7 @@ function buildPrompt(
       `attention-grabbing hook, then say in plain words what she did and why ` +
       `it still matters today (tie it to "${level.concept}"). Do not greet the ` +
       `player or say "Welcome". Keep it upbeat, a little playful, and easy to ` +
-      `read for a 12 to 16 year old.`
+      `read for a 12 to 16 year old. Bold the key ideas with **double asterisks**.`
     );
   }
 

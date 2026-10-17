@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import type { LevelDefinition } from "@/level-manager/types";
 import { useGame } from "@/state/game-context";
 import { Button } from "@/components/ui/Button";
@@ -20,6 +20,14 @@ export function LevelShell({
   const isStub = canCompleteProp === undefined;
   const canComplete = canCompleteProp ?? true;
   const isFinalLevel = level.floor === 6;
+  const footerRef = useRef<HTMLElement>(null);
+
+  // The Complete button only appears once the level is solved; bring it into
+  // view so the player always sees what to do next.
+  useEffect(() => {
+    if (canCompleteProp !== true) return;
+    footerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [canCompleteProp]);
 
   return (
     <article className="overflow-hidden rounded-3xl border border-line bg-paper-raised shadow-sm">
@@ -46,18 +54,19 @@ export function LevelShell({
         </p>
         {children}
       </section>
-      <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-line bg-paper px-5 py-4 sm:px-8">
-        <p className="text-sm text-ink-soft">
-          {!canComplete
-            ? "Solve it to clear this level."
-            : isFinalLevel
-              ? "Clear it to finish the game."
-              : "Clear it to unlock the next level."}
-        </p>
-        <Button onClick={() => completeLevel()} disabled={!canComplete}>
-          Complete Level
-        </Button>
-      </footer>
+      {canComplete && (
+        <footer
+          ref={footerRef}
+          className="flex flex-wrap items-center justify-between gap-4 border-t border-line bg-paper px-5 py-5 sm:px-8"
+        >
+          <p className="text-base text-ink-soft">
+            {isFinalLevel ? "That's the last level!" : "Ready for the next one?"}
+          </p>
+          <Button className="px-10 py-3.5 text-lg" onClick={() => completeLevel()}>
+            Complete Level
+          </Button>
+        </footer>
+      )}
       <GuideAgent key={level.slug} level={level} />
     </article>
   );

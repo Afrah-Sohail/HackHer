@@ -57,7 +57,7 @@ function Legend() {
 
 const STEPS: Step[] = [
   {
-    title: "The mission",
+    title: "The story",
     body: (
       <>
         It&apos;s World War II. Your radio-controlled torpedo is being{" "}

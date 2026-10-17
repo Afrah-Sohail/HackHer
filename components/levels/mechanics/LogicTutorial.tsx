@@ -67,11 +67,15 @@ function MiniBoard() {
 
 const STEPS: Step[] = [
   {
-    title: "The mission",
+    title: "The story",
     body: (
       <>
-        <strong>Joan Clarke</strong> cracked codes at Bletchley Park using
-        strict logic. Build circuits that follow the rules!
+        In 1940, mathematician <strong>Joan Clarke</strong> joined the
+        codebreakers at Bletchley Park. Women couldn&apos;t be paid as
+        cryptanalysts then, so she was officially a &quot;linguist&quot;, yet
+        she became deputy head of Hut 8, helping break the German
+        Navy&apos;s <strong>Enigma</strong> messages with strict logic. Now
+        build circuits that follow the rules!
       </>
     ),
     visual: (

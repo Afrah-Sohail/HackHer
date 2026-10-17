@@ -40,11 +40,15 @@ function BlueprintDemo() {
 
 const STEPS: Step[] = [
   {
-    title: "The mission",
+    title: "The story",
     body: (
       <>
-        <strong>Adele Goldberg</strong> helped create <strong>Smalltalk</strong>,
-        a language that changed how big programs are organized.
+        In the 1970s at Xerox PARC, <strong>Adele Goldberg</strong> helped
+        create <strong>Smalltalk</strong>, one of the first object-oriented
+        languages. It came with windows, menus and a mouse, and she wanted
+        learners, including children, to be able to program. Its big idea:
+        build programs from <strong>objects</strong> made from blueprints
+        called <strong>classes</strong>.
       </>
     ),
     visual: (

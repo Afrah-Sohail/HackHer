@@ -3,14 +3,14 @@ export type Round = {
   story: string;
   /** Seconds after liftoff that mission control needs an altitude for. */
   inputs: readonly number[];
-  /** Fixed value, or null when the player may change it. */
-  aFixed: number | null;
-  bFixed: number | null;
   /** The hidden rule that produces mission control's numbers. */
   solution: { a: number; b: number };
   lesson: string;
 };
 
+/** Both steppers start here in every round; the player can change either. */
+export const START_A = 1;
+export const START_B = 0;
 export const A_RANGE = { min: 0, max: 6 };
 export const B_RANGE = { min: -5, max: 9 };
 
@@ -20,8 +20,6 @@ export const ROUNDS: readonly Round[] = [
     story:
       "Dorothy Vaughan's team worked these out by hand. Add the right boost.",
     inputs: [1, 2, 3, 4],
-    aFixed: 1,
-    bFixed: null,
     solution: { a: 1, b: 2 },
     lesson:
       "A function turns an input into an output using a rule.",
@@ -31,8 +29,6 @@ export const ROUNDS: readonly Round[] = [
     story:
       "Now multiply instead of adding.",
     inputs: [1, 2, 3, 4],
-    aFixed: null,
-    bFixed: 0,
     solution: { a: 3, b: 0 },
     lesson:
       "Same input, same output. Every time.",
@@ -42,8 +38,6 @@ export const ROUNDS: readonly Round[] = [
     story:
       "Use both: multiply, then add.",
     inputs: [1, 2, 3, 4],
-    aFixed: null,
-    bFixed: null,
     solution: { a: 2, b: 1 },
     lesson:
       "Functions can chain steps together.",
@@ -53,8 +47,6 @@ export const ROUNDS: readonly Round[] = [
     story:
       "Katherine Johnson checked numbers like these for John Glenn. Find the rule!",
     inputs: [1, 2, 3, 4, 5],
-    aFixed: null,
-    bFixed: null,
     solution: { a: 3, b: -2 },
     lesson:
       "You found the rule behind the trajectory!",

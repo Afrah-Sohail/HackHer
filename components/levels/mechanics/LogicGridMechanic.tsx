@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { BodyPortal } from "@/components/ui/BodyPortal";
 import { Button } from "@/components/ui/Button";
 import { UnicornSays } from "@/components/guide/Unicorn";
 import { LogicTutorial } from "./LogicTutorial";
@@ -281,6 +282,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
         />
 
         {drag?.moved && (
+          <BodyPortal>
           <div
             aria-hidden="true"
             className="pointer-events-none fixed z-[80] -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 border-signal bg-void px-8 py-4 text-xl font-semibold text-ink shadow-2xl"
@@ -288,6 +290,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
           >
             {drag.gate}
           </div>
+          </BodyPortal>
         )}
 
         <p className="min-h-6 text-base text-copper" aria-live="polite">

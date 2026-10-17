@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Explosion } from "@/components/story/JourneyMap";
 import { PlanetArt } from "@/components/story/Planet";
 import { RocketArt } from "@/components/story/Characters";
-import { Speech } from "@/components/story/Speech";
+import { ArrivalChat } from "@/components/story/ArrivalChat";
 import { useGame } from "@/state/game-context";
 
 // Timeline of the opening, in milliseconds.
@@ -83,10 +83,10 @@ export function OpeningScreen() {
         : "The rocket spirals down toward Mercury...";
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col justify-center gap-6 px-4 py-8 sm:px-6">
+    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col justify-center gap-3 px-4 py-4 sm:px-6">
       <svg
         viewBox="0 0 1000 500"
-        className="w-full"
+        className="mx-auto max-h-[38vh] w-full"
         role="img"
         aria-label="Your rocket studies the Sun, then breaks down and heads for Mercury"
       >
@@ -145,26 +145,14 @@ export function OpeningScreen() {
       </svg>
 
       <p
-        className="text-center font-display text-2xl text-ink sm:text-3xl"
+        className="text-center font-display text-xl text-ink sm:text-2xl"
         aria-live="polite"
       >
         {status}
       </p>
 
       {landed ? (
-        <div className="mx-auto grid w-full max-w-2xl gap-3">
-          <Speech speaker="you">
-            Great scan of the Sun! But the engine just blew up. We&apos;re crashing on Mercury!
-          </Speech>
-          <Speech speaker="sparkles">
-            Hold on tight! I&apos;ll be right here cheering you on.
-          </Speech>
-          <div className="mt-2 flex justify-center">
-            <Button className="px-10 py-3.5 text-lg" onClick={arrive}>
-              Look around Mercury →
-            </Button>
-          </div>
-        </div>
+        <ArrivalChat index={0} onDone={arrive} />
       ) : (
         <div className="flex justify-center">
           <Button

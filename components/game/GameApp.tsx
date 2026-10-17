@@ -20,7 +20,7 @@ function GameFrame() {
     state.screen === "victory";
 
   return (
-    <div className={splash ? "min-h-screen" : "min-h-screen pb-24"}>
+    <div className={"min-h-screen"}>
       {splash ? null : <GameHeader />}
       <main>
         {state.screen === "welcome" ? <WelcomeScreen /> : null}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BodyPortal } from "@/components/ui/BodyPortal";
 import { GUIDE_NAME, HINTS_ENABLED } from "@/guide/config";
 import type { LevelDefinition } from "@/level-manager/types";
 import { Button } from "@/components/ui/Button";
@@ -124,6 +125,7 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
   const body = view === "overview" ? level.blurb : texts[view];
 
   return (
+    <BodyPortal>
     <div className="fixed right-4 bottom-4 z-40 flex max-w-sm flex-col items-end gap-3">
       {open && (
         <section
@@ -220,5 +222,6 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
         </button>
       )}
     </div>
+    </BodyPortal>
   );
 }

@@ -9,6 +9,8 @@ import {
   A_RANGE,
   B_RANGE,
   ROUNDS,
+  START_A,
+  START_B,
   check,
   describeMiss,
   formatRule,
@@ -32,7 +34,6 @@ function Stepper({
   value,
   min,
   max,
-  fixed,
   disabled,
   onChange,
 }: {
@@ -40,45 +41,38 @@ function Stepper({
   value: number;
   min: number;
   max: number;
-  fixed: boolean;
   disabled: boolean;
   onChange: (value: number) => void;
 }) {
-  const locked = fixed || disabled;
   return (
-    <div
-      className={`rounded-2xl border-2 px-4 py-3 text-center ${
-        fixed ? "border-line bg-paper/60" : "border-copper/60 bg-paper"
-      }`}
-    >
+    <div className="rounded-2xl border-2 border-copper/60 bg-paper px-3 py-2 text-center">
       <p className="text-xs tracking-wide text-ink-soft uppercase">{label}</p>
-      <div className="mt-2 flex items-center justify-center gap-3">
+      <div className="mt-1 flex items-center justify-center gap-2">
         <button
           type="button"
-          disabled={locked || value <= min}
+          disabled={disabled || value <= min}
           onClick={() => onChange(value - 1)}
           aria-label={`${label}: decrease`}
-          className="h-12 w-12 rounded-xl border border-line text-2xl text-ink transition hover:border-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-30"
+          className="h-11 w-11 rounded-xl border border-line text-2xl text-ink transition hover:border-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-30"
         >
           −
         </button>
         <span
-          className="min-w-14 text-center font-display text-5xl text-ink"
+          className="min-w-12 text-center font-display text-4xl text-ink"
           aria-live="polite"
         >
           {value}
         </span>
         <button
           type="button"
-          disabled={locked || value >= max}
+          disabled={disabled || value >= max}
           onClick={() => onChange(value + 1)}
           aria-label={`${label}: increase`}
-          className="h-12 w-12 rounded-xl border border-line text-2xl text-ink transition hover:border-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-30"
+          className="h-11 w-11 rounded-xl border border-line text-2xl text-ink transition hover:border-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-30"
         >
           +
         </button>
       </div>
-      {fixed && <p className="mt-1 text-xs text-ink-soft">fixed</p>}
     </div>
   );
 }
@@ -102,10 +96,10 @@ function Graph({
   const targetMax = Math.max(...rows.map((row) => row.needed));
   const yMin = -2;
   const yMax = Math.ceil((targetMax + 3) / 2) * 2;
-  const px = (x: number) => 12 + (x / xMax) * 82;
+  const px = (x: number) => 12 + (x / xMax) * 84;
   const py = (y: number) => {
     const clamped = Math.min(yMax, Math.max(yMin, y));
-    return 46 - ((clamped - yMin) / (yMax - yMin)) * 40;
+    return 62 - ((clamped - yMin) / (yMax - yMin)) * 54;
   };
 
   const ticks: number[] = [];
@@ -119,9 +113,10 @@ function Graph({
     .join(" ");
 
   return (
+    <div className="flex h-full items-center rounded-3xl border border-line bg-void p-3">
     <svg
-      viewBox="0 0 100 56"
-      className="mx-auto w-full max-w-4xl rounded-3xl border border-line bg-void"
+      viewBox="0 0 100 76"
+      className="h-auto w-full"
       role="img"
       aria-label="Graph of altitude against seconds after liftoff. Hollow gold circles are mission control's targets; filled dots are your rocket."
     >
@@ -129,26 +124,26 @@ function Graph({
         <g key={y}>
           <line
             x1={12}
-            x2={94}
+            x2={96}
             y1={py(y)}
             y2={py(y)}
             className={y === 0 ? "stroke-ink-soft" : "stroke-line"}
-            strokeWidth={0.3}
+            strokeWidth={0.4}
           />
-          <text x={9} y={py(y) + 1} textAnchor="end" className="fill-ink-soft" fontSize={3}>
+          <text x={9} y={py(y) + 1.2} textAnchor="end" className="fill-ink-soft" fontSize={3.8}>
             {y}
           </text>
         </g>
       ))}
       {round.inputs.map((x) => (
-        <text key={x} x={px(x)} y={51} textAnchor="middle" className="fill-ink-soft" fontSize={3}>
+        <text key={x} x={px(x)} y={69} textAnchor="middle" className="fill-ink-soft" fontSize={3.8}>
           {x}
         </text>
       ))}
-      <text x={53} y={55} textAnchor="middle" className="fill-ink-soft" fontSize={2.6}>
+      <text x={54} y={75} textAnchor="middle" className="fill-ink-soft" fontSize={3.4}>
         seconds after liftoff
       </text>
-      <text x={3} y={4} className="fill-ink-soft" fontSize={2.6}>
+      <text x={2} y={5} className="fill-ink-soft" fontSize={3.4}>
         altitude (km)
       </text>
 
@@ -157,7 +152,7 @@ function Graph({
           points={line}
           fill="none"
           className="stroke-signal/60"
-          strokeWidth={0.8}
+          strokeWidth={1}
           strokeLinecap="round"
           strokeLinejoin="round"
         />
@@ -168,10 +163,10 @@ function Graph({
           key={`t${row.x}`}
           cx={px(row.x)}
           cy={py(row.needed)}
-          r={2.4}
+          r={3.3}
           fill="none"
           className="stroke-copper"
-          strokeWidth={0.7}
+          strokeWidth={0.9}
         />
       ))}
 
@@ -184,7 +179,7 @@ function Graph({
             key={`m${point.x}`}
             cx={px(point.x)}
             cy={py(point.y)}
-            r={1.6}
+            r={2.2}
             className={landed ? (ok ? "fill-signal" : "fill-red-500") : "fill-signal/70"}
           />
         );
@@ -193,21 +188,22 @@ function Graph({
       {phase === "launching" && revealed > 0 && revealed <= mine.length && (
         <text
           x={px(mine[revealed - 1].x)}
-          y={py(mine[revealed - 1].y) - 3}
+          y={py(mine[revealed - 1].y) - 4.5}
           textAnchor="middle"
-          fontSize={5}
+          fontSize={7}
         >
           🚀
         </text>
       )}
     </svg>
+    </div>
   );
 }
 
 export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
   const [roundIndex, setRoundIndex] = useState(0);
-  const [aValue, setAValue] = useState(1);
-  const [bValue, setBValue] = useState(0);
+  const [aValue, setAValue] = useState(START_A);
+  const [bValue, setBValue] = useState(START_B);
   const [phase, setPhase] = useState<Phase>("build");
   const [revealed, setRevealed] = useState(0);
   const [showTutorial, setShowTutorial] = useState(true);
@@ -215,8 +211,8 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
 
   const round = ROUNDS[roundIndex];
   const isLastRound = roundIndex === ROUNDS.length - 1;
-  const a = round.aFixed ?? aValue;
-  const b = round.bFixed ?? bValue;
+  const a = aValue;
+  const b = bValue;
   const rows = check(round, a, b);
   const allOk = rows.every((row) => row.ok);
   const firstMiss = rows.find((row) => !row.ok);
@@ -245,10 +241,9 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
   }
 
   function nextRound() {
-    const next = ROUNDS[roundIndex + 1];
     setRoundIndex(roundIndex + 1);
-    setAValue(next.aFixed ?? 1);
-    setBValue(next.bFixed ?? 0);
+    setAValue(START_A);
+    setBValue(START_B);
     setRevealed(0);
     setPhase("build");
   }
@@ -259,37 +254,34 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
     <>
       {showTutorial && <MissionTutorial onDone={closeTutorial} />}
       <div className="grid gap-4">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-base font-semibold text-ink">
-            Round {roundIndex + 1} of {ROUNDS.length}
-          </p>
-          <ol className="flex gap-2" aria-label="Round progress">
-            {ROUNDS.map((r, i) => (
-              <li
-                key={r.title}
-                className={`h-2.5 w-10 rounded-full ${
-                  i < roundIndex || (i === roundIndex && phase === "result" && allOk)
-                    ? "bg-signal"
-                    : i === roundIndex
-                      ? "bg-copper"
-                      : "bg-line"
-                }`}
-              />
-            ))}
-          </ol>
-        </div>
-
-        <div>
-          <p className="font-display text-2xl text-ink sm:text-3xl">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <p className="font-display text-xl text-ink sm:text-2xl">
             Match mission control
-            <span className="ml-3 text-base font-sans text-ink-soft sm:text-lg">
-              every second
-            </span>
+            <span className="ml-2 text-base font-sans text-ink-soft">every second</span>
           </p>
-          <p className="mt-1 text-base text-ink-soft">{round.story}</p>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-semibold text-ink">
+              Round {roundIndex + 1} of {ROUNDS.length}
+            </span>
+            <ol className="flex gap-1.5" aria-label="Round progress">
+              {ROUNDS.map((r, i) => (
+                <li
+                  key={r.title}
+                  className={`h-2 w-8 rounded-full ${
+                    i < roundIndex || (i === roundIndex && phase === "result" && allOk)
+                      ? "bg-signal"
+                      : i === roundIndex
+                        ? "bg-copper"
+                        : "bg-line"
+                  }`}
+                />
+              ))}
+            </ol>
+          </div>
         </div>
+        <p className="-mt-2 text-sm text-ink-soft sm:text-base">{round.story}</p>
 
-        <div className="grid gap-4 rounded-3xl border border-line bg-void p-4 sm:p-7">
+        <div className="grid gap-3 rounded-3xl border border-line bg-void p-3 sm:p-5">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             <Pill>second x</Pill>
             <span aria-hidden="true" className="text-copper">
@@ -300,7 +292,6 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
               value={a}
               min={A_RANGE.min}
               max={A_RANGE.max}
-              fixed={round.aFixed !== null}
               disabled={locked}
               onChange={setAValue}
             />
@@ -312,7 +303,6 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
               value={b}
               min={B_RANGE.min}
               max={B_RANGE.max}
-              fixed={round.bFixed !== null}
               disabled={locked}
               onChange={setBValue}
             />
@@ -321,116 +311,120 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
             </span>
             <Pill>altitude y</Pill>
           </div>
-          <p className="text-center font-mono text-lg text-copper sm:text-xl">
-            {formatRule(a, b)}
-          </p>
-        </div>
-
-        <Graph
-          round={round}
-          a={a}
-          b={b}
-          rows={rows}
-          revealed={revealed}
-          phase={phase}
-        />
-
-        <div className="overflow-x-auto rounded-2xl border border-line bg-paper-raised">
-          <table className="w-full text-center text-base">
-            <caption className="px-4 pt-3 pb-1 text-left text-xs font-medium tracking-[0.14em] text-ink-soft uppercase">
-              Rocket check
-            </caption>
-            <thead>
-              <tr className="text-xs text-ink-soft">
-                <th scope="col" className="px-3 py-3 font-medium">
-                  Second
-                </th>
-                <th scope="col" className="px-3 py-3 font-medium">
-                  Needed
-                </th>
-                <th scope="col" className="px-3 py-3 font-medium">
-                  Yours
-                </th>
-                <th scope="col" className="px-3 py-3 font-medium">
-                  <span className="sr-only">Match</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, i) => {
-                const marked = phase === "result" || (phase === "launching" && i < revealed);
-                return (
-                  <tr key={row.x} className="border-t border-line">
-                    <td className="px-3 py-3 text-lg text-ink">{row.x}</td>
-                    <td className="px-3 py-3 text-lg text-copper">{row.needed}</td>
-                    <td className="px-3 py-3 text-lg text-ink">{row.yours}</td>
-                    <td className="px-3 py-3 text-lg font-semibold">
-                      {marked ? (
-                        row.ok ? (
-                          <span className="text-signal">✓</span>
-                        ) : (
-                          <span className="text-red-400">✕</span>
-                        )
-                      ) : (
-                        <span className="text-ink-soft">·</span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          {phase === "build" && (
-            <>
-              <Button className="px-10 py-3.5 text-lg" onClick={launch}>
-                Launch 🚀
-              </Button>
-              <Button
-                variant="ghost"
-                className="px-4 py-3 text-base"
-                onClick={() => setShowTutorial(true)}
-              >
-                Help
-              </Button>
-            </>
-          )}
-          {phase === "launching" && (
-            <p className="text-lg text-ink-soft" aria-live="polite">
-              Launching…
-            </p>
-          )}
-          {phase === "result" && allOk && (
-            <>
-              <UnicornSays tone="happy" className="w-full">
-                <span aria-live="polite" className="block">
-                  <strong className="text-signal">
-                    {isLastRound ? "Level cleared!" : "Perfect launch!"}
-                  </strong>{" "}
-                  <span className="text-ink-soft">{round.lesson}</span>
-                </span>
-              </UnicornSays>
-              {!isLastRound && (
-                <Button className="px-10 py-3.5 text-lg" onClick={nextRound}>
-                  Next round
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <p className="font-mono text-base text-copper sm:text-lg">{formatRule(a, b)}</p>
+            {phase === "build" && (
+              <div className="flex items-center gap-3">
+                <Button className="px-8 py-3 text-lg" onClick={launch}>
+                  Launch 🚀
                 </Button>
-              )}
-            </>
-          )}
-          {phase === "result" && !allOk && firstMiss && (
-            <>
-              <UnicornSays tone="oops" className="w-full">
-                <span aria-live="polite" className="block">
-                  <strong className="text-copper">Off course.</strong> {describeMiss(firstMiss)}
-                </span>
-              </UnicornSays>
-              <Button className="px-10 py-3.5 text-lg" onClick={tryAgain}>
+                <Button
+                  variant="ghost"
+                  className="px-3 py-2.5 text-base"
+                  onClick={() => setShowTutorial(true)}
+                >
+                  Help
+                </Button>
+              </div>
+            )}
+            {phase === "launching" && (
+              <p className="text-lg text-ink-soft" aria-live="polite">
+                Launching…
+              </p>
+            )}
+            {phase === "result" && allOk && !isLastRound && (
+              <Button className="px-8 py-3 text-lg" onClick={nextRound}>
+                Next round
+              </Button>
+            )}
+            {phase === "result" && !allOk && (
+              <Button className="px-8 py-3 text-lg" onClick={tryAgain}>
                 Try again
               </Button>
-            </>
-          )}
+            )}
+          </div>
+        </div>
+
+        {phase === "result" && allOk && (
+          <UnicornSays tone="happy" className="w-full">
+            <span aria-live="polite" className="block">
+              <strong className="text-signal">
+                {isLastRound ? "Level cleared!" : "Perfect launch!"}
+              </strong>{" "}
+              <span className="text-ink-soft">{round.lesson}</span>
+            </span>
+          </UnicornSays>
+        )}
+        {phase === "result" && !allOk && firstMiss && (
+          <UnicornSays tone="oops" className="w-full">
+            <span aria-live="polite" className="block">
+              <strong className="text-copper">Off course.</strong> {describeMiss(firstMiss)}
+            </span>
+          </UnicornSays>
+        )}
+
+        <div className="grid items-stretch gap-4 md:grid-cols-[3fr_2fr]">
+          <Graph
+            round={round}
+            a={a}
+            b={b}
+            rows={rows}
+            revealed={revealed}
+            phase={phase}
+          />
+
+          <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-paper-raised">
+            <p className="px-4 pt-3 pb-1 text-xs font-medium tracking-[0.14em] text-ink-soft uppercase">
+              Rocket check
+            </p>
+            <div className="flex-1 overflow-x-auto">
+            <table
+              aria-label="Rocket check"
+              className="h-full w-full text-center text-base"
+            >
+              <thead>
+                <tr className="text-xs text-ink-soft">
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Second
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Needed
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Yours
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    <span className="sr-only">Match</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, i) => {
+                  const marked =
+                    phase === "result" || (phase === "launching" && i < revealed);
+                  return (
+                    <tr key={row.x} className="border-t border-line">
+                      <td className="px-3 py-2 text-lg text-ink">{row.x}</td>
+                      <td className="px-3 py-2 text-lg text-copper">{row.needed}</td>
+                      <td className="px-3 py-2 text-lg text-ink">{row.yours}</td>
+                      <td className="px-3 py-2 text-lg font-semibold">
+                        {marked ? (
+                          row.ok ? (
+                            <span className="text-signal">✓</span>
+                          ) : (
+                            <span className="text-red-400">✕</span>
+                          )
+                        ) : (
+                          <span className="text-ink-soft">·</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            </div>
+          </div>
         </div>
       </div>
     </>

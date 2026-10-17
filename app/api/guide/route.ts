@@ -1,7 +1,18 @@
 import { getLevel } from "@/level-manager/catalog";
 import { GEMINI_MODEL, HINTS_ENABLED } from "@/guide/config";
 
-type GuideMode = "background" | "hint";
+type GuideMode = "learn" | "hint";
+type LearnTopic = "life" | "work" | "legacy";
+
+const TOPIC_BRIEF: Record<LearnTopic, string> = {
+  life: "her life: where she came from, what she was like, and one surprising or inspiring moment from her story",
+  work: "her work: what she actually built or figured out, explained simply with a fun comparison a teen would get",
+  legacy: "her legacy: how her ideas show up in technology and everyday life today, and why she is remembered",
+};
+
+function isTopic(value: unknown): value is LearnTopic {
+  return value === "life" || value === "work" || value === "legacy";
+}
 
 const SYSTEM_PROMPT =
   "You are the friendly in-game guide for HackHer, a puzzle game that teaches " +
@@ -15,6 +26,7 @@ function buildPrompt(
   mode: GuideMode,
   level: NonNullable<ReturnType<typeof getLevel>>,
   hintLevel: number,
+  topic: LearnTopic,
 ): string {
   const context =
     `Floor ${level.floor}: ${level.title}\n` +
@@ -22,14 +34,14 @@ function buildPrompt(
     `Concept: ${level.concept}\n` +
     `Floor story: ${level.narrative}`;
 
-  if (mode === "background") {
+  if (mode === "learn") {
+    const who = level.pioneer;
     return (
-      `${context}\n\nWrite about 60 words, in at most 3 short sentences or one ` +
-      `short paragraph, about ${level.pioneer}. Open with a surprising, ` +
-      `attention-grabbing hook, then say in plain words what she did and why ` +
-      `it still matters today (tie it to "${level.concept}"). Do not greet the ` +
-      `player or say "Welcome". Keep it upbeat, a little playful, and easy to ` +
-      `read for a 12 to 16 year old. Bold the key ideas with **double asterisks**.`
+      `${context}\n\nThe player already read this overview, so do not repeat it:\n` +
+      `${level.blurb}\n\nNow write about 60 words on ${TOPIC_BRIEF[topic]} ` +
+      `(subject: ${who}). Open with a hook, no greeting, no "Welcome". Keep it ` +
+      `upbeat, a little playful, and easy to read for a 12 to 16 year old. ` +
+      `Bold the key ideas with **double asterisks**.`
     );
   }
 
@@ -50,14 +62,19 @@ export async function POST(request: Request) {
     return Response.json({ error: "Guide is not configured." }, { status: 503 });
   }
 
-  let body: { slug?: unknown; mode?: unknown; hintLevel?: unknown };
+  let body: {
+    slug?: unknown;
+    mode?: unknown;
+    hintLevel?: unknown;
+    topic?: unknown;
+  };
   try {
     body = await request.json();
   } catch {
     return Response.json({ error: "Invalid request." }, { status: 400 });
   }
 
-  const mode: GuideMode = body.mode === "hint" ? "hint" : "background";
+  const mode: GuideMode = body.mode === "hint" ? "hint" : "learn";
   if (mode === "hint" && !HINTS_ENABLED) {
     return Response.json({ error: "Hints are disabled." }, { status: 403 });
   }
@@ -69,10 +86,14 @@ export async function POST(request: Request) {
     return Response.json({ error: "Unknown level." }, { status: 400 });
   }
 
+  if (mode === "learn" && !isTopic(body.topic)) {
+    return Response.json({ error: "Unknown topic." }, { status: 400 });
+  }
+  const topic: LearnTopic = isTopic(body.topic) ? body.topic : "life";
   const hintLevel = body.hintLevel === 2 ? 2 : 1;
 
-  try {
-    const response = await fetch(
+  const callGemini = () =>
+    fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
       {
         method: "POST",
@@ -80,13 +101,13 @@ export async function POST(request: Request) {
           "Content-Type": "application/json",
           "x-goog-api-key": apiKey,
         },
-        signal: AbortSignal.timeout(20000),
+        signal: AbortSignal.timeout(10000),
         body: JSON.stringify({
           systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
           contents: [
             {
               role: "user",
-              parts: [{ text: buildPrompt(mode, level, hintLevel) }],
+              parts: [{ text: buildPrompt(mode, level, hintLevel, topic) }],
             },
           ],
           generationConfig: {
@@ -97,6 +118,10 @@ export async function POST(request: Request) {
         }),
       },
     );
+
+  try {
+    // Gemini occasionally stalls; one quick retry beats a failed panel.
+    const response = await callGemini().catch(() => callGemini());
 
     if (!response.ok) {
       return Response.json({ error: "Guide is unavailable." }, { status: 502 });

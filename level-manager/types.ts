@@ -25,6 +25,8 @@ export type LevelDefinition = {
   pioneer: string;
   concept: string;
   narrative: string;
+  /** Pre-written overview shown in the guide. **bold** marks key terms. */
+  blurb: string;
   mechanicId: MechanicId;
   mechanicLabel: string;
 };

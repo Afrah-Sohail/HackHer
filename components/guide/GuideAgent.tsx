@@ -6,6 +6,15 @@ import type { LevelDefinition } from "@/level-manager/types";
 import { Button } from "@/components/ui/Button";
 import { ConceptBadge } from "@/components/ui/ConceptBadge";
 
+type Topic = "life" | "work" | "legacy";
+type View = "overview" | Topic | "hint";
+
+const TOPICS: { id: Topic; label: string }[] = [
+  { id: "life", label: "🌱 Her life" },
+  { id: "work", label: "🛠️ Her work" },
+  { id: "legacy", label: "🌟 Her legacy" },
+];
+
 // Renders **bold** spans as <strong> without ever injecting HTML.
 function RichText({ text }: { text: string }) {
   return (
@@ -26,17 +35,14 @@ function RichText({ text }: { text: string }) {
   );
 }
 
-type Tab = "background" | "hint";
-
 async function fetchGuide(
   slug: string,
-  mode: Tab,
-  hintLevel?: number,
+  body: { mode: "learn"; topic: Topic } | { mode: "hint"; hintLevel: number },
 ): Promise<string> {
   const response = await fetch("/api/guide", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ slug, mode, hintLevel }),
+    body: JSON.stringify({ slug, ...body }),
   });
   if (!response.ok) throw new Error("guide request failed");
   const data = (await response.json()) as { text: string };
@@ -61,42 +67,42 @@ function writeCache(key: string, value: string) {
 
 export function GuideAgent({ level }: { level: LevelDefinition }) {
   const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState<Tab>("background");
-  const [text, setText] = useState<string | null>(null);
+  const [view, setView] = useState<View>("overview");
+  const [texts, setTexts] = useState<Partial<Record<View, string>>>({});
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
   const [hintCount, setHintCount] = useState(0);
 
-  async function load(nextTab: Tab, nextHintCount = hintCount) {
-    setTab(nextTab);
+  async function show(next: View) {
+    setView(next);
     setFailed(false);
+    if (next === "overview") return;
 
-    if (nextTab === "background") {
-      const cacheKey = `guide:background:v3:${level.slug}`;
+    if (next !== "hint") {
+      if (texts[next]) return;
+      const cacheKey = `guide:v4:${level.slug}:${next}`;
       const cached = readCache(cacheKey);
       if (cached) {
-        setText(cached);
+        setTexts((prev) => ({ ...prev, [next]: cached }));
         return;
       }
-      setText(null);
-      setLoading(true);
-      try {
-        const result = await fetchGuide(level.slug, "background");
-        writeCache(cacheKey, result);
-        setText(result);
-      } catch {
-        setFailed(true);
-      } finally {
-        setLoading(false);
-      }
-      return;
     }
 
-    setText(null);
     setLoading(true);
     try {
-      setText(await fetchGuide(level.slug, "hint", nextHintCount >= 1 ? 2 : 1));
-      setHintCount(nextHintCount + 1);
+      const text =
+        next === "hint"
+          ? await fetchGuide(level.slug, {
+              mode: "hint",
+              hintLevel: hintCount >= 1 ? 2 : 1,
+            })
+          : await fetchGuide(level.slug, { mode: "learn", topic: next });
+      if (next === "hint") {
+        setHintCount((count) => count + 1);
+      } else {
+        writeCache(`guide:v4:${level.slug}:${next}`, text);
+      }
+      setTexts((prev) => ({ ...prev, [next]: text }));
     } catch {
       setFailed(true);
     } finally {
@@ -104,18 +110,14 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
     }
   }
 
-  function toggle() {
-    const next = !open;
-    setOpen(next);
-    if (next && text === null && !loading) void load("background");
-  }
+  const body = view === "overview" ? level.blurb : texts[view];
 
   return (
     <div className="fixed right-4 bottom-4 z-40 flex max-w-sm flex-col items-end gap-3">
       {open && (
         <section
           aria-label="Guide"
-          className="max-h-[55vh] w-full overflow-y-auto rounded-2xl border-2 border-copper/30 bg-paper-raised p-4 shadow-xl"
+          className="max-h-[70vh] w-full overflow-y-auto rounded-2xl border-2 border-copper/30 bg-paper-raised p-4 shadow-xl"
         >
           <div className="mb-3 flex items-center gap-3">
             <span
@@ -133,22 +135,7 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
               </div>
             </div>
           </div>
-          {HINTS_ENABLED && (
-            <div className="mb-3 flex gap-2">
-              <Button
-                variant={tab === "background" ? "primary" : "secondary"}
-                onClick={() => void load("background")}
-              >
-                About her
-              </Button>
-              <Button
-                variant={tab === "hint" ? "primary" : "secondary"}
-                onClick={() => void load("hint")}
-              >
-                Hint
-              </Button>
-            </div>
-          )}
+
           {loading && (
             <div aria-label="Loading" className="space-y-2">
               <div className="h-3 w-full animate-pulse rounded bg-line" />
@@ -158,17 +145,49 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
           )}
           {!loading && failed && (
             <p className="text-sm leading-6 text-ink-soft">
-              The guide is unavailable right now. {level.narrative}
+              Couldn&apos;t reach the guide right now. Try again in a moment.
             </p>
           )}
-          {!loading && !failed && text && (
+          {!loading && !failed && body && (
             <p className="text-[15px] leading-7 whitespace-pre-line text-ink">
-              <RichText text={text} />
+              <RichText text={body} />
             </p>
           )}
+
+          <div className="mt-4 border-t border-line pt-3">
+            <p className="mb-2 text-xs font-medium tracking-[0.14em] text-ink-soft uppercase">
+              {view === "overview" ? "Learn more about…" : "Keep exploring"}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {view !== "overview" && (
+                <Button variant="ghost" onClick={() => void show("overview")}>
+                  ← Overview
+                </Button>
+              )}
+              {TOPICS.filter((topic) => topic.id !== view).map((topic) => (
+                <Button
+                  key={topic.id}
+                  variant="secondary"
+                  disabled={loading}
+                  onClick={() => void show(topic.id)}
+                >
+                  {topic.label}
+                </Button>
+              ))}
+              {HINTS_ENABLED && (
+                <Button
+                  variant="secondary"
+                  disabled={loading}
+                  onClick={() => void show("hint")}
+                >
+                  💡 Hint
+                </Button>
+              )}
+            </div>
+          </div>
         </section>
       )}
-      <Button onClick={toggle} aria-expanded={open}>
+      <Button onClick={() => setOpen((value) => !value)} aria-expanded={open}>
         {open ? "Close" : `✦ Who was ${level.pioneer}?`}
       </Button>
     </div>

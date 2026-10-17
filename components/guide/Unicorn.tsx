@@ -27,6 +27,10 @@ export function UnicornAvatar({
       <circle cx="12" cy="38" r="7.5" fill="#b08cff" />
       <circle cx="18" cy="48" r="7" fill="#8ae7ff" />
 
+      {/* horn (drawn first so the head covers its base) */}
+      <path d="M30 27 L36.5 2 L40.5 28 Z" fill="url(#unicorn-horn)" stroke="#e5ad45" strokeWidth="0.8" strokeLinejoin="round" />
+      <path d="M32.6 17 L38.4 15 M34.2 11 L37.6 9.6" stroke="#e5ad45" strokeWidth="0.9" strokeLinecap="round" />
+
       {/* ear */}
       <path d="M23 25 L25 11 L33 22 Z" fill="#fff7ff" stroke="#d9c9ff" strokeWidth="1" strokeLinejoin="round" />
       <path d="M26 22 L27 16 L30 21 Z" fill="#ffc2e2" />
@@ -35,12 +39,8 @@ export function UnicornAvatar({
       <ellipse cx="32" cy="37" rx="17" ry="16" fill="#fff7ff" stroke="#d9c9ff" strokeWidth="1" />
       <ellipse cx="45" cy="43" rx="9.5" ry="7.5" fill="#ffeef8" stroke="#ecd9f7" strokeWidth="0.8" />
 
-      {/* horn */}
-      <path d="M35 22 L42 2 L45 23 Z" fill="url(#unicorn-horn)" stroke="#e5ad45" strokeWidth="0.8" strokeLinejoin="round" />
-      <path d="M37 16 L43.4 13.5 M36 19.5 L44.2 17" stroke="#e5ad45" strokeWidth="0.9" strokeLinecap="round" />
-
       {/* forelock */}
-      <path d="M26 24 C 28 18, 34 19, 35 25 C 31 22, 28 24, 26 24 Z" fill="#ff9ad5" />
+      <path d="M26 26 C 27 19, 37 18, 39 26 C 34 22, 30 24, 26 26 Z" fill="#ff9ad5" />
 
       {/* face */}
       <circle cx="37" cy="35" r="2.7" fill="#2b1d4a" />

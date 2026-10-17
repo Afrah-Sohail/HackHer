@@ -29,7 +29,7 @@ function GameFrame() {
         {state.screen === "playing" ? <GameView /> : null}
         {state.screen === "victory" ? <VictoryScreen /> : null}
       </main>
-      {splash ? null : <DebugPanel />}
+      <DebugPanel />
     </div>
   );
 }

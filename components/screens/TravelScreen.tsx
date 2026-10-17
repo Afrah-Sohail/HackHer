@@ -95,9 +95,9 @@ export function TravelScreen() {
 
       {landed ? (
         <div className="mx-auto grid w-full max-w-2xl gap-3">
-          <Speech speaker="blip">Not again! Ugh. Okay, we&apos;re on {destination.name}.</Speech>
+          <Speech speaker="you">Not again! Ugh. Okay, I&apos;m on {destination.name}.</Speech>
           <Speech speaker="sparkles">
-            Don&apos;t worry, Blip. Someone here can help you fix it!
+            Don&apos;t worry! Someone here can help you fix it!
           </Speech>
           <div className="mt-2 flex justify-center">
             <Button className="px-10 py-3.5 text-lg" onClick={arrive}>

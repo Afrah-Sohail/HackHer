@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/Button";
 import { UnicornSays } from "@/components/guide/Unicorn";
 import { JourneyMap } from "@/components/story/JourneyMap";
 import { GUIDE_NAME } from "@/guide/config";
-import { ALIEN_NAME } from "@/story/journey";
 
 export function WelcomeScreen() {
   const { state, cleared, start, selectLevel } = useGame();
@@ -19,13 +18,13 @@ export function WelcomeScreen() {
         HackHer
       </h1>
       <p className="mt-3 text-sm font-medium tracking-[0.2em] text-copper uppercase">
-        Help {ALIEN_NAME} fly home
+        Fly home
       </p>
 
       <p className="mt-5 max-w-2xl text-base leading-7 text-ink-soft sm:text-lg sm:leading-8">
-        {ALIEN_NAME} the alien is stuck in our solar system, and his rocket keeps
-        breaking down. On every planet, a real woman who shaped computing
-        teaches him her big idea, and you use it to fix the rocket.
+        You&apos;re an alien stuck in our solar system, and your rocket keeps breaking
+        down. On every planet, a real woman who shaped computing teaches you
+        her big idea, and you use it to fix the rocket.
       </p>
 
       <div className="mt-6 w-full max-w-5xl">
@@ -40,7 +39,7 @@ export function WelcomeScreen() {
       <div className="mt-6 w-full max-w-xl text-left">
         <UnicornSays size={64}>
           <strong className="text-copper">Hi, I&apos;m {GUIDE_NAME}!</strong> I&apos;m{" "}
-          {ALIEN_NAME}&apos;s space unicorn. I can&apos;t fix a rocket with hooves,
+          your space unicorn. I can&apos;t fix a rocket with hooves,
           but I can cheer you on and tell you about the women. Ready?
         </UnicornSays>
       </div>
@@ -56,6 +55,8 @@ export function WelcomeScreen() {
         Made with 💜 by <strong className="font-semibold text-ink">Afrah</strong>,{" "}
         <strong className="font-semibold text-ink">Emily</strong> &amp;{" "}
         <strong className="font-semibold text-ink">Valentina</strong>
+        <br />
+        Planet photos from NASA
       </p>
     </div>
   );

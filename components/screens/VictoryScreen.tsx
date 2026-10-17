@@ -9,7 +9,7 @@ import { JourneyMap, type Travel } from "@/components/story/JourneyMap";
 import { Speech } from "@/components/story/Speech";
 import { JOURNEY } from "@/story/journey";
 
-const FLIGHT = 3400; // Saturn to Home, in milliseconds
+const FLIGHT = 3400; // Last planet to Home, in milliseconds
 
 const ease = (x: number) => {
   const c = Math.min(1, Math.max(0, x));
@@ -63,7 +63,7 @@ export function VictoryScreen() {
       {allCleared && home && <StarConfetti count={90} seed={11} />}
 
       <h1 className="text-center font-display text-4xl text-ink sm:text-6xl">
-        {allCleared ? (home ? "Blip is home! 🏠" : "Blast off, Blip!") : "You reached Saturn!"}
+        {allCleared ? (home ? "You're home! 🏠" : "Blast off!") : `You reached ${JOURNEY[LEVEL_COUNT - 1].name}!`}
       </h1>
 
       <JourneyMap
@@ -78,7 +78,7 @@ export function VictoryScreen() {
         <div className="mx-auto grid w-full max-w-2xl gap-3">
           {allCleared ? (
             <>
-              <Speech speaker="blip">
+              <Speech speaker="you">
                 I made it! Every planet taught me something new. Thank you,
                 everyone!
               </Speech>

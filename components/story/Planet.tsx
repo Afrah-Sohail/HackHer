@@ -35,24 +35,21 @@ export function PlanetArt({ id, uid = "" }: { id: PlanetId; uid?: string }) {
           <path d="M14 74 Q34 64 52 74 T88 72" fill="none" stroke="#fff3d6" strokeWidth="3" opacity="0.4" />
         </g>
       );
-    case "earth":
+    case "uranus":
       return (
         <g>
           <defs>
-            <radialGradient id={`pl-earth${uid}`} cx="35%" cy="30%" r="80%">
-              <stop offset="0" stopColor="#60a5fa" />
-              <stop offset="1" stopColor="#1e3a8a" />
+            <radialGradient id={`pl-uranus${uid}`} cx="35%" cy="30%" r="80%">
+              <stop offset="0" stopColor="#d6fbff" />
+              <stop offset="1" stopColor="#5fa8b8" />
             </radialGradient>
-            <clipPath id={`clip-earth${uid}`}>
-              <circle cx="50" cy="50" r="46" />
-            </clipPath>
           </defs>
-          <circle cx="50" cy="50" r="46" fill={`url(#pl-earth${uid})`} />
-          <g clipPath={`url(#clip-earth${uid})`}>
-            <path d="M18 34 C30 22 46 28 44 42 C42 54 28 54 20 48 C14 44 14 38 18 34 Z" fill="#4ade80" />
-            <path d="M58 58 C72 50 88 58 82 72 C76 84 60 82 54 72 C52 66 54 61 58 58 Z" fill="#4ade80" />
-            <path d="M52 20 C62 16 72 22 68 30 C64 36 54 34 52 28 Z" fill="#4ade80" />
-            <path d="M10 62 Q30 54 48 64" fill="none" stroke="#fff" strokeWidth="3" opacity="0.55" />
+          <g transform="rotate(-80 50 50)">
+            <ellipse cx="50" cy="50" rx="46" ry="10" fill="none" stroke="#bfeaf2" strokeWidth="3" opacity="0.5" />
+          </g>
+          <circle cx="50" cy="50" r="32" fill={`url(#pl-uranus${uid})`} />
+          <g transform="rotate(-80 50 50)">
+            <path d="M4 50 A46 10 0 0 0 96 50" fill="none" stroke="#d9f4f9" strokeWidth="3" />
           </g>
         </g>
       );

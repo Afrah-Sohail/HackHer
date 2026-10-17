@@ -185,6 +185,8 @@ function MapSvg({
             {isCurrent && (
               <circle r={R + 8} fill="none" stroke="#f0c36a" strokeWidth="4" className="map-pulse" />
             )}
+            {/* A solid backing, so the dotted path never shows through the planet. */}
+            <circle r={R} fill="#150f2e" />
             <circle
               r={R + 6}
               fill="transparent"

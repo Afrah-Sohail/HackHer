@@ -10,15 +10,17 @@ import { GameProvider, useGame } from "@/state/game-context";
 function GameFrame() {
   const { state } = useGame();
 
+  const splash = state.screen === "welcome";
+
   return (
-    <div className="min-h-screen pb-24">
-      <GameHeader />
+    <div className={splash ? "min-h-screen" : "min-h-screen pb-24"}>
+      {splash ? null : <GameHeader />}
       <main>
-        {state.screen === "welcome" ? <WelcomeScreen /> : null}
+        {splash ? <WelcomeScreen /> : null}
         {state.screen === "playing" ? <GameView /> : null}
         {state.screen === "victory" ? <VictoryScreen /> : null}
       </main>
-      <DebugPanel />
+      {splash ? null : <DebugPanel />}
     </div>
   );
 }

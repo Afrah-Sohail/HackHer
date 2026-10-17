@@ -1,11 +1,8 @@
+"use client";
+
 import type { LevelDefinition } from "@/level-manager/types";
-import { LevelShell } from "@/components/levels/LevelShell";
-import { LoomMechanic } from "@/components/levels/mechanics/LoomMechanic";
+import { AnalyticalEngineGame } from "@/components/levels/mechanics/AnalyticalEngineGame";
 
 export function AdaLovelaceFloor({ level }: { level: LevelDefinition }) {
-  return (
-    <LevelShell level={level}>
-      <LoomMechanic />
-    </LevelShell>
-  );
+  return <AnalyticalEngineGame level={level} />;
 }

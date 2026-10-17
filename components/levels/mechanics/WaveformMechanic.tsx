@@ -10,9 +10,9 @@ export function WaveformMechanic() {
 
   return (
     <div className="grid gap-4">
-      <div className="rounded-2xl border border-line bg-ink px-4 py-5 text-paper-raised">
+      <div className="rounded-2xl border border-line bg-void px-4 py-5 text-ink">
         <div className="flex items-baseline justify-between gap-3">
-          <p className="text-sm text-paper">Channel {channel}</p>
+          <p className="text-sm text-ink-soft">Channel {channel}</p>
           <p className="font-display text-2xl">{frequency} MHz</p>
         </div>
         <svg

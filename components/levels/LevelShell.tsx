@@ -45,7 +45,7 @@ export function LevelShell({
             ? "Clearing this floor opens the victory screen."
             : "Clearing this floor unlocks the next one."}
         </p>
-        <Button onClick={completeLevel}>Complete Level</Button>
+        <Button onClick={() => completeLevel()}>Complete Level</Button>
       </footer>
       <GuideAgent key={level.slug} level={level} />
     </article>

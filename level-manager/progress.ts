@@ -53,13 +53,14 @@ export function withUnlockThrough(
 export function withLevelCleared(
   levels: readonly LevelProgress[],
   index: LevelIndex,
+  awarded = CLEAR_SCORE,
 ): LevelProgress[] {
   return levels.map((level, levelIndex) => {
     if (levelIndex === index) {
       return {
         unlocked: true,
         completed: true,
-        score: level.completed ? level.score : level.score + CLEAR_SCORE,
+        score: level.completed ? level.score : awarded,
       };
     }
 

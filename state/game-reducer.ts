@@ -20,7 +20,7 @@ export type GameState = {
 export type GameAction =
   | { type: "start"; index?: number }
   | { type: "select-level"; index: number }
-  | { type: "complete-level" }
+  | { type: "complete-level"; score?: number }
   | { type: "jump-to-level"; index: number }
   | { type: "force-win" }
   | { type: "show-welcome" }
@@ -46,8 +46,12 @@ function enterLevel(state: GameState, index: number): GameState {
   };
 }
 
-function finishLevel(state: GameState, index: LevelIndex): GameState {
-  const levels = withLevelCleared(state.levels, index);
+function finishLevel(
+  state: GameState,
+  index: LevelIndex,
+  score?: number,
+): GameState {
+  const levels = withLevelCleared(state.levels, index, score);
   const nextIndex = index + 1;
 
   if (!isLevelIndex(nextIndex)) {
@@ -76,7 +80,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
     case "select-level":
       return enterLevel(state, action.index);
     case "complete-level":
-      return finishLevel(state, state.currentLevelIndex);
+      return finishLevel(state, state.currentLevelIndex, action.score);
     case "jump-to-level": {
       if (!isLevelIndex(action.index)) {
         return state;

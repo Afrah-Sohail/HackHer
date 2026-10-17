@@ -571,9 +571,6 @@ function Board({
               : "bg-ink/10 shadow-[inset_0_2px_6px_rgb(0_0_0/0.5)]"
           }`}
         />
-        <span className="whitespace-nowrap text-center text-lg leading-tight text-ink-soft">
-          {round.outputLabel}
-        </span>
       </div>
     </div>
   );

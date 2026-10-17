@@ -96,10 +96,10 @@ function Graph({
   const targetMax = Math.max(...rows.map((row) => row.needed));
   const yMin = -2;
   const yMax = Math.ceil((targetMax + 3) / 2) * 2;
-  const px = (x: number) => 12 + (x / xMax) * 82;
+  const px = (x: number) => 12 + (x / xMax) * 84;
   const py = (y: number) => {
     const clamped = Math.min(yMax, Math.max(yMin, y));
-    return 46 - ((clamped - yMin) / (yMax - yMin)) * 40;
+    return 62 - ((clamped - yMin) / (yMax - yMin)) * 54;
   };
 
   const ticks: number[] = [];
@@ -113,9 +113,10 @@ function Graph({
     .join(" ");
 
   return (
+    <div className="flex h-full items-center rounded-3xl border border-line bg-void p-3">
     <svg
-      viewBox="0 0 100 56"
-      className="mx-auto w-full max-w-4xl rounded-3xl border border-line bg-void"
+      viewBox="0 0 100 76"
+      className="h-auto w-full"
       role="img"
       aria-label="Graph of altitude against seconds after liftoff. Hollow gold circles are mission control's targets; filled dots are your rocket."
     >
@@ -123,26 +124,26 @@ function Graph({
         <g key={y}>
           <line
             x1={12}
-            x2={94}
+            x2={96}
             y1={py(y)}
             y2={py(y)}
             className={y === 0 ? "stroke-ink-soft" : "stroke-line"}
-            strokeWidth={0.3}
+            strokeWidth={0.4}
           />
-          <text x={9} y={py(y) + 1} textAnchor="end" className="fill-ink-soft" fontSize={3}>
+          <text x={9} y={py(y) + 1.2} textAnchor="end" className="fill-ink-soft" fontSize={3.8}>
             {y}
           </text>
         </g>
       ))}
       {round.inputs.map((x) => (
-        <text key={x} x={px(x)} y={51} textAnchor="middle" className="fill-ink-soft" fontSize={3}>
+        <text key={x} x={px(x)} y={69} textAnchor="middle" className="fill-ink-soft" fontSize={3.8}>
           {x}
         </text>
       ))}
-      <text x={53} y={55} textAnchor="middle" className="fill-ink-soft" fontSize={2.6}>
+      <text x={54} y={75} textAnchor="middle" className="fill-ink-soft" fontSize={3.4}>
         seconds after liftoff
       </text>
-      <text x={3} y={4} className="fill-ink-soft" fontSize={2.6}>
+      <text x={2} y={5} className="fill-ink-soft" fontSize={3.4}>
         altitude (km)
       </text>
 
@@ -151,7 +152,7 @@ function Graph({
           points={line}
           fill="none"
           className="stroke-signal/60"
-          strokeWidth={0.8}
+          strokeWidth={1}
           strokeLinecap="round"
           strokeLinejoin="round"
         />
@@ -162,10 +163,10 @@ function Graph({
           key={`t${row.x}`}
           cx={px(row.x)}
           cy={py(row.needed)}
-          r={2.4}
+          r={3.3}
           fill="none"
           className="stroke-copper"
-          strokeWidth={0.7}
+          strokeWidth={0.9}
         />
       ))}
 
@@ -178,7 +179,7 @@ function Graph({
             key={`m${point.x}`}
             cx={px(point.x)}
             cy={py(point.y)}
-            r={1.6}
+            r={2.2}
             className={landed ? (ok ? "fill-signal" : "fill-red-500") : "fill-signal/70"}
           />
         );
@@ -187,14 +188,15 @@ function Graph({
       {phase === "launching" && revealed > 0 && revealed <= mine.length && (
         <text
           x={px(mine[revealed - 1].x)}
-          y={py(mine[revealed - 1].y) - 3}
+          y={py(mine[revealed - 1].y) - 4.5}
           textAnchor="middle"
-          fontSize={5}
+          fontSize={7}
         >
           🚀
         </text>
       )}
     </svg>
+    </div>
   );
 }
 
@@ -361,7 +363,7 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
           </UnicornSays>
         )}
 
-        <div className="grid items-start gap-4 md:grid-cols-2">
+        <div className="grid items-stretch gap-4 md:grid-cols-[3fr_2fr]">
           <Graph
             round={round}
             a={a}
@@ -371,11 +373,15 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
             phase={phase}
           />
 
-          <div className="overflow-x-auto rounded-2xl border border-line bg-paper-raised">
-            <table className="w-full text-center text-base">
-              <caption className="px-4 pt-3 pb-1 text-left text-xs font-medium tracking-[0.14em] text-ink-soft uppercase">
-                Rocket check
-              </caption>
+          <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-paper-raised">
+            <p className="px-4 pt-3 pb-1 text-xs font-medium tracking-[0.14em] text-ink-soft uppercase">
+              Rocket check
+            </p>
+            <div className="flex-1 overflow-x-auto">
+            <table
+              aria-label="Rocket check"
+              className="h-full w-full text-center text-base"
+            >
               <thead>
                 <tr className="text-xs text-ink-soft">
                   <th scope="col" className="px-3 py-2 font-medium">
@@ -417,6 +423,7 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
                 })}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
       </div>

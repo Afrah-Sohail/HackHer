@@ -17,6 +17,8 @@ export type PlanetPhoto = {
   flip?: boolean;
   /** Draw Saturn-style rings around the planet (the photo has none in view). */
   rings?: boolean;
+  /** Scale of the planet on screen (default 1). */
+  size?: number;
   credit: string;
 };
 
@@ -25,6 +27,6 @@ export const PLANET_PHOTOS: Record<PlanetId, PlanetPhoto> = {
   venus: { src: "/planets/venus.jpg", width: 2245, height: 1096, cx: 526, cy: 547, r: 429, clip: "inset(0 51% 0 0)", credit: "NASA/JPL-Caltech (Mariner 10)" },
   mars: { src: "/planets/mars.jpg", width: 500, height: 500, cx: 250, cy: 252, r: 222, credit: "NASA/ESA/Hubble" },
   jupiter: { src: "/planets/jupiter.jpg", width: 1024, height: 1280, cx: 705, cy: 640, r: 595, flip: true, credit: "NASA/JPL/Space Science Institute (Cassini)" },
-  saturn: { src: "/planets/saturn.jpg", width: 1001, height: 1628, cx: 749, cy: 814, r: 706, flip: true, rings: true, credit: "NASA/JPL/Space Science Institute (Cassini)" },
+  saturn: { src: "/planets/saturn.jpg", width: 1001, height: 1628, cx: 749, cy: 814, r: 706, flip: true, rings: true, size: 0.65, credit: "NASA/JPL/Space Science Institute (Cassini)" },
   uranus: { src: "/planets/uranus.jpg", width: 1280, height: 1280, cx: 635, cy: 640, r: 520, credit: "NASA/JPL-Caltech (Voyager 2)" },
 };

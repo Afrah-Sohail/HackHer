@@ -36,42 +36,42 @@ function pattern(letters: string): Thread[] {
 
 export const ROUNDS: readonly Round[] = [
   {
-    title: "One thread at a time",
+    title: "One at a time",
     story:
-      "The loom weaves one thread after another, in the order you give it. Copy the pattern!",
+      "Copy the pattern, in order.",
     target: pattern("ABC"),
     budget: 3,
     repeatAvailable: false,
-    lesson: "That's a sequence: steps done one after another, in order.",
+    lesson: "A sequence: steps in order.",
   },
   {
     title: "Again and again",
     story:
-      "The same two threads, over and over, and you only have 3 chips. Is there a shortcut? Add your two threads, select them, then tap 🔁 Repeat these!",
+      "Only 3 chips! Add ◆ ▲, select them, tap 🔁 Repeat these.",
     target: pattern("ABABAB"),
     budget: 3,
     repeatAvailable: true,
     lesson:
-      "That's a loop: repeat some steps instead of writing them out again and again.",
+      "A loop: repeat steps instead of writing them again.",
   },
   {
-    title: "A twist at the start",
+    title: "A twist",
     story:
-      "Start with one pink thread, then repeat a pattern. Mix a single step with a loop.",
+      "Start with ●, then repeat the rest.",
     target: pattern("CABABAB"),
     budget: 4,
     repeatAvailable: true,
-    lesson: "Sequences and loops work together: do one thing, then loop the rest.",
+    lesson: "Sequences and loops work together.",
   },
   {
-    title: "The big tapestry",
+    title: "The big one",
     story:
-      "A long pattern, but only 4 chips. Find the small piece that repeats!",
+      "Only 4 chips! Find the part that repeats.",
     target: pattern("AABAABAABAAB"),
     budget: 4,
     repeatAvailable: true,
     lesson:
-      "A tiny loop can make a huge pattern. Ada saw that the loom repeats a weave, and a computer can too.",
+      "A tiny loop makes a big pattern.",
   },
 ];
 
@@ -112,10 +112,10 @@ export function describeMismatch(
   const want = target[index];
   const got = woven[index];
   if (got === undefined) {
-    return `Your weave stopped after ${woven.length} threads, but the pattern has ${target.length}.`;
+    return `Yours stops at ${woven.length}, the pattern has ${target.length}.`;
   }
   if (want === undefined) {
-    return `Your weave has ${woven.length} threads, but the pattern only has ${target.length}.`;
+    return `Yours has ${woven.length}, the pattern has ${target.length}.`;
   }
-  return `Thread ${index + 1} should be ${THREADS[want].symbol} ${THREADS[want].name}, but you wove ${THREADS[got].symbol} ${THREADS[got].name}.`;
+  return `Spot ${index + 1} should be ${THREADS[want].symbol}, not ${THREADS[got].symbol}.`;
 }

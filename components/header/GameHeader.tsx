@@ -3,6 +3,7 @@
 import { LEVEL_COUNT } from "@/level-manager/types";
 import { ConceptBadge } from "@/components/ui/ConceptBadge";
 import { useGame } from "@/state/game-context";
+import { JOURNEY } from "@/story/journey";
 
 export function GameHeader() {
   const { state, level, score, cleared, showWelcome } = useGame();
@@ -29,7 +30,7 @@ export function GameHeader() {
         </div>
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <span className="text-xs font-semibold tracking-[0.14em] text-copper uppercase">
-            {inLobby ? "Lobby" : clearedArchive ? "Archive clear" : `Level ${level.floor}`}
+            {inLobby ? "Lobby" : clearedArchive ? "Archive clear" : `Level ${level.floor} · ${JOURNEY[level.index].name}`}
           </span>
           <span className="font-medium text-ink">
             {inLobby ? "Choose a level" : level.pioneer}

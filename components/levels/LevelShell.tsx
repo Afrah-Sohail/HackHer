@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { LevelDefinition } from "@/level-manager/types";
 import { useGame } from "@/state/game-context";
 import { Button } from "@/components/ui/Button";
 import { GuideAgent } from "@/components/guide/GuideAgent";
 import { StarConfetti } from "@/components/ui/StarConfetti";
+import { PlanetIntro } from "@/components/story/PlanetIntro";
+import { JOURNEY } from "@/story/journey";
 
 export function LevelShell({
   level,
@@ -22,6 +24,8 @@ export function LevelShell({
   const canComplete = canCompleteProp ?? true;
   const isFinalLevel = level.floor === 6;
   const footerRef = useRef<HTMLElement>(null);
+  const story = JOURNEY[level.index];
+  const [introDone, setIntroDone] = useState(false);
 
   // The Complete button only appears once the level is solved; bring it into
   // view so the player always sees what to do next.
@@ -34,7 +38,7 @@ export function LevelShell({
     <article className="overflow-hidden rounded-3xl border border-line bg-paper-raised shadow-sm">
       <header className="border-b border-line px-5 py-5 sm:px-8">
         <p className="text-xs font-medium tracking-[0.18em] text-copper uppercase">
-          Level {level.floor}
+          Level {level.floor} · {story.name}
         </p>
         <h1 className="mt-1 font-display text-2xl leading-tight text-ink sm:text-3xl">
           <strong className="font-bold">{level.pioneer}</strong>
@@ -53,7 +57,8 @@ export function LevelShell({
         <p className="mb-4 text-xs font-medium tracking-[0.16em] text-ink-soft uppercase">
           {level.mechanicLabel}{isStub ? " shell" : ""}
         </p>
-        {children}
+        {/* The game and its tutorial start once the arrival scene is done. */}
+        {introDone ? children : null}
       </section>
       {canComplete && (
         <footer
@@ -61,13 +66,14 @@ export function LevelShell({
           className="flex flex-wrap items-center justify-between gap-4 border-t border-line bg-paper px-5 py-5 sm:px-8"
         >
           <p className="text-base text-ink-soft">
-            {isFinalLevel ? "That's the last level!" : "Ready for the next one?"}
+            {story.fixed} {isFinalLevel ? "Time to fly home!" : "Ready to blast off?"}
           </p>
           <Button className="px-10 py-3.5 text-lg" onClick={() => completeLevel()}>
-            Complete Level
+            {isFinalLevel ? "Fly home 🚀" : "Blast off 🚀"}
           </Button>
         </footer>
       )}
+      {!introDone && <PlanetIntro level={level} onDone={() => setIntroDone(true)} />}
       {canCompleteProp === true && <StarConfetti />}
       <GuideAgent key={level.slug} level={level} />
     </article>

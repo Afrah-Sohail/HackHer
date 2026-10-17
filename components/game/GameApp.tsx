@@ -3,6 +3,7 @@
 import { GameHeader } from "@/components/header/GameHeader";
 import { DebugPanel } from "@/components/overlays/DebugPanel";
 import { GameView } from "@/components/screens/GameView";
+import { TravelScreen } from "@/components/screens/TravelScreen";
 import { VictoryScreen } from "@/components/screens/VictoryScreen";
 import { WelcomeScreen } from "@/components/screens/WelcomeScreen";
 import { GameProvider, useGame } from "@/state/game-context";
@@ -10,13 +11,18 @@ import { GameProvider, useGame } from "@/state/game-context";
 function GameFrame() {
   const { state } = useGame();
 
-  const splash = state.screen === "welcome";
+  // Full-screen scenes show no game header.
+  const splash =
+    state.screen === "welcome" ||
+    state.screen === "travel" ||
+    state.screen === "victory";
 
   return (
     <div className={splash ? "min-h-screen" : "min-h-screen pb-24"}>
       {splash ? null : <GameHeader />}
       <main>
-        {splash ? <WelcomeScreen /> : null}
+        {state.screen === "welcome" ? <WelcomeScreen /> : null}
+        {state.screen === "travel" ? <TravelScreen /> : null}
         {state.screen === "playing" ? <GameView /> : null}
         {state.screen === "victory" ? <VictoryScreen /> : null}
       </main>

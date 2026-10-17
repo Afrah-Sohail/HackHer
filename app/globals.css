@@ -121,3 +121,113 @@ button:not(:disabled):not([data-plain]):active {
     display: none;
   }
 }
+
+/* Journey map and travel scenes (components/story) */
+.rocket-flame {
+  animation: flame-flicker 0.18s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+
+@keyframes flame-flicker {
+  from {
+    transform: scaleY(0.8);
+  }
+  to {
+    transform: scaleY(1.2);
+  }
+}
+
+.map-pulse {
+  animation: map-pulse 1.6s ease-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes map-pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+.boom-core,
+.boom-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: boom-grow 0.9s ease-out forwards;
+}
+
+.boom-ring {
+  animation-name: boom-ring;
+}
+
+.boom-spark {
+  animation: boom-spark 0.9s ease-out forwards;
+}
+
+@keyframes boom-grow {
+  0% {
+    transform: scale(0.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes boom-ring {
+  0% {
+    transform: scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes boom-spark {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy)) scale(0.3);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rocket-flame,
+  .map-pulse {
+    animation: none;
+  }
+}
+
+/* A pet sprite pops in when the right pet is made (Level 6) */
+.pet-pop {
+  animation: pet-pop 0.45s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+@keyframes pet-pop {
+  0% {
+    transform: scale(0.2) rotate(-12deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pet-pop {
+    animation: none;
+  }
+}

@@ -157,7 +157,7 @@ export function OpeningScreen() {
             Great scan of the Sun! But the engine just blew up. We&apos;re crashing on Mercury!
           </Speech>
           <Speech speaker="sparkles">
-            Hold on tight! I can&apos;t fix a rocket with hooves, but I&apos;ll cheer you on.
+            Hold on tight! I&apos;ll be right here cheering you on.
           </Speech>
           <div className="mt-2 flex justify-center">
             <Button className="px-10 py-3.5 text-lg" onClick={arrive}>

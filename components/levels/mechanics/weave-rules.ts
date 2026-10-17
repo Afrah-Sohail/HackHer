@@ -47,7 +47,7 @@ export const ROUNDS: readonly Round[] = [
   {
     title: "Again and again",
     story:
-      "The same two threads, over and over, and you only have 3 chips. Is there a shortcut? Try the 🔁 Repeat block!",
+      "The same two threads, over and over, and you only have 3 chips. Is there a shortcut? Add your two threads, select them, then tap 🔁 Repeat these!",
     target: pattern("ABABAB"),
     budget: 3,
     repeatAvailable: true,

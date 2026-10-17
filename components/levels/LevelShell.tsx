@@ -38,7 +38,7 @@ export function LevelShell({
   return (
     <>
     <PlanetBackdrop planet={story.planet} />
-    <article className="overflow-hidden rounded-3xl border border-line bg-paper-raised/75 shadow-sm backdrop-blur-sm">
+    <article className="overflow-hidden rounded-3xl border border-line bg-paper-raised/75 shadow-sm">
       <header className="border-b border-line px-5 py-5 sm:px-8">
         <p className="text-xs font-medium tracking-[0.18em] text-copper uppercase">
           Level {level.floor} · {story.name}

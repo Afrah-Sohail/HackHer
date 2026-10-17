@@ -31,12 +31,12 @@ export function PlanetIntro({
   const last = shown >= story.arrival.length;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-void/85 p-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-void/50 p-4">
       <section
         role="dialog"
         aria-modal="true"
         aria-label={`Arriving on ${story.name}`}
-        className="max-h-full w-full max-w-2xl overflow-y-auto rounded-3xl border-2 border-copper/40 p-6 shadow-2xl sm:p-8"
+        className="max-h-full flex min-h-[min(34rem,90vh)] w-full max-w-4xl flex-col overflow-y-auto rounded-3xl border-2 border-copper/40 p-6 shadow-2xl sm:p-10"
         style={{
           backgroundImage:
             'url("/tutorial-stars.jpg"), linear-gradient(160deg, #2b1670 0%, #1d2c80 55%, #1a1452 100%)',
@@ -46,18 +46,18 @@ export function PlanetIntro({
         }}
       >
         <div className="flex items-center gap-4">
-          <Planet id={story.planet} size={88} />
+          <Planet id={story.planet} size={140} />
           <div>
             <p className="text-sm font-medium tracking-[0.16em] text-copper uppercase">
               Level {level.floor} · {story.name}
             </p>
-            <p className="mt-1 font-display text-2xl text-ink sm:text-3xl">
+            <p className="mt-1 font-display text-3xl text-ink sm:text-4xl">
               🔧 {story.problem}
             </p>
           </div>
         </div>
 
-        <div className="mt-6 grid gap-4" aria-live="polite">
+        <div className="mt-8 grid content-start gap-4 text-lg" aria-live="polite">
           {story.arrival.slice(0, shown).map((beat, i) => (
             <Speech
               key={i}
@@ -70,7 +70,7 @@ export function PlanetIntro({
           ))}
         </div>
 
-        <div className="mt-6 flex items-center justify-between gap-3">
+        <div className="mt-auto flex items-center justify-between gap-3 pt-8">
           <Button variant="ghost" className="px-5 py-3 text-lg" onClick={onDone}>
             Skip
           </Button>

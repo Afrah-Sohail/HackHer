@@ -1,6 +1,33 @@
-export type Gate = "AND" | "OR" | "NOT";
+// NAND, NOR and XNOR are AND, OR and XOR with a NOT on the output.
+export type Gate = "AND" | "OR" | "NOT" | "XOR" | "NAND" | "NOR" | "XNOR";
 
-export const GATE_ARITY: Record<Gate, 1 | 2> = { AND: 2, OR: 2, NOT: 1 };
+export const GATE_ARITY: Record<Gate, 1 | 2> = {
+  AND: 2,
+  OR: 2,
+  NOT: 1,
+  XOR: 2,
+  NAND: 2,
+  NOR: 2,
+  XNOR: 2,
+};
+
+const NEGATED: Partial<Record<Gate, Gate>> = {
+  AND: "NAND",
+  NAND: "AND",
+  OR: "NOR",
+  NOR: "OR",
+  XOR: "XNOR",
+  XNOR: "XOR",
+};
+
+/** The gate with a NOT added to (or taken off) its output; null for NOT. */
+export function toggleNot(gate: Gate): Gate | null {
+  return NEGATED[gate] ?? null;
+}
+
+export function isNegated(gate: Gate): boolean {
+  return gate === "NAND" || gate === "NOR" || gate === "XNOR";
+}
 
 export type InputNode = { id: string; label: string; x: number; y: number };
 
@@ -38,7 +65,7 @@ export const ROUNDS: readonly Round[] = [
     slots: [{ id: "g1", from: ["A", "B"], x: 50, y: 30 }],
     outputFrom: "g1",
     outputLabel: "Stop machine",
-    outputPos: { x: 90, y: 30 },
+    outputPos: { x: 86, y: 30 },
     target: (v) => v.A && v.B,
     lesson: "AND needs both.",
   },
@@ -53,9 +80,23 @@ export const ROUNDS: readonly Round[] = [
     slots: [{ id: "g1", from: ["A", "B"], x: 50, y: 30 }],
     outputFrom: "g1",
     outputLabel: "Keep guess",
-    outputPos: { x: 90, y: 30 },
+    outputPos: { x: 86, y: 30 },
     target: (v) => v.A || v.B,
     lesson: "OR needs just one.",
+  },
+  {
+    title: "Exactly one",
+    story: "Stop the machine when EXACTLY ONE clue is true, not both.",
+    inputs: [
+      { id: "A", label: "Letters match", x: 10, y: 18 },
+      { id: "B", label: "Rotors match", x: 10, y: 42 },
+    ],
+    slots: [{ id: "g1", from: ["A", "B"], x: 50, y: 30 }],
+    outputFrom: "g1",
+    outputLabel: "Stop machine",
+    outputPos: { x: 86, y: 30 },
+    target: (v) => v.A !== v.B,
+    lesson: "XOR is on when the inputs differ.",
   },
   {
     title: "Never itself",
@@ -65,7 +106,7 @@ export const ROUNDS: readonly Round[] = [
     slots: [{ id: "g1", from: ["A"], x: 50, y: 30 }],
     outputFrom: "g1",
     outputLabel: "Keep guess",
-    outputPos: { x: 90, y: 30 },
+    outputPos: { x: 86, y: 30 },
     target: (v) => !v.A,
     lesson: "NOT flips it.",
   },
@@ -85,7 +126,7 @@ export const ROUNDS: readonly Round[] = [
     ],
     outputFrom: "g3",
     outputLabel: "Keep guess",
-    outputPos: { x: 92, y: 35 },
+    outputPos: { x: 86, y: 35 },
     target: (v) => (v.A || v.B) && !v.C,
     lesson: "Small gates chained together make big decisions.",
   },
@@ -99,9 +140,22 @@ export function emptyPlaced(round: Round): Placed {
 }
 
 function apply(gate: Gate, inputs: boolean[]): boolean {
-  if (gate === "NOT") return !inputs[0];
-  if (gate === "AND") return inputs[0] && inputs[1];
-  return inputs[0] || inputs[1];
+  switch (gate) {
+    case "NOT":
+      return !inputs[0];
+    case "AND":
+      return inputs[0] && inputs[1];
+    case "NAND":
+      return !(inputs[0] && inputs[1]);
+    case "OR":
+      return inputs[0] || inputs[1];
+    case "NOR":
+      return !(inputs[0] || inputs[1]);
+    case "XOR":
+      return inputs[0] !== inputs[1];
+    case "XNOR":
+      return inputs[0] === inputs[1];
+  }
 }
 
 /** Value of every node. A slot with no gate (or missing input) is null. */

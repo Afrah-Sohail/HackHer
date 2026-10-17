@@ -83,7 +83,7 @@ export function VictoryScreen() {
                 planet taught me something new. Thank you, everyone!
               </Speech>
               <Speech speaker="sparkles">
-                I&apos;m so proud of you both. I did the cheering, you did the
+                I&apos;m so proud of us! I did the cheering, you did the
                 fixing! You learned loops, hopping, logic, functions, priority
                 queues and classes.
               </Speech>

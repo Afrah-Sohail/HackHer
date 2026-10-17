@@ -309,20 +309,20 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
               {objects.map((pet, index) => (
                 <li
                   key={index}
-                  className="flex items-start gap-4 rounded-2xl border border-line bg-paper-raised/60 p-4 text-xl"
+                  className="flex items-center gap-3 rounded-2xl border border-line bg-paper-raised/60 p-3 text-xl"
                 >
-                  <div className="flex w-20 shrink-0 flex-col items-center gap-1">
+                  <div className="flex w-16 shrink-0 flex-col items-center gap-0.5">
                     {round.mode !== "build" || matchesRequest(round, pet) ? (
                       <PetSprite
                         species={pet.species}
                         color={pet.color}
-                        size={80}
+                        size={64}
                         className="pet-pop"
                       />
                     ) : (
                       <span
                         aria-hidden="true"
-                        className="flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-dashed border-line text-3xl text-ink-soft/60"
+                        className="flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-dashed border-line text-3xl text-ink-soft/60"
                       >
                         ?
                       </span>
@@ -333,17 +333,17 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                   </div>
                   <div className="min-w-0 flex-1">
                   {round.mode === "build" ? (
-                    <div className="grid grid-cols-[repeat(auto-fit,minmax(8rem,1fr))] gap-2">
+                    <div className="grid grid-cols-3 gap-2">
                       {(["name", "species", "color"] as const).map((key) => (
                         <label key={key} className="grid min-w-0 gap-1 text-base text-ink-soft">
-                          {PROPS[key].label}
+                          <span className="sr-only">{PROPS[key].label}</span>
                           <select
                             value={pet[key]}
                             disabled={!editable}
                             onChange={(event) => editPet(index, key, event.target.value)}
-                            className="w-full min-w-0 rounded-xl border border-line bg-void px-3 py-2.5 text-xl text-ink"
+                            className="w-full min-w-0 rounded-xl border border-line bg-void px-2 py-2 text-lg text-ink"
                           >
-                            <option value="">Choose…</option>
+                            <option value="">{PROPS[key].label}…</option>
                             {PROPS[key].options?.map((option) => (
                               <option key={option} value={option}>
                                 {option}

@@ -10,7 +10,7 @@ export const PROPS: Record<
   PropId,
   { label: string; options?: readonly string[]; fixed?: string }
 > = {
-  name: { label: "name", options: ["Mochi", "Pixel", "Nova", "Biscuit"] },
+  name: { label: "name", options: ["Mochi", "Bailey", "Nova", "Kiki"] },
   species: { label: "species", options: ["cat", "dog", "bunny"] },
   color: { label: "color", options: ["orange", "brown", "black", "white"] },
   vaccinated: { label: "vaccinated", fixed: "yes" },
@@ -57,9 +57,9 @@ export type Round = {
 };
 
 const MOCHI: Pet = { name: "Mochi", species: "cat", color: "orange" };
-const PIXEL: Pet = { name: "Pixel", species: "dog", color: "brown" };
+const BAILEY: Pet = { name: "Bailey", species: "dog", color: "brown" };
 const NOVA: Pet = { name: "Nova", species: "cat", color: "black" };
-const BISCUIT: Pet = { name: "Biscuit", species: "bunny", color: "white" };
+const KIKI: Pet = { name: "Kiki", species: "dog", color: "white" };
 
 export const ROUNDS: readonly Round[] = [
   {
@@ -71,7 +71,7 @@ export const ROUNDS: readonly Round[] = [
     baseProps: [],
     required: ["name", "species", "color"],
     palette: ["name", "species", "color", "wheels", "wings"],
-    requests: [MOCHI, PIXEL, NOVA],
+    requests: [MOCHI, BAILEY, NOVA],
     objects: [],
     lesson:
       "A blueprint lists what every object has.",
@@ -85,7 +85,7 @@ export const ROUNDS: readonly Round[] = [
     baseProps: ["name", "species", "color"],
     required: [],
     palette: [],
-    requests: [MOCHI, PIXEL, NOVA],
+    requests: [MOCHI, BAILEY, NOVA],
     objects: [],
     lesson:
       "Same blueprint, different values.",
@@ -99,8 +99,8 @@ export const ROUNDS: readonly Round[] = [
     baseProps: ["name", "species", "color"],
     required: [],
     palette: [],
-    requests: [MOCHI, PIXEL, NOVA],
-    objects: [MOCHI, PIXEL, NOVA],
+    requests: [MOCHI, BAILEY, NOVA],
+    objects: [MOCHI, BAILEY, NOVA],
     lesson:
       "Same method, but each pet uses its own values.",
   },
@@ -114,7 +114,7 @@ export const ROUNDS: readonly Round[] = [
     required: ["name", "species", "color", "vaccinated"],
     palette: ["vaccinated", "wheels", "wings"],
     requests: [],
-    objects: [MOCHI, PIXEL, NOVA, BISCUIT],
+    objects: [MOCHI, BAILEY, NOVA, KIKI],
     lesson:
       "Change the blueprint once and every object updates.",
   },

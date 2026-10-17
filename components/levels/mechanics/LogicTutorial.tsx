@@ -24,11 +24,17 @@ const GATE_CARDS = [
     example: "ON → OFF",
     counter: "OFF → ON",
   },
+  {
+    name: "XOR",
+    rule: "ON if the inputs are DIFFERENT",
+    example: "ON + OFF → ON",
+    counter: "ON + ON → OFF",
+  },
 ];
 
 function GateCards() {
   return (
-    <ul className="grid gap-2 sm:grid-cols-3">
+    <ul className="grid grid-cols-2 gap-2 sm:grid-cols-4">
       {GATE_CARDS.map((gate) => (
         <li
           key={gate.name}
@@ -99,7 +105,8 @@ const STEPS: Step[] = [
     body: (
       <>
         <strong>Drag</strong> a gate onto a dashed slot (or tap a gate, then the
-        slot). Tap the circles to test. Make every row match!
+        slot). Tap the <strong>NOT</strong> bubble on an AND, OR or XOR gate to
+        flip its answer. Tap the circles to test. Make every row match!
       </>
     ),
     visual: <MiniBoard />,

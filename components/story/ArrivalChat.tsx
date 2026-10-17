@@ -1,13 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { getLevel } from "@/level-manager";
 import { JOURNEY } from "@/story/journey";
 import { Speech } from "./Speech";
-
-// Only the latest few lines stay up, so the scene fits on one screen.
-const MAX_VISIBLE = 3;
 
 // "Ada Lovelace" -> "AL"; a group of women gets a star.
 function badgeFor(pioneer: string): string {
@@ -28,11 +25,18 @@ export function ArrivalChat({ index, onDone }: { index: number; onDone: () => vo
   const beats = story.arrival.filter((beat) => beat.speaker !== "narrator");
   const [shown, setShown] = useState(1);
   const last = shown >= beats.length;
+  const listRef = useRef<HTMLDivElement>(null);
+
+  // Every line stays; the list scrolls down to the newest one.
+  useEffect(() => {
+    const list = listRef.current;
+    list?.scrollTo({ top: list.scrollHeight, behavior: "smooth" });
+  }, [shown]);
 
   return (
     <div className="mx-auto grid w-full max-w-3xl gap-3">
-      <div className="grid gap-3" aria-live="polite">
-        {beats.slice(Math.max(0, shown - MAX_VISIBLE), shown).map((beat, i) => (
+      <div ref={listRef} className="grid max-h-[40vh] gap-3 overflow-y-auto" aria-live="polite">
+        {beats.slice(0, shown).map((beat, i) => (
           <Speech
             key={i}
             speaker={beat.speaker}

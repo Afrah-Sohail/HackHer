@@ -9,9 +9,9 @@ import { ArrivalChat } from "@/components/story/ArrivalChat";
 import { useGame } from "@/state/game-context";
 
 // Timeline of the opening, in milliseconds.
-const SCAN = 3600; // the rocket scans the Sun
-const BOOM = 1100; // the engine blows up
-const DRIFT = 1900; // limp over to Mercury
+const SCAN = 5200; // the rocket scans the Sun
+const BOOM = 1900; // the engine blows up
+const DRIFT = 3000; // limp over to Mercury
 const TOTAL = SCAN + BOOM + DRIFT;
 
 const SUN = { x: 210, y: 250, r: 150 };
@@ -144,7 +144,7 @@ export function OpeningScreen() {
         <g transform={`translate(${x} ${y}) rotate(${angle}) scale(1.5) translate(-20 -35)`}>
           <RocketArt flame={!scanning && !exploding && !landed} broken={!scanning} />
         </g>
-        {exploding && elapsed < SCAN + 900 && <Explosion key="boom" x={x} y={y} />}
+        {exploding && elapsed < SCAN + 1300 && <Explosion key="boom" x={x} y={y} />}
       </svg>
 
       <p

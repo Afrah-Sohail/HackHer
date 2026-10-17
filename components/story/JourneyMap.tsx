@@ -115,7 +115,7 @@ function MapSvg({
         <mask id={`map-cut${uid}`} maskUnits="userSpaceOnUse" x="0" y="0" width={w} height={h}>
           <rect width={w} height={h} fill="white" />
           {pts.map((p, i) => (
-            <circle key={i} cx={p.x} cy={p.y} r={R + 7} fill="black" />
+            <circle key={i} cx={p.x} cy={p.y} r={i === 0 ? R + 3 : i === 7 ? 26 : R * 0.93} fill="black" />
           ))}
         </mask>
         <radialGradient id={`map-sun${uid}`} cx="40%" cy="38%" r="75%">

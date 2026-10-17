@@ -156,23 +156,13 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
     setMessage("Tap symbols to fill the loop, then set how many times with − and +.");
   }
 
-  // The learning moment: swap the player's long answer for the loop version.
-  function showLoop() {
-    const next: Card[] = round.solution.map((item) =>
-      "thread" in item
-        ? { id: nextId.current++, kind: "thread", thread: item.thread }
-        : {
-            id: nextId.current++,
-            kind: "repeat",
-            times: item.repeat,
-            body: item.body.map((thread) => ({ id: nextId.current++, thread })),
-          },
-    );
-    setCards(next);
+  // The learning moment: start over and build it again with a loop.
+  function restartWithLoop() {
+    setCards([]);
     setFocusId(null);
     setRevealed(0);
     setPhase("build");
-    setMessage("Here's the loop! Press Weave to try it.");
+    setMessage("Clear card! Tap 🔁 and build it again with a loop.");
   }
 
   function changeTimes(id: number, delta: number) {
@@ -220,7 +210,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
   return (
     <>
       {showTutorial && <WeaveTutorial onDone={closeTutorial} />}
-      <div className="grid gap-6">
+      <div className="grid gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-lg font-semibold text-ink">
             Round {roundIndex + 1} of {ROUNDS.length}
@@ -434,8 +424,8 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
 
         </div>
 
-        <p className="min-h-6 text-lg text-copper" aria-live="polite">
-          {message ?? " "}
+        <p className="text-lg text-copper empty:hidden" aria-live="polite">
+          {message}
         </p>
 
         <div className="flex flex-wrap items-center gap-4">
@@ -479,9 +469,9 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
               {canTeachLoop ? (
                 <UnicornSays tone="happy" className="w-full">
                   <span aria-live="polite" className="block">
-                    <strong className="text-signal">It works! 🎉</strong> But
-                    there&apos;s a shortcut: a 🔁 loop can do this in just{" "}
-                    <strong>{round.budget} chips</strong>.
+                    <strong className="text-signal">It works, great job! 🎉</strong>{" "}
+                    Want to try something neat? Start over and use a 🔁 loop.
+                    It only takes <strong>{round.budget} chips</strong>.
                   </span>
                 </UnicornSays>
               ) : (
@@ -495,8 +485,8 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
                 </UnicornSays>
               )}
               {canTeachLoop && (
-                <Button className="px-8 py-3.5 text-xl" onClick={showLoop}>
-                  Show me the loop
+                <Button className="px-8 py-3.5 text-xl" onClick={restartWithLoop}>
+                  Try it with a loop
                 </Button>
               )}
               {!isLastRound && (

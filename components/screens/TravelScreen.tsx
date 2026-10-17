@@ -8,9 +8,9 @@ import { JOURNEY } from "@/story/journey";
 import { useGame } from "@/state/game-context";
 
 // Timeline of the trip, in milliseconds.
-const FLY = 1900; // blast off and fly along the path
-const BOOM = 1000; // the engine blows up
-const DRIFT = 1700; // limp down to the next planet
+const FLY = 2700; // blast off and fly along the path
+const BOOM = 2200; // the engine blows up
+const DRIFT = 2800; // limp down to the next planet
 const TOTAL = FLY + BOOM + DRIFT;
 
 const ease = (x: number) => {

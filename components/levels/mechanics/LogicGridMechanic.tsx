@@ -12,13 +12,15 @@ import {
   emptyPlaced,
   evaluate,
   isSolved,
+  toggleNot,
+  isNegated,
   type Gate,
   type Placed,
   type Round,
   type Signals,
 } from "./logic-rules";
 
-const GATES: Gate[] = ["AND", "OR", "NOT"];
+const GATES: Gate[] = ["AND", "OR", "NOT", "XOR"];
 
 type Drag = {
   gate: Gate;
@@ -82,6 +84,17 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
 
     const next = { ...placed, [slotId]: gate };
     if (fromSlot && fromSlot !== slotId) next[fromSlot] = null;
+    setPlaced(next);
+    setMessage(null);
+    if (isLastRound && isSolved(round, next)) onCleared?.();
+  }
+
+  // The little NOT bubble on a placed gate: AND <-> NAND, OR <-> NOR, XOR <-> XNOR.
+  function toggleSlotNot(slotId: string) {
+    const gate = placed[slotId];
+    const flipped = gate ? toggleNot(gate) : null;
+    if (!gate || !flipped || solved) return;
+    const next = { ...placed, [slotId]: flipped };
     setPlaced(next);
     setMessage(null);
     if (isLastRound && isSolved(round, next)) onCleared?.();
@@ -280,6 +293,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
             setSwitches((prev) => ({ ...prev, [id]: !prev[id] }))
           }
           onSlot={placeGate}
+          onToggleNot={toggleSlotNot}
           onSlotPointerDown={startDrag}
         />
 
@@ -295,8 +309,8 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
           </BodyPortal>
         )}
 
-        <p className="min-h-6 text-lg text-copper" aria-live="polite">
-          {message ?? " "}
+        <p className="text-lg text-copper empty:hidden" aria-live="polite">
+          {message}
         </p>
 
           </div>
@@ -385,6 +399,7 @@ function Board({
   dragFrom,
   onSwitch,
   onSlot,
+  onToggleNot,
   onSlotPointerDown,
 }: {
   round: Round;
@@ -397,6 +412,7 @@ function Board({
   dragFrom: string | null;
   onSwitch: (id: string) => void;
   onSlot: (id: string) => void;
+  onToggleNot: (id: string) => void;
   onSlotPointerDown: (
     event: ReactPointerEvent,
     gate: Gate,
@@ -487,8 +503,8 @@ function Board({
             ? "ring-2 ring-copper/70"
             : "";
         return (
+          <div key={slot.id} className="contents">
           <button
-            key={slot.id}
             type="button"
             data-slot={slot.id}
             onPointerDown={gate ? (event) => onSlotPointerDown(event, gate, slot.id) : undefined}
@@ -516,6 +532,26 @@ function Board({
               />
             )}
           </button>
+          {gate && toggleNot(gate) !== null && (
+            <button
+              type="button"
+              onClick={() => onToggleNot(slot.id)}
+              aria-pressed={isNegated(gate)}
+              aria-label={`NOT on the ${slot.id} gate: ${isNegated(gate) ? "on" : "off"}`}
+              style={{
+                left: `calc(${slot.x}% + 2.6rem)`,
+                top: `calc(${(slot.y / 60) * 100}% - 2.1rem)`,
+              }}
+              className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 px-2.5 py-0.5 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
+                isNegated(gate)
+                  ? "border-copper bg-copper text-paper-raised"
+                  : "border-line bg-paper-raised text-ink-soft hover:border-copper"
+              }`}
+            >
+              NOT
+            </button>
+          )}
+          </div>
         );
       })}
 
@@ -535,7 +571,7 @@ function Board({
               : "bg-ink/10 shadow-[inset_0_2px_6px_rgb(0_0_0/0.5)]"
           }`}
         />
-        <span className="max-w-24 text-center text-base leading-tight text-ink-soft">
+        <span className="max-w-28 text-center text-lg leading-tight text-ink-soft">
           {round.outputLabel}
         </span>
       </div>

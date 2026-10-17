@@ -32,7 +32,7 @@ function BlueprintDemo() {
       <span className="text-copper">→</span>
       <span className="grid gap-1.5">
         <Card tone="object">Mochi · cat · orange</Card>
-        <Card tone="object">Pixel · dog · brown</Card>
+        <Card tone="object">Bailey · dog · brown</Card>
       </span>
     </div>
   );

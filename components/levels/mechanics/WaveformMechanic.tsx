@@ -61,8 +61,13 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
     return () => clearTimeout(timer);
   }, [phase, revealed, results, roundIndex, onCleared]);
 
+  // Only the step you are on can be set; the last step you set can be undone.
   function pick(step: number, channel: number) {
     if (phase !== "plan") return;
+    const lastFilled = plan.reduce((acc, current, i) => (current !== null ? i : acc), -1);
+    const onThisStep = step === nextStep;
+    const undoing = step === lastFilled && plan[step] === channel;
+    if (!onThisStep && !undoing) return;
     setPlan((prev) =>
       prev.map((current, i) =>
         i === step ? (current === channel ? null : channel) : current,
@@ -360,6 +365,8 @@ function ChannelRow({
         const outcome =
           selected && result ? (result.ok ? "clear" : "jammed") : null;
 
+        const lastFilled = plan.reduce((acc, current, i) => (current !== null ? i : acc), -1);
+        const canPick = !locked && (step === activeStep || (selected && step === lastFilled));
         const isActive = step === activeStep && !selected;
         let style = isActive
           ? "bg-copper/20 ring-1 ring-copper/60 hover:bg-copper/30"
@@ -374,7 +381,7 @@ function ChannelRow({
           <button
             key={step}
             type="button"
-            disabled={locked}
+            disabled={!canPick}
             aria-pressed={selected}
             aria-label={`Step ${step + 1}, channel ${channel}${
               outcome ? `, ${outcome}` : ""

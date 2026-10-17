@@ -42,7 +42,7 @@ export function LevelShell({
           <strong className="font-bold">{level.pioneer}</strong>
           <span className="font-normal">: {level.heading}</span>
         </h1>
-        <details className="group text-base text-ink-soft">
+        <details className="group text-lg text-ink-soft">
           <summary className="cursor-pointer select-none text-copper hover:text-ink">
             About this level
           </summary>
@@ -55,12 +55,12 @@ export function LevelShell({
       {canComplete && (
         <footer
           ref={footerRef}
-          className="flex flex-wrap items-center justify-between gap-4 border-t border-line bg-paper px-5 py-3 sm:px-8"
+          className="flex flex-col items-center gap-3 border-t border-line bg-paper px-5 py-4 text-center sm:px-8"
         >
-          <p className="text-base text-ink-soft">
+          <p className="text-xl text-ink">
             {story.fixed} {isFinalLevel ? "Time to fly home!" : "Ready to blast off?"}
           </p>
-          <Button className="px-10 py-2.5 text-lg" onClick={() => completeLevel()}>
+          <Button className="px-16 py-4 text-2xl" onClick={() => completeLevel()}>
             {isFinalLevel ? "Fly home 🚀" : "Blast off 🚀"}
           </Button>
         </footer>

@@ -30,11 +30,11 @@ export function WelcomeScreen() {
         them along the way. No experience needed, just curiosity.
       </p>
 
-      <ul className="mt-6 flex flex-wrap items-center justify-center gap-2">
+      <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ink-soft">
         {HIGHLIGHTS.map((item) => (
           <li
             key={item.label}
-            className="flex items-center gap-2 rounded-full border border-line bg-paper-raised/70 px-4 py-2 text-sm text-ink backdrop-blur-sm"
+            className="flex items-center gap-2"
           >
             <span aria-hidden="true">{item.icon}</span>
             {item.label}

@@ -39,7 +39,7 @@ function ThreadCell({
     <span
       role="img"
       aria-label={`${THREADS[thread].name} thread`}
-      className={`flex h-8 w-8 items-center justify-center rounded-md text-base transition ${THREADS[thread].className} ${ringClass} ${dim ? "opacity-50" : ""}`}
+      className={`flex h-7 w-7 cursor-default items-center justify-center rounded-full text-sm select-none transition ${THREADS[thread].className} ${ringClass} ${dim ? "opacity-50" : ""}`}
     >
       {THREADS[thread].symbol}
     </span>
@@ -50,7 +50,7 @@ function EmptyCell() {
   return (
     <span
       aria-hidden="true"
-      className="h-8 w-8 rounded-md border border-dashed border-line"
+      className="h-7 w-7 rounded-full border border-dashed border-line"
     />
   );
 }

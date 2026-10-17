@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Tag } from "@/components/ui/Tag";
 import { UnicornSays } from "@/components/guide/Unicorn";
 import { ObjectTutorial } from "./ObjectTutorial";
 import {
@@ -175,11 +176,10 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
           {round.requests.length > 0 ? (
             <ul className="flex flex-wrap gap-2" aria-label="Pets requested">
               {round.requests.map((pet) => (
-                <li
-                  key={pet.name}
-                  className="rounded-full border border-copper/50 px-3 py-1 text-sm text-ink"
-                >
-                  🐾 {petText(pet)}
+                <li key={pet.name}>
+                  <Tag tone="copper" size="md">
+                    🐾 {petText(pet)}
+                  </Tag>
                 </li>
               ))}
             </ul>
@@ -207,22 +207,23 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                 <span className="text-sm text-ink-soft">Empty so far</span>
               )}
               {blueprint.map((id) => {
-                const locked = round.baseProps.includes(id);
+                if (round.baseProps.includes(id)) {
+                  return (
+                    <Tag key={id} size="md">
+                      {PROPS[id].label}
+                    </Tag>
+                  );
+                }
                 return (
                   <button
                     key={id}
                     type="button"
-                    disabled={locked || !editable}
+                    disabled={!editable}
                     onClick={() => toggleProp(id)}
-                    aria-label={locked ? `${PROPS[id].label} (built in)` : `Remove ${PROPS[id].label}`}
-                    className={`rounded-full border px-3 py-1 text-sm ${
-                      locked
-                        ? "border-line text-ink"
-                        : "border-copper bg-copper/15 text-copper hover:bg-copper/25"
-                    }`}
+                    aria-label={`Remove ${PROPS[id].label}`}
+                    className="rounded-full border border-copper bg-copper/15 px-3 py-1 text-sm text-copper hover:bg-copper/25"
                   >
-                    {PROPS[id].label}
-                    {!locked && " ✕"}
+                    {PROPS[id].label} ✕
                   </button>
                 );
               })}

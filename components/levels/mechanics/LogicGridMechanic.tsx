@@ -350,17 +350,18 @@ function Board({
 
       <div
         style={place(round.outputPos)}
-        className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1"
+        className="pointer-events-none absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 select-none"
       >
+        <span className="text-[10px] tracking-wide text-ink-soft uppercase">Output</span>
         <span
           role="img"
           aria-label={`${round.outputLabel}: ${
             outputOn === null ? "not connected" : outputOn ? "on" : "off"
           }`}
-          className={`h-9 w-9 rounded-full border-2 transition ${
+          className={`h-9 w-9 rounded-full transition ${
             outputOn
-              ? "border-signal bg-signal shadow-[0_0_16px_var(--color-signal)]"
-              : "border-line bg-paper-raised"
+              ? "bg-signal shadow-[0_0_20px_var(--color-signal)]"
+              : "bg-ink/10 shadow-[inset_0_2px_6px_rgb(0_0_0/0.5)]"
           }`}
         />
         <span className="max-w-20 text-center text-[11px] leading-tight text-ink-soft">

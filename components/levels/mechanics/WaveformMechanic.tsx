@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Tag } from "@/components/ui/Tag";
 import { UnicornSays } from "@/components/guide/Unicorn";
 import { WaveformTutorial } from "./WaveformTutorial";
 import {
@@ -145,12 +146,12 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
             className="flex items-center gap-2 text-sm font-medium text-ink"
             aria-hidden="true"
           >
-            <span className="rounded-full bg-signal/20 px-3 py-1">📡 Sender</span>
+            <Tag tone="signal" size="md">📡 Sender</Tag>
             <span className="flex-1 border-t-2 border-dashed border-copper/60" />
             <span className="text-copper">▶</span>
-            <span className="rounded-full bg-signal/20 px-3 py-1">
+            <Tag tone="signal" size="md">
               🚀 Receiver
-            </span>
+            </Tag>
           </div>
           <p className="mt-3 text-[15px] leading-6 text-ink">
             <strong className="text-copper">Your goal:</strong> choose one

@@ -2,14 +2,15 @@
 
 import type { ReactNode } from "react";
 import { TutorialDialog } from "@/components/guide/TutorialDialog";
+import { Tag } from "@/components/ui/Tag";
 
 type Step = { title: string; body: ReactNode; visual: ReactNode };
 
 function Pill({ children }: { children: ReactNode }) {
   return (
-    <span className="rounded-full bg-signal/20 px-3 py-1 text-sm font-medium text-ink">
+    <Tag tone="signal" size="md">
       {children}
-    </span>
+    </Tag>
   );
 }
 

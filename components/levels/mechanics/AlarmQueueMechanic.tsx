@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Tag } from "@/components/ui/Tag";
 import { UnicornSays } from "@/components/guide/Unicorn";
 import { QueueTutorial } from "./QueueTutorial";
 import {
-  PRIORITY_CLASS,
   PRIORITY_LABEL,
   ROUNDS,
   describeMiss,
@@ -16,6 +16,12 @@ import {
 } from "./queue-rules";
 
 type Phase = "build" | "running" | "result";
+
+const PRIORITY_TONE = {
+  critical: "critical",
+  important: "copper",
+  routine: "neutral",
+} as const;
 
 const MEMORY_COLOR: Record<Priority, string> = {
   critical: "bg-red-400",
@@ -185,11 +191,9 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
                     ▼
                   </button>
                 </span>
-                <span
-                  className={`rounded-full border px-2 py-0.5 text-[11px] font-medium ${PRIORITY_CLASS[task.priority]}`}
-                >
+                <Tag tone={PRIORITY_TONE[task.priority]} caps className="w-20 justify-center">
                   {PRIORITY_LABEL[task.priority]}
-                </span>
+                </Tag>
                 <span className="min-w-0 flex-1 text-sm text-ink">{task.name}</span>
                 <span
                   className="flex gap-0.5"

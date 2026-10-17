@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
+import { Tag } from "@/components/ui/Tag";
 import { UnicornSays } from "@/components/guide/Unicorn";
 import { MissionTutorial } from "./MissionTutorial";
 import {
@@ -20,9 +21,9 @@ type Phase = "build" | "launching" | "result";
 
 function Pill({ children }: { children: ReactNode }) {
   return (
-    <span className="rounded-full bg-signal/20 px-3 py-1 text-sm font-medium text-ink">
+    <Tag tone="signal" size="md">
       {children}
-    </span>
+    </Tag>
   );
 }
 

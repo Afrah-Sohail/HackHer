@@ -46,8 +46,8 @@ function Legend() {
         </li>
       ))}
       <li className="flex items-center gap-3">
-        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-void">
-          <span className="h-2 w-2 rounded-full bg-red-500" />
+        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-red-500/15 text-sm">
+          ⚡
         </span>
         Channel the jammer is blocking
       </li>

@@ -5,7 +5,8 @@ export const LEVELS = [
     index: 0,
     floor: 1,
     slug: "ada-lovelace",
-    title: "Ada Lovelace & The Analytical Engine",
+    title: "Ada Lovelace: The Analytical Engine",
+    heading: "The Analytical Engine",
     pioneer: "Ada Lovelace",
     concept: "Sequences & Loops",
     narrative:
@@ -19,7 +20,8 @@ export const LEVELS = [
     index: 1,
     floor: 2,
     slug: "hedy-lamarr",
-    title: "Hedy Lamarr & The Secret Wave Jumper",
+    title: "Hedy Lamarr: The Secret Wave Jumper",
+    heading: "The Secret Wave Jumper",
     pioneer: "Hedy Lamarr",
     concept: "Frequency Hopping & Encryption",
     narrative:
@@ -33,7 +35,8 @@ export const LEVELS = [
     index: 2,
     floor: 3,
     slug: "joan-clarke",
-    title: "Joan Clarke & The Bletchley Park Cipher Machine",
+    title: "Joan Clarke: The Bletchley Park Cipher Machine",
+    heading: "The Bletchley Park Cipher Machine",
     pioneer: "Joan Clarke",
     concept: "Logic Gates (AND / OR / NOT)",
     narrative:
@@ -47,7 +50,8 @@ export const LEVELS = [
     index: 3,
     floor: 4,
     slug: "hidden-figures",
-    title: "Hidden Figures (Johnson, Jackson, Vaughan)",
+    title: "Johnson, Jackson & Vaughan: Hidden Figures",
+    heading: "Hidden Figures",
     pioneer: "Johnson, Jackson & Vaughan",
     concept: "Compilers, Aerodynamics, & Functions",
     narrative:
@@ -61,7 +65,8 @@ export const LEVELS = [
     index: 4,
     floor: 5,
     slug: "margaret-hamilton",
-    title: "Margaret Hamilton & Apollo 11 Alarm Priority",
+    title: "Margaret Hamilton: Apollo 11 Alarm Priority",
+    heading: "Apollo 11 Alarm Priority",
     pioneer: "Margaret Hamilton",
     concept: "Priority Queues & Memory Management",
     narrative:
@@ -75,7 +80,8 @@ export const LEVELS = [
     index: 5,
     floor: 6,
     slug: "adele-goldberg",
-    title: "Adele Goldberg & The Object Blueprint",
+    title: "Adele Goldberg: The Object Blueprint",
+    heading: "The Object Blueprint",
     pioneer: "Adele Goldberg",
     concept: "Object-Oriented Programming (Classes & Objects)",
     narrative:

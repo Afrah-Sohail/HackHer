@@ -60,8 +60,12 @@ const STEPS: Step[] = [
     title: "The mission",
     body: (
       <>
-        <strong>Hedy Lamarr</strong> had an idea: hop between radio channels
-        so an enemy can&apos;t jam your signal. Your turn!
+        It&apos;s World War II. Your radio-controlled torpedo is being{" "}
+        <strong>jammed</strong>: the enemy blasts noise on your channel so your
+        signal never arrives. <strong>Hedy Lamarr</strong>, a Hollywood star
+        and self-taught inventor, had a clever fix: don&apos;t stay on one
+        channel. <strong>Hop</strong> between channels so the jammer can never
+        keep up.
       </>
     ),
     visual: (

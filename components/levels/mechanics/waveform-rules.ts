@@ -38,14 +38,14 @@ export const ROUNDS: readonly Round[] = [
     title: "Pattern spotter",
     rule: "Jammer blocks your last 2 channels.",
     blocked: (history) => lastUsed(history, 2),
-    lesson: "Switching between two is too easy to spot.",
+    lesson: "Switching between two is too easy to spot. Hedy's design used a player-piano-style roll to keep both sides in sync.",
     previewByDefault: false,
   },
   {
     title: "Mastermind",
     rule: "Jammer blocks your last 3 channels.",
     blocked: (history) => lastUsed(history, 3),
-    lesson: "A longer, less predictable pattern wins. That's Hedy's big idea!",
+    lesson: "Hedy and composer George Antheil patented hopping in 1942. Ideas like it live on in Bluetooth.",
     previewByDefault: false,
   },
 ];

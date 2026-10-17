@@ -61,12 +61,14 @@ function LoopDemo() {
 
 const STEPS: Step[] = [
   {
-    title: "Program the loom",
+    title: "The story",
     body: (
       <>
-        <strong>Ada Lovelace</strong> saw that a machine could follow a list of
-        steps, like a <strong>loom</strong> weaving a pattern. Now you program
-        the loom!
+        In 1843, <strong>Ada Lovelace</strong> wrote about Charles
+        Babbage&apos;s <strong>Analytical Engine</strong>, a machine that would
+        follow punched cards the way a <strong>loom</strong> follows a pattern.
+        She even imagined it making music, about a century before anyone built
+        a computer. Now you program the loom!
       </>
     ),
     visual: (

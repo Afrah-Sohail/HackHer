@@ -60,12 +60,17 @@ function TableDemo() {
 
 const STEPS: Step[] = [
   {
-    title: "The mission",
+    title: "The story",
     body: (
       <>
-        <strong>Katherine Johnson</strong>, <strong>Dorothy Vaughan</strong> and{" "}
-        <strong>Mary Jackson</strong> found the math behind rocket flights.
-        Find the <strong>rule</strong> behind mission control&apos;s numbers!
+        In the 1940s and 50s, Black women mathematicians worked at
+        NASA&apos;s predecessor in a segregated unit.{" "}
+        <strong>Dorothy Vaughan</strong> led it and taught her team FORTRAN.{" "}
+        <strong>Mary Jackson</strong> became NASA&apos;s first Black female
+        engineer. <strong>Katherine Johnson</strong> calculated Alan
+        Shepard&apos;s 1961 flight path, and John Glenn asked her to
+        double-check the computer&apos;s numbers. Now find the{" "}
+        <strong>rule</strong> behind mission control&apos;s numbers!
       </>
     ),
     visual: (

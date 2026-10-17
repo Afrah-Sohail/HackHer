@@ -53,12 +53,15 @@ function QueueDemo() {
 
 const STEPS: Step[] = [
   {
-    title: "The mission",
+    title: "The story",
     body: (
       <>
-        <strong>Margaret Hamilton</strong> wrote Apollo&apos;s software for a
-        computer with <strong>very little memory</strong>. Decide what runs
-        first!
+        During the Apollo 11 landing on 20 July 1969, the computer flashed
+        alarms 1201 and 1202: it was overloaded with extra work.{" "}
+        <strong>Margaret Hamilton</strong>&apos;s team had designed the
+        software to run by <strong>priority</strong>, so it dropped
+        lower-priority jobs and kept the landing going. Now you decide what
+        runs first!
       </>
     ),
     visual: (

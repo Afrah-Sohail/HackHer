@@ -262,6 +262,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
               ))}
             </div>
           </div>
+          {phase !== "build" && (
           <div>
             <p className="mb-2 text-xs font-medium tracking-wide text-ink-soft uppercase">
               Yours
@@ -288,6 +289,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
               })}
             </div>
           </div>
+          )}
         </div>
 
         <div className="grid gap-3">

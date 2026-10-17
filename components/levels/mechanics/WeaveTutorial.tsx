@@ -89,8 +89,8 @@ const STEPS: Step[] = [
     title: "The loop shortcut",
     body: (
       <>
-        Select chips, tap <strong>🔁 Repeat these</strong>, then pick how many
-        times with <strong>− +</strong>.
+        Writing the same thing again and again? Tap <strong>🔁 Repeat</strong>{" "}
+        to loop it, then pick how many times with <strong>− +</strong>.
       </>
     ),
     visual: <LoopDemo />,

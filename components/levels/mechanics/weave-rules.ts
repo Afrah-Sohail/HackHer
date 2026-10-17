@@ -13,6 +13,8 @@ export const THREAD_IDS: Thread[] = ["A", "B", "C"];
 
 export const MIN_REPEAT = 2;
 export const MAX_REPEAT = 6;
+/** Safety cap so nobody builds an endless card by hand. */
+export const MAX_CHIPS = 14;
 
 export type BodyThread = { id: number; thread: Thread };
 
@@ -20,13 +22,20 @@ export type Card =
   | { id: number; kind: "thread"; thread: Thread }
   | { id: number; kind: "repeat"; times: number; body: BodyThread[] };
 
+/** A ready-made answer: single threads, or a repeat block with its threads. */
+export type SolutionItem =
+  | { thread: Thread }
+  | { repeat: number; body: Thread[] };
+
 export type Round = {
   title: string;
   story: string;
   target: Thread[];
-  /** Most chips (threads plus repeat blocks) the player may use. */
+  /** "Par": the chip count a clever solution (using a loop) needs. */
   budget: number;
   repeatAvailable: boolean;
+  /** The par solution, shown by the "Show me the loop" learning moment. */
+  solution: SolutionItem[];
   lesson: string;
 };
 
@@ -42,34 +51,38 @@ export const ROUNDS: readonly Round[] = [
     target: pattern("ABC"),
     budget: 3,
     repeatAvailable: false,
+    solution: [{ thread: "A" }, { thread: "B" }, { thread: "C" }],
     lesson: "A sequence: steps in order.",
   },
   {
     title: "Again and again",
     story:
-      "Only 3 chips! Add ◆ ▲, select them, tap 🔁 Repeat these.",
+      "Copy it any way you like. Can you do it in 3 chips?",
     target: pattern("ABABAB"),
     budget: 3,
     repeatAvailable: true,
+    solution: [{ repeat: 3, body: ["A", "B"] }],
     lesson:
       "A loop: repeat steps instead of writing them again.",
   },
   {
     title: "A twist",
     story:
-      "Start with ●, then repeat the rest.",
+      "Start with ●, then the rest repeats. Aim for 4 chips.",
     target: pattern("CABABAB"),
     budget: 4,
     repeatAvailable: true,
+    solution: [{ thread: "C" }, { repeat: 3, body: ["A", "B"] }],
     lesson: "Sequences and loops work together.",
   },
   {
     title: "The big one",
     story:
-      "Only 4 chips! Find the part that repeats.",
+      "Aim for 4 chips. Find the part that repeats!",
     target: pattern("AABAABAABAAB"),
     budget: 4,
     repeatAvailable: true,
+    solution: [{ repeat: 4, body: ["A", "A", "B"] }],
     lesson:
       "A tiny loop makes a big pattern.",
   },

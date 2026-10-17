@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { UnicornSays } from "@/components/guide/Unicorn";
 import { WeaveTutorial } from "./WeaveTutorial";
 import {
+  MAX_CHIPS,
   MAX_REPEAT,
   MIN_REPEAT,
   ROUNDS,
@@ -93,8 +94,8 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
   }, [phase, revealed, woven.length, mismatch, roundIndex, onCleared]);
 
   function outOfChips(): boolean {
-    if (used < round.budget) return false;
-    setMessage("Out of chips! Remove one, or use 🔁 Repeat.");
+    if (used < MAX_CHIPS) return false;
+    setMessage("That's a lot of chips! Try a 🔁 loop.");
     return true;
   }
 
@@ -163,8 +164,8 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
       setMessage("Select chips outside a 🔁 block to repeat them.");
       return;
     }
-    if (used + 1 > round.budget) {
-      setMessage("Out of chips! 🔁 costs 1 chip too.");
+    if (used + 1 > MAX_CHIPS) {
+      setMessage("That's a lot of chips! Remove a few first.");
       return;
     }
     const firstIndex = cards.findIndex((card) => card.id === picked[0].id);
@@ -182,6 +183,43 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
     setSelected([]);
     setFocusId(null);
     setMessage("Now set how many times with − and +.");
+  }
+
+  // The palette's 🔁 button: confirm a selection, offer to repeat the chips
+  // already on the card, or start an empty block when there is nothing yet.
+  function onRepeatButton() {
+    if (phase !== "build") return;
+    if (selected.length > 0) {
+      repeatSelected();
+      return;
+    }
+    const onCard = cards.filter((card) => card.kind === "thread");
+    if (onCard.length > 0) {
+      setSelected(onCard.map((card) => card.id));
+      setMessage("Tap to deselect any you don't want repeated. Then 🔁 Repeat these.");
+      return;
+    }
+    addRepeat();
+  }
+
+  // The learning moment: swap the player's long answer for the loop version.
+  function showLoop() {
+    const next: Card[] = round.solution.map((item) =>
+      "thread" in item
+        ? { id: nextId.current++, kind: "thread", thread: item.thread }
+        : {
+            id: nextId.current++,
+            kind: "repeat",
+            times: item.repeat,
+            body: item.body.map((thread) => ({ id: nextId.current++, thread })),
+          },
+    );
+    setCards(next);
+    setFocusId(null);
+    setSelected([]);
+    setRevealed(0);
+    setPhase("build");
+    setMessage("Here's the loop! Press Weave to try it.");
   }
 
   function changeTimes(id: number, delta: number) {
@@ -226,6 +264,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
   }
 
   const locked = phase !== "build";
+  const canTeachLoop = matches && round.repeatAvailable && used > round.budget;
 
   return (
     <>
@@ -255,7 +294,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
           <p className="font-display text-2xl text-ink sm:text-3xl">
             Match the pattern
             <span className="ml-3 text-base font-sans text-ink-soft sm:text-lg">
-              up to {round.budget} chips
+              aim for {round.budget} chips
             </span>
           </p>
           <p className="mt-1 text-base text-ink-soft">{round.story}</p>
@@ -318,7 +357,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
               <button
                 type="button"
                 disabled={locked}
-                onClick={addRepeat}
+                onClick={onRepeatButton}
                 aria-label="Add repeat block"
                 className="flex h-16 items-center justify-center gap-2 rounded-2xl border-2 border-copper px-5 text-2xl text-copper transition hover:bg-copper/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-40 sm:h-20 sm:text-3xl"
               >
@@ -328,16 +367,23 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
             )}
             <span
               className="ml-auto flex items-center gap-1.5 text-sm text-ink-soft"
-              aria-label={`${used} of ${round.budget} chips used`}
+              aria-label={`${used} chips used, aim for ${round.budget}`}
             >
-              {Array.from({ length: round.budget }, (_, i) => (
+              {Array.from({ length: Math.max(round.budget, used) }, (_, i) => (
                 <span
                   key={i}
-                  className={`h-3.5 w-3.5 rounded-full ${i < used ? "bg-copper" : "border border-line"}`}
+                  className={`h-3.5 w-3.5 rounded-full ${
+                    i >= used
+                      ? "border border-line"
+                      : i >= round.budget
+                        ? "bg-red-400"
+                        : "bg-copper"
+                  }`}
                 />
               ))}
               <span className="ml-1 font-medium text-ink">
-                {used}/{round.budget}
+                {used}
+                <span className="font-normal text-ink-soft"> / aim {round.budget}</span>
               </span>
             </span>
           </div>
@@ -519,16 +565,35 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
           )}
           {phase === "result" && matches && (
             <>
-              <UnicornSays tone="happy" className="w-full">
-                <span aria-live="polite" className="block">
-                  <strong className="text-signal">
-                    {isLastRound ? "Level cleared!" : "Perfect!"}
-                  </strong>{" "}
-                  <span className="text-ink-soft">{round.lesson}</span>
-                </span>
-              </UnicornSays>
+              {canTeachLoop ? (
+                <UnicornSays tone="happy" className="w-full">
+                  <span aria-live="polite" className="block">
+                    <strong className="text-signal">It works! 🎉</strong> But
+                    there&apos;s a shortcut: a 🔁 loop can do this in just{" "}
+                    <strong>{round.budget} chips</strong>.
+                  </span>
+                </UnicornSays>
+              ) : (
+                <UnicornSays tone="happy" className="w-full">
+                  <span aria-live="polite" className="block">
+                    <strong className="text-signal">
+                      {isLastRound ? "Level cleared!" : "Perfect!"}
+                    </strong>{" "}
+                    <span className="text-ink-soft">{round.lesson}</span>
+                  </span>
+                </UnicornSays>
+              )}
+              {canTeachLoop && (
+                <Button className="px-8 py-3.5 text-lg" onClick={showLoop}>
+                  Show me the loop
+                </Button>
+              )}
               {!isLastRound && (
-                <Button className="px-10 py-3.5 text-lg" onClick={nextRound}>
+                <Button
+                  variant={canTeachLoop ? "secondary" : "primary"}
+                  className="px-8 py-3.5 text-lg"
+                  onClick={nextRound}
+                >
                   Next round
                 </Button>
               )}

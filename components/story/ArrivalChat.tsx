@@ -6,6 +6,9 @@ import { getLevel } from "@/level-manager";
 import { JOURNEY } from "@/story/journey";
 import { Speech } from "./Speech";
 
+// Only the latest few lines stay up, so the scene fits on one screen.
+const MAX_VISIBLE = 3;
+
 // "Ada Lovelace" -> "AL"; a group of women gets a star.
 function badgeFor(pioneer: string): string {
   if (/[&,]/.test(pioneer)) return "★";
@@ -29,7 +32,7 @@ export function ArrivalChat({ index, onDone }: { index: number; onDone: () => vo
   return (
     <div className="mx-auto grid w-full max-w-3xl gap-3">
       <div className="grid gap-3" aria-live="polite">
-        {beats.slice(0, shown).map((beat, i) => (
+        {beats.slice(Math.max(0, shown - MAX_VISIBLE), shown).map((beat, i) => (
           <Speech
             key={i}
             speaker={beat.speaker}

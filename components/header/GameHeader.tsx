@@ -20,7 +20,7 @@ export function GameHeader() {
             onClick={showWelcome}
             className="font-display text-xl tracking-tight text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-copper"
           >
-            HackHer
+            Lost in Computation
           </button>
           <span className="text-xs font-semibold tracking-[0.14em] text-copper uppercase">
             {inLobby ? "Lobby" : clearedArchive ? "Archive clear" : `Level ${level.floor} · ${JOURNEY[level.index].name}`}

@@ -38,7 +38,7 @@ export const ROUNDS: readonly Round[] = [
     title: "Pattern spotter",
     rule: "Jammer blocks your last 2 channels.",
     blocked: (history) => lastUsed(history, 2),
-    lesson: "Switching between two is too easy to spot. Hedy's design used a player-piano-style roll to keep both sides in sync.",
+    lesson: "Switching between two is too easy to spot.",
     previewByDefault: false,
   },
   {

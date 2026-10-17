@@ -23,7 +23,7 @@ type GameContextValue = {
   cleared: number;
   start: (index?: number) => void;
   selectLevel: (index: number) => void;
-  completeLevel: () => void;
+  completeLevel: (score?: number) => void;
   jumpToLevel: (index: number) => void;
   forceWin: () => void;
   showWelcome: () => void;
@@ -44,7 +44,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
       cleared: clearedCount(state.levels),
       start: (index) => dispatch({ type: "start", index }),
       selectLevel: (index) => dispatch({ type: "select-level", index }),
-      completeLevel: () => dispatch({ type: "complete-level" }),
+      completeLevel: (score) =>
+        dispatch({
+          type: "complete-level",
+          score: typeof score === "number" ? score : undefined,
+        }),
       jumpToLevel: (index) => dispatch({ type: "jump-to-level", index }),
       forceWin: () => dispatch({ type: "force-win" }),
       showWelcome: () => dispatch({ type: "show-welcome" }),

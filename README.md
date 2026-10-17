@@ -56,4 +56,4 @@ On Vercel, add `GEMINI_API_KEY` as an environment variable for Production, then 
 
 ## Credits
 
-Made with 💜 by Afrah, Emily, and Valentina.
+Made by Afrah Sohail, Emily New, and Valentina Sanchez-patout.

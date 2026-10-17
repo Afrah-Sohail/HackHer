@@ -122,14 +122,14 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
       )}
       <div className="grid gap-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-sm font-medium text-ink">
-            Round {roundIndex + 1} of {ROUNDS.length}: {round.title}
+          <p className="text-base font-semibold text-ink">
+            Round {roundIndex + 1} of {ROUNDS.length}
           </p>
-          <ol className="flex gap-1.5" aria-label="Round progress">
+          <ol className="flex gap-2" aria-label="Round progress">
             {ROUNDS.map((r, i) => (
               <li
                 key={r.title}
-                className={`h-2 w-8 rounded-full ${
+                className={`h-2.5 w-10 rounded-full ${
                   i < roundIndex
                     ? "bg-signal"
                     : i === roundIndex
@@ -141,9 +141,9 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
           </ol>
         </div>
 
-        <div className="rounded-xl border border-line bg-paper-raised/60 p-4">
+        <div className="rounded-2xl border border-line bg-paper-raised/60 p-4 sm:p-5">
           <div
-            className="flex items-center gap-2 text-sm font-medium text-ink"
+            className="flex items-center gap-3 text-base font-medium text-ink"
             aria-hidden="true"
           >
             <Tag tone="signal" size="md">📡 Sender</Tag>
@@ -153,43 +153,38 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
               🚀 Receiver
             </Tag>
           </div>
-          <p className="mt-3 text-[15px] leading-6 text-ink">
-            <strong className="text-copper">Your goal:</strong> choose one
-            channel for each of the {STEP_COUNT} steps so your signal reaches
-            the receiver. Never land on a channel marked{" "}
-            <span aria-label="lightning">⚡</span>.
+          <p className="mt-3 font-display text-2xl text-ink sm:text-3xl">
+            Hop to a clear channel
+            <span className="ml-2 text-base font-sans text-ink-soft sm:text-lg">
+              every step
+            </span>
+          </p>
+          <p className="mt-2 text-base text-ink">
+            <span className="font-semibold text-red-300">⚡ {round.rule}</span>
           </p>
         </div>
 
-        <p className="rounded-xl border border-red-400/40 bg-red-500/10 px-4 py-3 text-sm leading-6 text-ink">
-          <span className="font-semibold text-red-300">⚡ Jammer rule: </span>
-          {round.rule}
-        </p>
-
-        <p
-          className="text-sm font-medium text-ink"
-          aria-live="polite"
-        >
+        <p className="text-base font-semibold text-ink" aria-live="polite">
           {phase === "plan"
             ? nextStep === -1
-              ? "✅ All 8 steps set. Press Transmit!"
-              : `👉 Step ${nextStep + 1}: tap a channel in the glowing column (${filled} of ${STEP_COUNT} set)`
+              ? "✅ Ready! Press Transmit."
+              : `👉 Step ${nextStep + 1}: pick a channel (${filled}/${STEP_COUNT})`
             : "\u00a0"}
         </p>
 
-        <div className="overflow-x-auto rounded-2xl border border-line bg-void p-3 text-ink sm:p-4">
-          <div className="relative min-w-[20rem]">
+        <div className="overflow-x-auto rounded-3xl border border-line bg-void p-3 text-ink sm:p-6">
+          <div className="relative min-w-[22rem]">
             <div
               className="grid"
               style={{
-                gridTemplateColumns: `3.25rem repeat(${STEP_COUNT}, minmax(0, 1fr))`,
+                gridTemplateColumns: `3.5rem repeat(${STEP_COUNT}, minmax(0, 1fr))`,
               }}
               role="group"
               aria-label="Hop pattern"
             >
               <span
                 aria-hidden="true"
-                className="flex h-6 items-end text-[10px] tracking-wide text-ink-soft uppercase"
+                className="flex h-8 items-end pb-1 text-xs tracking-wide text-ink-soft uppercase"
               >
                 Step
               </span>
@@ -197,7 +192,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
                 <span
                   key={step}
                   aria-hidden="true"
-                  className={`mx-[3px] h-6 rounded-md text-center text-xs leading-6 ${
+                  className={`mx-1 h-8 rounded-lg text-center text-base leading-8 ${
                     phase === "plan" && step === nextStep
                       ? "bg-copper font-semibold text-paper-raised motion-safe:animate-pulse"
                       : "text-ink-soft"
@@ -223,7 +218,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
             <svg
               viewBox={`0 0 ${STEP_COUNT} ${CHANNEL_COUNT}`}
               preserveAspectRatio="none"
-              className="pointer-events-none absolute top-6 left-[3.25rem] z-[1] h-60 w-[calc(100%-3.25rem)]"
+              className="pointer-events-none absolute top-8 left-[3.5rem] z-[1] h-[21rem] w-[calc(100%-3.5rem)]"
               aria-hidden="true"
             >
               {pathSegments.map((segment) => (
@@ -234,7 +229,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
                   x2={segment.x2}
                   y2={segment.y2}
                   vectorEffect="non-scaling-stroke"
-                  strokeWidth={3}
+                  strokeWidth={4}
                   strokeLinecap="round"
                   strokeDasharray={segment.solid ? undefined : "2 6"}
                   className={segment.className}
@@ -242,60 +237,58 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
               ))}
             </svg>
           </div>
-          <p className="mt-2 text-right text-[10px] tracking-wide text-ink-soft uppercase">
-            Time → each column is one moment
-          </p>
         </div>
 
         <ul
-          className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-soft"
+          className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-ink-soft"
           aria-label="Legend"
         >
-          <li className="flex items-center gap-1.5">
-            <span className="inline-block h-3 w-3 rounded bg-copper" /> Your pick
-          </li>
-          <li className="flex items-center gap-1.5">⚡ Blocked by jammer</li>
-          <li className="flex items-center gap-1.5">
-            <span className="inline-block h-3 w-3 rounded bg-signal" /> ✓ Got
-            through
-          </li>
-          <li className="flex items-center gap-1.5">
-            <span className="inline-block h-3 w-3 rounded bg-red-700" /> ✕ Jammed
-          </li>
+          <li>⚡ blocked</li>
+          <li className="text-signal">✓ clear</li>
+          <li className="text-red-400">✕ jammed</li>
         </ul>
 
         {phase === "plan" && (
-          <label className="flex w-fit cursor-pointer items-center gap-2 text-sm text-ink">
+          <label className="flex w-fit cursor-pointer items-center gap-2 text-base text-ink">
             <input
               type="checkbox"
               checked={showPreview}
               onChange={(event) => setShowPreview(event.target.checked)}
-              className="h-4 w-4 accent-[var(--color-copper)]"
+              className="h-5 w-5 accent-[var(--color-copper)]"
             />
-            Show jammer&apos;s next move (⚡)
+            Show ⚡ hints
           </label>
         )}
 
         <div className="flex flex-wrap items-center gap-3">
           {phase === "plan" && (
             <>
-              <Button onClick={transmit} disabled={!isPlanComplete(plan)}>
+              <Button
+                className="px-10 py-3.5 text-lg"
+                onClick={transmit}
+                disabled={!isPlanComplete(plan)}
+              >
                 Transmit
               </Button>
               <Button
                 variant="secondary"
+                className="px-6 py-3 text-base"
                 onClick={() => setPlan(emptyPlan())}
                 disabled={filled === 0}
               >
                 Clear
               </Button>
-              <Button variant="ghost" onClick={() => setShowTutorial(true)}>
-                How to play
+              <Button
+                variant="ghost"
+                className="px-4 py-3 text-base"
+                onClick={() => setShowTutorial(true)}
+              >
+                Help
               </Button>
             </>
           )}
           {phase === "running" && (
-            <p className="text-sm text-ink-soft" aria-live="polite">
+            <p className="text-lg text-ink-soft" aria-live="polite">
               Transmitting…
             </p>
           )}
@@ -304,14 +297,16 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
               <UnicornSays tone="happy" className="w-full">
                 <span aria-live="polite" className="block">
                   <strong className="text-signal">
-                    {isLastRound
-                      ? "Message delivered through every jammer! Level cleared."
-                      : "Message delivered!"}
+                    {isLastRound ? "Level cleared!" : "Delivered!"}
                   </strong>{" "}
                   <span className="text-ink-soft">{round.lesson}</span>
                 </span>
               </UnicornSays>
-              {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
+              {!isLastRound && (
+                <Button className="px-10 py-3.5 text-lg" onClick={nextRound}>
+                  Next round
+                </Button>
+              )}
             </>
           )}
           {phase === "result" && !delivered && (
@@ -319,11 +314,12 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
               <UnicornSays tone="oops" className="w-full">
                 <span aria-live="polite" className="block">
                   <strong className="text-copper">Jammed!</strong>{" "}
-                  {describeFailure(results[firstFailure], firstFailure)} ⚡ marks
-                  everything it blocked.
+                  {describeFailure(results[firstFailure], firstFailure)}
                 </span>
               </UnicornSays>
-              <Button onClick={editPattern}>Try again</Button>
+              <Button className="px-10 py-3.5 text-lg" onClick={editPattern}>
+                Try again
+              </Button>
             </>
           )}
         </div>
@@ -351,13 +347,10 @@ function ChannelRow({
   activeStep: number;
   onPick: (step: number, channel: number) => void;
 }) {
-  const frequency = (2.1 + channel * 0.15).toFixed(2);
-
   return (
     <>
-      <span className="flex h-10 flex-col justify-center text-xs leading-tight text-ink-soft">
-        <span className="font-medium text-ink">Ch {channel}</span>
-        <span className="text-[10px]">{frequency} MHz</span>
+      <span className="flex h-14 items-center text-base font-semibold text-ink">
+        Ch {channel}
       </span>
       {STEPS.map((step) => {
         const selected = plan[step] === channel;
@@ -387,12 +380,12 @@ function ChannelRow({
               outcome ? `, ${outcome}` : ""
             }`}
             onClick={() => onPick(step, channel)}
-            className={`relative m-[3px] flex h-[calc(2.5rem-6px)] items-center justify-center rounded-lg text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-default ${style}`}
+            className={`relative m-1 flex h-[calc(3.5rem-8px)] items-center justify-center rounded-xl text-xl font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-default ${style}`}
           >
             {outcome === "clear" && "✓"}
             {outcome === "jammed" && "✕"}
             {jammedHere && !selected && (
-              <span aria-hidden="true" className="text-base leading-none">
+              <span aria-hidden="true" className="text-xl leading-none">
                 ⚡
               </span>
             )}

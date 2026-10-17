@@ -43,9 +43,8 @@ const STEPS: Step[] = [
     title: "The mission",
     body: (
       <>
-        <strong>Adele Goldberg</strong> helped create <strong>Smalltalk</strong>
-        , one of the first object-oriented programming languages. It changed how
-        people organize big programs. Today you&apos;ll learn its big idea.
+        <strong>Adele Goldberg</strong> helped create <strong>Smalltalk</strong>,
+        a language that changed how big programs are organized.
       </>
     ),
     visual: (
@@ -58,10 +57,8 @@ const STEPS: Step[] = [
     title: "Blueprints and objects",
     body: (
       <>
-        A <strong>class</strong> is a <strong>blueprint</strong>: it lists what
-        every thing of that kind has. An <strong>object</strong> is one real
-        thing built from the blueprint, with its own values. One blueprint can
-        make as many objects as you like.
+        A <strong>class</strong> is a blueprint. An <strong>object</strong> is
+        one real thing built from it.
       </>
     ),
     visual: <BlueprintDemo />,
@@ -70,10 +67,7 @@ const STEPS: Step[] = [
     title: "How to play",
     body: (
       <>
-        Read the <strong>goal</strong> at the top of each round. You&apos;ll
-        add properties to the blueprint, build objects, and teach them{" "}
-        <strong>methods</strong> (things they can do). Press the{" "}
-        <strong>check button</strong> when you&apos;re ready.
+        Follow the goal, then press <strong>Check</strong>.
       </>
     ),
     visual: (

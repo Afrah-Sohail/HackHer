@@ -99,8 +99,8 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
         ok: false,
         text:
           need > 0
-            ? `Make ${need} more ${need === 1 ? "pet" : "pets"}, then choose their values.`
-            : `No pet matches ${petText(result.unmatched[0])} yet. Check each pet's values.`,
+            ? `Make ${need} more ${need === 1 ? "pet" : "pets"}.`
+            : `No pet matches ${petText(result.unmatched[0])} yet.`,
       });
       return;
     }
@@ -111,10 +111,10 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
     if (wrong) {
       setFeedback({
         ok: false,
-        text: `Pets don't need "${METHODS[wrong].label}". Remove it and try again.`,
+        text: `Pets don't need "${METHODS[wrong].label}". Remove it.`,
       });
     } else if (!methods.includes("greet")) {
-      setFeedback({ ok: false, text: "Add a method so every pet can say hello." });
+      setFeedback({ ok: false, text: "Add a method so pets can greet." });
     } else {
       win(round.lesson);
     }
@@ -133,24 +133,24 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
   const showGreetings = round.mode === "method" && sent && methods.includes("greet");
   const checkLabel =
     round.mode === "design"
-      ? "Check blueprint"
+      ? "Check"
       : round.mode === "build"
-        ? "Check pets"
-        : "Send message to all pets";
+        ? "Check"
+        : "Send message";
 
   return (
     <>
       {showTutorial && <ObjectTutorial onDone={closeTutorial} />}
       <div className="grid gap-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-sm font-medium text-ink">
-            Round {roundIndex + 1} of {ROUNDS.length}: {round.title}
+          <p className="text-base font-semibold text-ink">
+            Round {roundIndex + 1} of {ROUNDS.length}
           </p>
-          <ol className="flex gap-1.5" aria-label="Round progress">
+          <ol className="flex gap-2" aria-label="Round progress">
             {ROUNDS.map((r, i) => (
               <li
                 key={r.title}
-                className={`h-2 w-8 rounded-full ${
+                className={`h-2.5 w-10 rounded-full ${
                   i < roundIndex || (i === roundIndex && solved)
                     ? "bg-signal"
                     : i === roundIndex
@@ -162,31 +162,29 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
           </ol>
         </div>
 
-        <div className="rounded-xl border border-line bg-paper-raised/60 p-4">
-          <p className="text-[15px] leading-6 text-ink">
-            <strong className="text-copper">Your goal:</strong> {round.goal}
-          </p>
-          <p className="mt-2 text-sm leading-6 text-ink-soft">{round.story}</p>
+        <div>
+          <p className="font-display text-2xl text-ink sm:text-3xl">{round.goal}</p>
+          <p className="mt-1 text-base text-ink-soft">{round.story}</p>
         </div>
 
-        <div className="rounded-2xl border border-line bg-void p-4">
-          <p className="mb-2 text-[10px] tracking-wide text-ink-soft uppercase">
-            Mission board
+        <div className="rounded-3xl border border-line bg-void p-4 sm:p-5">
+          <p className="mb-3 text-xs tracking-wide text-ink-soft uppercase">
+            Wanted
           </p>
           {round.requests.length > 0 ? (
             <ul className="flex flex-wrap gap-2" aria-label="Pets requested">
               {round.requests.map((pet) => (
                 <li key={pet.name}>
-                  <Tag tone="copper" size="md">
+                  <Tag tone="copper" size="md" className="text-base sm:text-lg">
                     🐾 {petText(pet)}
                   </Tag>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-ink">
-              🩺 Vet rule: every pet record must show{" "}
-              <strong className="text-copper">vaccinated: yes</strong>.
+            <p className="text-lg text-ink">
+              🩺 Every pet must show{" "}
+              <strong className="text-copper">vaccinated: yes</strong>
             </p>
           )}
         </div>
@@ -196,20 +194,19 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
             aria-label="Pet blueprint"
             className="rounded-2xl border-2 border-dashed border-copper/60 bg-paper p-4"
           >
-            <h3 className="font-display text-lg text-copper">📐 Pet blueprint (class)</h3>
-            <p className="mb-3 text-xs text-ink-soft">What every pet has and can do</p>
+            <h3 className="mb-4 font-display text-2xl text-copper">📐 Pet blueprint</h3>
 
-            <p className="mb-1 text-[10px] tracking-wide text-ink-soft uppercase">
+            <p className="mb-2 text-xs tracking-wide text-ink-soft uppercase">
               Properties
             </p>
             <div className="flex flex-wrap gap-1.5">
               {blueprint.length === 0 && (
-                <span className="text-sm text-ink-soft">Empty so far</span>
+                <span className="text-base text-ink-soft">Empty</span>
               )}
               {blueprint.map((id) => {
                 if (round.baseProps.includes(id)) {
                   return (
-                    <Tag key={id} size="md">
+                    <Tag key={id} size="md" className="py-2 text-lg">
                       {PROPS[id].label}
                     </Tag>
                   );
@@ -221,7 +218,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                     disabled={!editable}
                     onClick={() => toggleProp(id)}
                     aria-label={`Remove ${PROPS[id].label}`}
-                    className="rounded-full border border-copper bg-copper/15 px-3 py-1 text-sm text-copper hover:bg-copper/25"
+                    className="rounded-full border border-copper bg-copper/15 px-4 py-2 text-lg text-copper hover:bg-copper/25"
                   >
                     {PROPS[id].label} ✕
                   </button>
@@ -231,7 +228,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
 
             {round.mode === "design" && (
               <div className="mt-3">
-                <p className="mb-1 text-[10px] tracking-wide text-ink-soft uppercase">
+                <p className="mb-2 text-xs tracking-wide text-ink-soft uppercase">
                   Add a property
                 </p>
                 <div className="flex flex-wrap gap-1.5" role="group" aria-label="Property palette">
@@ -243,7 +240,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                         type="button"
                         disabled={!editable}
                         onClick={() => toggleProp(id)}
-                        className="rounded-full border border-dashed border-ink-soft/60 px-3 py-1 text-sm text-ink transition hover:border-copper hover:text-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-40"
+                        className="rounded-full border border-dashed border-ink-soft/60 px-4 py-2 text-lg text-ink transition hover:border-copper hover:text-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-40"
                       >
                         + {PROPS[id].label}
                       </button>
@@ -254,7 +251,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
 
             {round.mode === "method" && (
               <div className="mt-3">
-                <p className="mb-1 text-[10px] tracking-wide text-ink-soft uppercase">
+                <p className="mb-2 text-xs tracking-wide text-ink-soft uppercase">
                   Methods (things pets can do)
                 </p>
                 <div className="grid gap-1.5" role="group" aria-label="Method palette">
@@ -267,14 +264,14 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                         aria-pressed={on}
                         disabled={!editable}
                         onClick={() => toggleMethod(id)}
-                        className={`rounded-xl border px-3 py-2 text-left text-sm transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
+                        className={`rounded-2xl border px-4 py-3 text-left text-lg transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
                           on
                             ? "border-copper bg-copper/15 text-ink"
                             : "border-line text-ink hover:border-copper"
                         }`}
                       >
                         <strong className="text-copper">{on ? "✓ " : "+ "}{METHODS[id].label}()</strong>
-                        <span className="block text-xs text-ink-soft">
+                        <span className="block text-sm text-ink-soft">
                           {METHODS[id].description}
                         </span>
                       </button>
@@ -289,32 +286,31 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
             aria-label="Pets"
             className="rounded-2xl border border-signal/40 bg-paper p-4"
           >
-            <h3 className="font-display text-lg text-signal">🐾 Pets (objects)</h3>
-            <p className="mb-3 text-xs text-ink-soft">Each one is built from the blueprint</p>
+            <h3 className="mb-4 font-display text-2xl text-signal">🐾 Pets</h3>
 
             <ul className="grid gap-2">
               {objects.length === 0 && (
-                <li className="text-sm text-ink-soft">
+                <li className="text-base text-ink-soft">
                   {round.mode === "build"
-                    ? "No pets yet. Tap \"Make a pet\"."
-                    : "No pets yet. The blueprint comes first!"}
+                    ? "No pets yet."
+                    : "No pets yet."}
                 </li>
               )}
               {objects.map((pet, index) => (
                 <li
                   key={index}
-                  className="rounded-xl border border-line bg-paper-raised/60 p-3 text-sm"
+                  className="rounded-2xl border border-line bg-paper-raised/60 p-4 text-lg"
                 >
                   {round.mode === "build" ? (
                     <div className="grid gap-2 sm:grid-cols-3">
                       {(["name", "species", "color"] as const).map((key) => (
-                        <label key={key} className="grid gap-0.5 text-xs text-ink-soft">
+                        <label key={key} className="grid gap-1 text-sm text-ink-soft">
                           {PROPS[key].label}
                           <select
                             value={pet[key]}
                             disabled={!editable}
                             onChange={(event) => editPet(index, key, event.target.value)}
-                            className="rounded-lg border border-line bg-void px-2 py-1.5 text-sm text-ink"
+                            className="rounded-xl border border-line bg-void px-3 py-2.5 text-lg text-ink"
                           >
                             <option value="">Choose…</option>
                             {PROPS[key].options?.map((option) => (
@@ -330,7 +326,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                     <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5">
                       {blueprint.map((id) => (
                         <div key={id} className="contents">
-                          <dt className="text-xs text-ink-soft">{PROPS[id].label}</dt>
+                          <dt className="text-sm text-ink-soft">{PROPS[id].label}</dt>
                           <dd
                             className={
                               id === "vaccinated" ? "font-medium text-signal" : "text-ink"
@@ -343,7 +339,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                     </dl>
                   )}
                   {showGreetings && (
-                    <p className="mt-2 rounded-lg bg-signal/15 px-3 py-1.5 text-signal">
+                    <p className="mt-2 rounded-xl bg-signal/15 px-4 py-2 text-lg text-signal">
                       💬 {greeting(pet)}
                     </p>
                   )}
@@ -354,7 +350,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
             {round.mode === "build" && (
               <Button
                 variant="secondary"
-                className="mt-3"
+                className="mt-4 px-6 py-3 text-base"
                 disabled={!editable || made.length >= round.requests.length}
                 onClick={makePet}
               >
@@ -370,7 +366,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
               {feedback.ok ? (
                 <>
                   <strong className="text-signal">
-                    {isLastRound ? "Blueprint complete! Level cleared." : "Nice work!"}
+                    {isLastRound ? "Level cleared!" : "Nice work!"}
                   </strong>{" "}
                   <span className="text-ink-soft">{feedback.text}</span>
                 </>
@@ -384,13 +380,23 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
         <div className="flex flex-wrap items-center gap-3">
           {!solved && (
             <>
-              <Button onClick={check}>{checkLabel}</Button>
-              <Button variant="ghost" onClick={() => setShowTutorial(true)}>
-                How to play
+              <Button className="px-10 py-3.5 text-lg" onClick={check}>
+                {checkLabel}
+              </Button>
+              <Button
+                variant="ghost"
+                className="px-4 py-3 text-base"
+                onClick={() => setShowTutorial(true)}
+              >
+                Help
               </Button>
             </>
           )}
-          {solved && !isLastRound && <Button onClick={nextRound}>Next round</Button>}
+          {solved && !isLastRound && (
+            <Button className="px-10 py-3.5 text-lg" onClick={nextRound}>
+              Next round
+            </Button>
+          )}
         </div>
       </div>
     </>

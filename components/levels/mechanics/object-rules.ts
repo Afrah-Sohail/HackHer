@@ -65,8 +65,8 @@ export const ROUNDS: readonly Round[] = [
   {
     title: "Draw the blueprint",
     story:
-      "Adele Goldberg helped create Smalltalk, one of the first object-oriented languages. In it, a class is a blueprint. Look at the pets below: what does every pet need?",
-    goal: "Add the properties every pet needs to the Pet blueprint, and nothing extra.",
+      "A class is a blueprint.",
+    goal: "Add what every pet needs. Nothing extra.",
     mode: "design",
     baseProps: [],
     required: ["name", "species", "color"],
@@ -74,13 +74,13 @@ export const ROUNDS: readonly Round[] = [
     requests: [MOCHI, PIXEL, NOVA],
     objects: [],
     lesson:
-      "A class is a blueprint: it lists what every object of that kind has.",
+      "A blueprint lists what every object has.",
   },
   {
     title: "Build the pets",
     story:
-      "Now use the blueprint to make real pets. Each pet is an object: its own thing, built from the same blueprint.",
-    goal: "Make three pets that match the list. Tap \"Make a pet\", then choose each pet's values.",
+      "Each pet is an object built from the blueprint.",
+    goal: "Make 3 pets that match the list.",
     mode: "build",
     baseProps: ["name", "species", "color"],
     required: [],
@@ -88,13 +88,13 @@ export const ROUNDS: readonly Round[] = [
     requests: [MOCHI, PIXEL, NOVA],
     objects: [],
     lesson:
-      "Every object comes from the same blueprint but has its own values. Change one pet and the others stay the same.",
+      "Same blueprint, different values.",
   },
   {
     title: "Teach them to talk",
     story:
-      "Objects don't just hold information, they can do things too. A method is something every object from a blueprint knows how to do. The pets should be able to say hello.",
-    goal: "Add the right method to the blueprint, then send the message to all the pets.",
+      "A method is something every pet can do.",
+    goal: "Teach the pets to say hello.",
     mode: "method",
     baseProps: ["name", "species", "color"],
     required: [],
@@ -102,13 +102,13 @@ export const ROUNDS: readonly Round[] = [
     requests: [MOCHI, PIXEL, NOVA],
     objects: [MOCHI, PIXEL, NOVA],
     lesson:
-      "Every object knows the same method, but each one uses its own values. That is why every greeting is different.",
+      "Same method, but each pet uses its own values.",
   },
   {
     title: "One change, every pet",
     story:
-      "The vet has a new rule: every pet record must show that the pet is vaccinated. You have four pets, so changing each one would be slow. Where should you make the change?",
-    goal: "Add the new property to the blueprint so all four pets show it.",
+      "Vet rule: every pet must show vaccinated.",
+    goal: "Make all 4 pets show it with one change.",
     mode: "design",
     baseProps: ["name", "species", "color"],
     required: ["name", "species", "color", "vaccinated"],
@@ -116,7 +116,7 @@ export const ROUNDS: readonly Round[] = [
     requests: [],
     objects: [MOCHI, PIXEL, NOVA, BISCUIT],
     lesson:
-      "Change the blueprint once and every object updates. That is why classes make big programs easier to manage.",
+      "Change the blueprint once and every object updates.",
   },
 ];
 
@@ -131,9 +131,9 @@ export function designCheck(
 
 export function describeDesign(missing: readonly PropId[], extra: readonly PropId[]): string {
   if (missing.length > 0) {
-    return `The pets need a "${PROPS[missing[0]].label}", but the blueprint doesn't have one yet.`;
+    return `Pets need "${PROPS[missing[0]].label}".`;
   }
-  return `Pets don't use "${PROPS[extra[0]].label}", so the blueprint doesn't need it. Remove it.`;
+  return `Pets don't need "${PROPS[extra[0]].label}". Remove it.`;
 }
 
 export function buildCheck(

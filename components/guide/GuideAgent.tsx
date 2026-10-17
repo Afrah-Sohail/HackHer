@@ -210,10 +210,15 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
           onClick={() => setOpen(true)}
           aria-expanded={false}
           aria-label={`Ask ${GUIDE_NAME}: ${question}`}
-          title={`Ask ${GUIDE_NAME}: ${question}`}
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-copper shadow-lg hover:bg-copper-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper"
+          className="flex max-w-60 items-center gap-2 rounded-2xl bg-copper py-1.5 pr-4 pl-1.5 text-left text-paper-raised shadow-lg hover:bg-copper-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper"
         >
-          <UnicornAvatar size={44} />
+          <UnicornAvatar size={36} />
+          <span className="leading-tight">
+            <span className="block text-[11px] font-medium opacity-80">
+              Ask {GUIDE_NAME}
+            </span>
+            <span className="block text-sm font-semibold">{question}</span>
+          </span>
         </button>
       )}
     </div>

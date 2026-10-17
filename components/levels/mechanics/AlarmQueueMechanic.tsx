@@ -167,7 +167,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
       {showTutorial && <QueueTutorial onDone={closeTutorial} />}
       <div className="grid gap-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-base font-semibold text-ink">
+          <p className="text-lg font-semibold text-ink">
             Round {roundIndex + 1} of {ROUNDS.length}
           </p>
           <ol className="flex gap-2" aria-label="Round progress">
@@ -190,11 +190,10 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
           <p className="font-display text-2xl text-ink sm:text-3xl">
             Keep every {mustRunText(round.mustRun)} job running
           </p>
-          <p className="mt-1 text-base text-ink-soft">{round.story}</p>
         </div>
 
         <div className="rounded-3xl border border-line bg-void p-3 sm:p-4">
-          <p className="mb-3 text-xs tracking-wide text-ink-soft uppercase">
+          <p className="mb-3 text-sm tracking-wide text-ink-soft uppercase">
             Memory ({cursor}/{round.capacity})
           </p>
           <div
@@ -214,7 +213,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
         </div>
 
         {phase === "build" && (
-          <p className="-mb-2 text-sm text-ink-soft sm:text-base">
+          <p className="-mb-2 text-base text-ink-soft sm:text-lg">
             Drag the <span aria-hidden="true">⠿</span> handle to reorder the jobs.
           </p>
         )}
@@ -263,11 +262,11 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
                 >
                   ⠿
                 </span>
-                <span className="w-6 text-center text-lg text-ink-soft">{index + 1}</span>
+                <span className="w-6 text-center text-xl text-ink-soft">{index + 1}</span>
                 <Tag tone={PRIORITY_TONE[task.priority]} size="md" caps className="w-28 justify-center">
                   {PRIORITY_LABEL[task.priority]}
                 </Tag>
-                <span className="min-w-0 flex-1 text-lg font-medium text-ink">{task.name}</span>
+                <span className="min-w-0 flex-1 text-xl font-medium text-ink">{task.name}</span>
                 <span
                   className="flex gap-0.5"
                   role="img"
@@ -278,7 +277,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
                   ))}
                 </span>
                 <span
-                  className={`w-28 text-right text-base font-semibold ${
+                  className={`w-28 text-right text-lg font-semibold ${
                     !marked
                       ? "text-ink-soft"
                       : outcome.runs
@@ -296,19 +295,19 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
         <div className="flex flex-wrap items-center gap-3">
           {phase === "build" && (
             <>
-              <Button className="px-10 py-3.5 text-lg" onClick={run}>
+              <Button className="px-10 py-3.5 text-xl" onClick={run}>
                 Run
               </Button>
               <Button
                 variant="secondary"
-                className="px-6 py-3 text-base"
+                className="px-6 py-3 text-lg"
                 onClick={() => setQueue([...round.tasks])}
               >
                 Reset
               </Button>
               <Button
                 variant="ghost"
-                className="px-4 py-3 text-base"
+                className="px-4 py-3 text-lg"
                 onClick={() => setShowTutorial(true)}
               >
                 Help
@@ -316,7 +315,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
             </>
           )}
           {phase === "running" && (
-            <p className="text-lg text-ink-soft" aria-live="polite">
+            <p className="text-xl text-ink-soft" aria-live="polite">
               Running…
             </p>
           )}
@@ -331,7 +330,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
                 </span>
               </UnicornSays>
               {!isLastRound && (
-                <Button className="px-10 py-3.5 text-lg" onClick={nextRound}>
+                <Button className="px-10 py-3.5 text-xl" onClick={nextRound}>
                   Next round
                 </Button>
               )}
@@ -344,7 +343,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
                   <strong className="text-copper">Whoops!</strong> {describeMiss(missed)}
                 </span>
               </UnicornSays>
-              <Button className="px-10 py-3.5 text-lg" onClick={tryAgain}>
+              <Button className="px-10 py-3.5 text-xl" onClick={tryAgain}>
                 Try again
               </Button>
             </>

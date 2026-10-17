@@ -122,7 +122,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
       )}
       <div className="grid gap-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-base font-semibold text-ink">
+          <p className="text-lg font-semibold text-ink">
             Round {roundIndex + 1} of {ROUNDS.length}
           </p>
           <ol className="flex gap-2" aria-label="Round progress">
@@ -143,7 +143,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
 
         <div className="rounded-2xl border border-line bg-paper-raised/60 p-3 sm:p-4">
           <div
-            className="flex items-center gap-3 text-base font-medium text-ink"
+            className="flex items-center gap-3 text-lg font-medium text-ink"
             aria-hidden="true"
           >
             <Tag tone="signal" size="md">📡 Sender</Tag>
@@ -155,16 +155,16 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
           </div>
           <p className="mt-2 font-display text-2xl text-ink sm:text-3xl">
             Hop to a clear channel
-            <span className="ml-2 text-base font-sans text-ink-soft sm:text-lg">
+            <span className="ml-2 text-lg font-sans text-ink-soft sm:text-xl">
               every step
             </span>
           </p>
-          <p className="mt-1 text-base text-ink">
+          <p className="mt-1 text-lg text-ink">
             <span className="font-semibold text-red-300">⚡ {round.rule}</span>
           </p>
         </div>
 
-        <p className="text-base font-semibold text-ink" aria-live="polite">
+        <p className="text-lg font-semibold text-ink" aria-live="polite">
           {phase === "plan"
             ? nextStep === -1
               ? "✅ Ready! Press Transmit."
@@ -184,7 +184,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
             >
               <span
                 aria-hidden="true"
-                className="flex h-8 items-end pb-1 text-xs tracking-wide text-ink-soft uppercase"
+                className="flex h-8 items-end pb-1 text-sm tracking-wide text-ink-soft uppercase"
               >
                 Step
               </span>
@@ -192,7 +192,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
                 <span
                   key={step}
                   aria-hidden="true"
-                  className={`mx-1 h-8 rounded-lg text-center text-base leading-8 ${
+                  className={`mx-1 h-8 rounded-lg text-center text-lg leading-8 ${
                     phase === "plan" && step === nextStep
                       ? "bg-copper font-semibold text-paper-raised motion-safe:animate-pulse"
                       : "text-ink-soft"
@@ -240,7 +240,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
         </div>
 
         <ul
-          className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-ink-soft"
+          className="flex flex-wrap gap-x-5 gap-y-1 text-base text-ink-soft"
           aria-label="Legend"
         >
           <li>⚡ blocked</li>
@@ -249,7 +249,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
         </ul>
 
         {phase === "plan" && (
-          <label className="flex w-fit cursor-pointer items-center gap-2 text-base text-ink">
+          <label className="flex w-fit cursor-pointer items-center gap-2 text-lg text-ink">
             <input
               type="checkbox"
               checked={showPreview}
@@ -264,7 +264,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
           {phase === "plan" && (
             <>
               <Button
-                className="px-10 py-3.5 text-lg"
+                className="px-10 py-3.5 text-xl"
                 onClick={transmit}
                 disabled={!isPlanComplete(plan)}
               >
@@ -272,7 +272,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
               </Button>
               <Button
                 variant="secondary"
-                className="px-6 py-3 text-base"
+                className="px-6 py-3 text-lg"
                 onClick={() => setPlan(emptyPlan())}
                 disabled={filled === 0}
               >
@@ -280,7 +280,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
               </Button>
               <Button
                 variant="ghost"
-                className="px-4 py-3 text-base"
+                className="px-4 py-3 text-lg"
                 onClick={() => setShowTutorial(true)}
               >
                 Help
@@ -288,7 +288,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
             </>
           )}
           {phase === "running" && (
-            <p className="text-lg text-ink-soft" aria-live="polite">
+            <p className="text-xl text-ink-soft" aria-live="polite">
               Transmitting…
             </p>
           )}
@@ -303,7 +303,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
                 </span>
               </UnicornSays>
               {!isLastRound && (
-                <Button className="px-10 py-3.5 text-lg" onClick={nextRound}>
+                <Button className="px-10 py-3.5 text-xl" onClick={nextRound}>
                   Next round
                 </Button>
               )}
@@ -317,7 +317,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
                   {describeFailure(results[firstFailure], firstFailure)}
                 </span>
               </UnicornSays>
-              <Button className="px-10 py-3.5 text-lg" onClick={editPattern}>
+              <Button className="px-10 py-3.5 text-xl" onClick={editPattern}>
                 Try again
               </Button>
             </>
@@ -349,7 +349,7 @@ function ChannelRow({
 }) {
   return (
     <>
-      <span className="flex h-11 items-center text-base font-semibold text-ink">
+      <span className="flex h-11 items-center text-lg font-semibold text-ink">
         Ch {channel}
       </span>
       {STEPS.map((step) => {

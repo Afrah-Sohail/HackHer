@@ -105,12 +105,16 @@ function DataSphere({
 }) {
   const needsFlip = ball.operation === "flip";
   return (
-    <div className="relative z-10 flex flex-col items-center gap-1">
-      <span className="text-[10px] tracking-wide text-ink-soft">{ball.index}</span>
+    <div
+      className={`relative z-10 flex flex-col items-center gap-1 transition duration-200 ${
+        ball.cleared ? "scale-75 opacity-0" : "opacity-100"
+      }`}
+    >
+      <span className="text-[10px] font-medium tracking-wide text-ink">{ball.index}</span>
       <div
         className={`grid h-12 w-12 place-items-center rounded-full text-sm font-semibold text-[#2a1608] transition duration-200 sm:h-14 sm:w-14 ${
-          ball.cleared ? "scale-50 opacity-0" : "opacity-100"
-        } ${striking ? "scale-110" : ""} ${
+          striking ? "scale-110" : ""
+        } ${
           previewed && !ball.cleared ? "ring-2 ring-signal ring-offset-2 ring-offset-void" : ""
         } ${ball.jammed ? "ring-2 ring-fuchsia-400" : ""}`}
         style={{
@@ -258,6 +262,22 @@ export function AnalyticalEngineGame({ level }: { level: LevelDefinition }) {
       </header>
 
       <div className="relative px-4 py-6 sm:px-8">
+        {won ? (
+          <div className="absolute inset-4 z-20 flex items-center justify-center rounded-3xl bg-void/80 p-6 backdrop-blur-sm sm:inset-8">
+            <div className="max-w-md text-center">
+              <p className="text-xs font-medium tracking-[0.18em] text-signal uppercase">
+                Chain reaction
+              </p>
+              <h2 className="mt-2 font-display text-4xl text-ink">16 balls cleared</h2>
+              <p className="mt-2 text-sm text-ink-soft">
+                The punch arms ran the whole tape. Chain score {score}.
+              </p>
+              <Button className="mt-5" onClick={() => completeLevel(score)}>
+                Continue
+              </Button>
+            </div>
+          </div>
+        ) : null}
         <div className="pointer-events-none absolute inset-x-8 top-4 hidden items-end justify-between sm:flex">
           <Gear name="left" className="h-20 w-20" duration={running ? "0.7s" : "10s"} />
           <Gear name="mid" className="h-14 w-14" duration={running ? "0.45s" : "7s"} reverse />
@@ -377,20 +397,6 @@ export function AnalyticalEngineGame({ level }: { level: LevelDefinition }) {
         </div>
       </div>
 
-      {won ? (
-        <div className="border-t border-line bg-void/80 px-5 py-6 sm:px-8">
-          <p className="text-xs font-medium tracking-[0.18em] text-signal uppercase">
-            Chain reaction
-          </p>
-          <h2 className="mt-1 font-display text-4xl text-ink">16 balls cleared</h2>
-          <p className="mt-2 text-sm text-ink-soft">
-            The punch arms ran the whole tape. Chain score {score}.
-          </p>
-          <Button className="mt-5" onClick={() => completeLevel(score)}>
-            Continue
-          </Button>
-        </div>
-      ) : null}
       <p className="sr-only" aria-live="polite">
         Combo {combo}. Score {score}. {cleared} of 16 balls cleared.
       </p>

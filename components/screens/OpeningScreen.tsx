@@ -34,12 +34,15 @@ function prefersReducedMotion(): boolean {
 // have to land on Mercury.
 export function OpeningScreen() {
   const { arrive } = useGame();
-  const [elapsed, setElapsed] = useState(() => (prefersReducedMotion() ? TOTAL : 0));
+  const [ticked, setElapsed] = useState(() => (prefersReducedMotion() ? TOTAL : 0));
+  const [skipped, setSkipped] = useState(false);
+  // Skip jumps to the end and stays there, even while the clock still ticks.
+  const elapsed = skipped ? TOTAL : ticked;
 
   useEffect(() => {
-    if (elapsed >= TOTAL) return;
+    if (ticked >= TOTAL) return;
     let frame = 0;
-    const start = performance.now() - elapsed;
+    const start = performance.now() - ticked;
     const tick = (now: number) => {
       const next = Math.min(now - start, TOTAL);
       setElapsed(next);
@@ -158,7 +161,7 @@ export function OpeningScreen() {
           <Button
             variant="ghost"
             className="px-5 py-2.5 text-base"
-            onClick={() => setElapsed(TOTAL)}
+            onClick={() => setSkipped(true)}
           >
             Skip
           </Button>

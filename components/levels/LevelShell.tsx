@@ -5,6 +5,7 @@ import type { LevelDefinition } from "@/level-manager/types";
 import { useGame } from "@/state/game-context";
 import { Button } from "@/components/ui/Button";
 import { GuideAgent } from "@/components/guide/GuideAgent";
+import { StarConfetti } from "@/components/ui/StarConfetti";
 
 export function LevelShell({
   level,
@@ -67,6 +68,7 @@ export function LevelShell({
           </Button>
         </footer>
       )}
+      {canCompleteProp === true && <StarConfetti />}
       <GuideAgent key={level.slug} level={level} />
     </article>
   );

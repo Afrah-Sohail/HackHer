@@ -154,7 +154,7 @@ export function OpeningScreen() {
       {landed ? (
         <div className="mx-auto grid w-full max-w-2xl gap-3">
           <Speech speaker="you">
-            Great scan of the Sun! But the engine just blew up. I have to land on Mercury!
+            Great scan of the Sun! But the engine just blew up. We&apos;re crashing on Mercury!
           </Speech>
           <Speech speaker="sparkles">
             Hold on tight! I can&apos;t fix a rocket with hooves, but I&apos;ll cheer you on.

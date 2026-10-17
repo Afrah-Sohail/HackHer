@@ -81,8 +81,9 @@ const STEPS: Step[] = [
     title: "How to play",
     body: (
       <>
-        Tap symbols to build your <strong>punch card</strong>. The loom weaves
-        them in order. <strong>Match the pattern!</strong>
+        Tap symbols to build your <strong>punch card</strong>. Tap a chip on the
+        card to remove it. The loom weaves them in order.{" "}
+        <strong>Match the pattern!</strong>
       </>
     ),
     visual: <PatternDemo />,
@@ -92,7 +93,8 @@ const STEPS: Step[] = [
     body: (
       <>
         Writing the same thing again and again? Tap <strong>🔁 Repeat</strong>{" "}
-        to loop it, then pick how many times with <strong>− +</strong>.
+        and the next symbols go inside the loop. Tap 🔁 again to close it, then
+        pick how many times with <strong>− +</strong>.
       </>
     ),
     visual: <LoopDemo />,

@@ -193,7 +193,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
           <p className="mt-1 text-base text-ink-soft">{round.story}</p>
         </div>
 
-        <div className="rounded-3xl border border-line bg-void p-4 sm:p-6">
+        <div className="rounded-3xl border border-line bg-void p-3 sm:p-4">
           <p className="mb-3 text-xs tracking-wide text-ink-soft uppercase">
             Memory ({cursor}/{round.capacity})
           </p>
@@ -205,7 +205,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
             {cells.map((priority, i) => (
               <span
                 key={i}
-                className={`h-9 w-9 rounded-lg transition sm:h-11 sm:w-11 ${
+                className={`h-8 w-8 rounded-lg transition sm:h-9 sm:w-9 ${
                   priority ? MEMORY_COLOR[priority] : "border border-line"
                 } ${phase === "build" ? "opacity-60" : ""}`}
               />
@@ -220,7 +220,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
         )}
         <ol
           aria-label="Job queue"
-          className={`grid gap-3 rounded-3xl border border-line bg-paper p-3 sm:p-4 ${
+          className={`grid gap-2 rounded-3xl border border-line bg-paper p-2 sm:p-3 ${
             dragging ? "select-none" : ""
           }`}
         >
@@ -234,7 +234,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
                 ref={(el) => {
                   rowRefs.current[task.id] = el;
                 }}
-                className={`flex flex-wrap items-center gap-3 rounded-2xl border px-4 py-3 transition-shadow sm:gap-4 ${
+                className={`flex flex-wrap items-center gap-3 rounded-2xl border px-4 py-2 transition-shadow sm:gap-4 ${
                   draggingId === task.id
                     ? "border-copper bg-copper/15 shadow-xl ring-2 ring-copper"
                     : active
@@ -254,7 +254,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
                       move(index, event.key === "ArrowUp" ? -1 : 1);
                     }
                   }}
-                  className={`touch-none rounded-lg px-2 py-3 text-3xl leading-none select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
+                  className={`touch-none rounded-lg px-2 py-1.5 text-3xl leading-none select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper ${
                     locked ? "text-ink-soft/30" : "text-ink-soft hover:text-ink"
                   }`}
                   style={{

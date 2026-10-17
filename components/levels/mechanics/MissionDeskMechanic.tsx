@@ -281,7 +281,7 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
         </div>
         <p className="-mt-2 text-sm text-ink-soft sm:text-base">{round.story}</p>
 
-        <div className="grid gap-3 rounded-3xl border border-line bg-void p-3 sm:p-5">
+        <div className="grid gap-2 rounded-3xl border border-line bg-void p-3 sm:p-4">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             <Pill>second x</Pill>
             <span aria-hidden="true" className="text-copper">

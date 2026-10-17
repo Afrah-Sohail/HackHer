@@ -265,6 +265,8 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
           </span>
         </div>
 
+        <div className="grid gap-4 md:grid-cols-[3fr_2fr] md:items-start">
+          <div className="grid gap-3">
         <Board
           round={round}
           placed={placed}
@@ -297,7 +299,9 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
           {message ?? " "}
         </p>
 
-        <ul className="grid gap-1 text-base text-ink-soft sm:grid-cols-2">
+          </div>
+          <div className="grid gap-3">
+        <ul className="grid gap-1 text-base text-ink-soft">
           {round.inputs.map((input) => (
             <li key={input.id}>
               <span className="font-semibold text-ink">{input.id}</span> ={" "}
@@ -312,6 +316,9 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
           rows={rows}
           activeRow={activeRow}
         />
+
+          </div>
+        </div>
 
         <div className="flex flex-wrap items-center gap-3">
           {solved ? (
@@ -424,7 +431,7 @@ function Board({
   });
 
   return (
-    <div className="relative h-72 w-full rounded-3xl border border-line bg-paper sm:h-[26rem]">
+    <div className="relative h-72 w-full rounded-3xl border border-line bg-paper sm:h-[22rem]">
       <svg
         viewBox="0 0 100 60"
         preserveAspectRatio="none"

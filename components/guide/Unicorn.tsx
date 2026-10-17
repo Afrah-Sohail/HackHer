@@ -77,7 +77,7 @@ export function UnicornSays({
     <div className={`flex items-start gap-3 ${className}`}>
       <UnicornAvatar size={size} />
       <div
-        className={`relative min-w-0 flex-1 rounded-2xl rounded-tl-sm border px-4 py-3 text-sm leading-6 text-ink ${TONE_CLASS[tone]}`}
+        className={`relative min-w-0 flex-1 rounded-2xl rounded-tl-sm border px-4 py-3 text-base leading-7 text-ink ${TONE_CLASS[tone]}`}
       >
         {children}
       </div>

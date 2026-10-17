@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { WaveformTutorial } from "./WaveformTutorial";
 import {
@@ -21,23 +21,6 @@ const CHANNELS = Array.from({ length: CHANNEL_COUNT }, (_, i) => i + 1);
 const STEPS = Array.from({ length: STEP_COUNT }, (_, i) => i);
 const emptyPlan = (): Plan => Array.from({ length: STEP_COUNT }, () => null);
 
-const SEEN_KEY = "hackher:floor2-tutorial-seen";
-
-function tutorialSeen(): boolean {
-  try {
-    return sessionStorage.getItem(SEEN_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function markTutorialSeen() {
-  try {
-    sessionStorage.setItem(SEEN_KEY, "1");
-  } catch {
-    // Storage unavailable; the tutorial just shows again next visit.
-  }
-}
 
 export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
   const [roundIndex, setRoundIndex] = useState(0);
@@ -45,7 +28,8 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
   const [phase, setPhase] = useState<Phase>("plan");
   const [results, setResults] = useState<StepResult[]>([]);
   const [revealed, setRevealed] = useState(0);
-  const [showTutorial, setShowTutorial] = useState(() => !tutorialSeen());
+  const [showTutorial, setShowTutorial] = useState(true);
+  const closeTutorial = useCallback(() => setShowTutorial(false), []);
   const [showPreview, setShowPreview] = useState(ROUNDS[0].previewByDefault);
 
   const round = ROUNDS[roundIndex];
@@ -90,11 +74,6 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
     setPhase("running");
   }
 
-  function closeTutorial() {
-    markTutorialSeen();
-    setShowTutorial(false);
-  }
-
   function nextRound() {
     setShowPreview(ROUNDS[roundIndex + 1].previewByDefault);
     setRoundIndex((index) => index + 1);
@@ -110,151 +89,152 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
     setPhase("plan");
   }
 
-  if (showTutorial) {
-    return <WaveformTutorial onDone={closeTutorial} />;
-  }
-
   return (
-    <div className="grid gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm font-medium text-ink">
-          Round {roundIndex + 1} of {ROUNDS.length}: {round.title}
+    <>
+      {showTutorial && (
+        <WaveformTutorial onDone={closeTutorial} />
+      )}
+      <div className="grid gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm font-medium text-ink">
+            Round {roundIndex + 1} of {ROUNDS.length}: {round.title}
+          </p>
+          <ol className="flex gap-1.5" aria-label="Round progress">
+            {ROUNDS.map((r, i) => (
+              <li
+                key={r.title}
+                className={`h-2 w-8 rounded-full ${
+                  i < roundIndex
+                    ? "bg-signal"
+                    : i === roundIndex
+                      ? "bg-copper"
+                      : "bg-line"
+                }`}
+              />
+            ))}
+          </ol>
+        </div>
+
+        <p className="rounded-xl border border-copper/30 bg-copper/5 px-4 py-3 text-sm leading-6 text-ink">
+          <span className="font-semibold text-copper-deep">Jammer rule: </span>
+          {round.rule}
         </p>
-        <ol className="flex gap-1.5" aria-label="Round progress">
-          {ROUNDS.map((r, i) => (
-            <li
-              key={r.title}
-              className={`h-2 w-8 rounded-full ${
-                i < roundIndex
-                  ? "bg-signal"
-                  : i === roundIndex
-                    ? "bg-copper"
-                    : "bg-line"
-              }`}
-            />
-          ))}
-        </ol>
-      </div>
 
-      <p className="rounded-xl border border-copper/30 bg-copper/5 px-4 py-3 text-sm leading-6 text-ink">
-        <span className="font-semibold text-copper-deep">Jammer rule: </span>
-        {round.rule}
-      </p>
+        <p className="text-sm text-ink-soft" aria-live="polite">
+          {phase === "plan"
+            ? nextStep === -1
+              ? "All 8 steps set. Press Transmit!"
+              : `Step ${nextStep + 1}: tap a channel in the highlighted column. (${filled} of ${STEP_COUNT} set)`
+            : "\u00a0"}
+        </p>
 
-      <p className="text-sm text-ink-soft" aria-live="polite">
-        {phase === "plan"
-          ? nextStep === -1
-            ? "All 8 steps set. Press Transmit!"
-            : `Step ${nextStep + 1}: tap a channel in the highlighted column. (${filled} of ${STEP_COUNT} set)`
-          : "\u00a0"}
-      </p>
-
-      <div className="overflow-x-auto rounded-2xl border border-line bg-void p-3 text-ink sm:p-4">
-        <div
-          className="grid min-w-[20rem] gap-1.5"
-          style={{
-            gridTemplateColumns: `3.25rem repeat(${STEP_COUNT}, minmax(0, 1fr))`,
-          }}
-          role="group"
-          aria-label="Hop pattern"
-        >
-          <span
-            aria-hidden="true"
-            className="self-end text-[10px] tracking-wide text-ink-soft uppercase"
+        <div className="overflow-x-auto rounded-2xl border border-line bg-void p-3 text-ink sm:p-4">
+          <div
+            className="grid min-w-[20rem] gap-1.5"
+            style={{
+              gridTemplateColumns: `3.25rem repeat(${STEP_COUNT}, minmax(0, 1fr))`,
+            }}
+            role="group"
+            aria-label="Hop pattern"
           >
-            Step
-          </span>
-          {STEPS.map((step) => (
             <span
-              key={step}
               aria-hidden="true"
-              className={`rounded-md text-center text-xs leading-6 ${
-                phase === "plan" && step === nextStep
-                  ? "bg-copper font-semibold text-paper-raised"
-                  : "text-ink-soft"
-              }`}
+              className="self-end text-[10px] tracking-wide text-ink-soft uppercase"
             >
-              {step + 1}
+              Step
             </span>
-          ))}
-          {CHANNELS.map((channel) => (
-            <ChannelRow
-              key={channel}
-              channel={channel}
-              plan={plan}
-              results={results}
-              previews={previews}
-              revealed={phase === "plan" ? 0 : revealed}
-              locked={phase !== "plan"}
-              onPick={pick}
+            {STEPS.map((step) => (
+              <span
+                key={step}
+                aria-hidden="true"
+                className={`rounded-md text-center text-xs leading-6 ${
+                  phase === "plan" && step === nextStep
+                    ? "bg-copper font-semibold text-paper-raised"
+                    : "text-ink-soft"
+                }`}
+              >
+                {step + 1}
+              </span>
+            ))}
+            {CHANNELS.map((channel) => (
+              <ChannelRow
+                key={channel}
+                channel={channel}
+                plan={plan}
+                results={results}
+                previews={previews}
+                revealed={phase === "plan" ? 0 : revealed}
+                locked={phase !== "plan"}
+                onPick={pick}
+              />
+            ))}
+          </div>
+        </div>
+
+        {phase === "plan" && (
+          <label className="flex w-fit cursor-pointer items-center gap-2 text-sm text-ink">
+            <input
+              type="checkbox"
+              checked={showPreview}
+              onChange={(event) => setShowPreview(event.target.checked)}
+              className="h-4 w-4 accent-[var(--color-copper)]"
             />
-          ))}
+            Show jammer&apos;s next move (red dots)
+          </label>
+        )}
+
+        <div className="flex flex-wrap items-center gap-3">
+          {phase === "plan" && (
+            <>
+              <Button onClick={transmit} disabled={!isPlanComplete(plan)}>
+                Transmit
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => setPlan(emptyPlan())}
+                disabled={filled === 0}
+              >
+                Clear
+              </Button>
+              <Button variant="ghost" onClick={() => setShowTutorial(true)}>
+                How to play
+              </Button>
+            </>
+          )}
+          {phase === "running" && (
+            <p className="text-sm text-ink-soft" aria-live="polite">
+              Transmitting…
+            </p>
+          )}
+          {phase === "result" && delivered && (
+            <>
+              <p className="text-sm leading-6 text-signal" aria-live="polite">
+                <strong>
+                  {isLastRound
+                    ? "Message delivered through every jammer! Floor cleared."
+                    : "Message delivered!"}
+                </strong>{" "}
+                <span className="text-ink-soft">{round.lesson}</span>
+              </p>
+              {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
+            </>
+          )}
+          {phase === "result" && !delivered && (
+            <>
+              <p
+                className="text-sm leading-6 text-copper-deep"
+                aria-live="polite"
+              >
+                <strong>Jammed!</strong>{" "}
+                {describeFailure(results[firstFailure], firstFailure)} Red dots
+                show everything it blocked.
+              </p>
+              <Button onClick={editPattern}>Try again</Button>
+            </>
+          )}
         </div>
       </div>
-
-      {phase === "plan" && (
-        <label className="flex w-fit cursor-pointer items-center gap-2 text-sm text-ink">
-          <input
-            type="checkbox"
-            checked={showPreview}
-            onChange={(event) => setShowPreview(event.target.checked)}
-            className="h-4 w-4 accent-[var(--color-copper)]"
-          />
-          Show jammer&apos;s next move (red dots)
-        </label>
-      )}
-
-      <div className="flex flex-wrap items-center gap-3">
-        {phase === "plan" && (
-          <>
-            <Button onClick={transmit} disabled={!isPlanComplete(plan)}>
-              Transmit
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => setPlan(emptyPlan())}
-              disabled={filled === 0}
-            >
-              Clear
-            </Button>
-            <Button variant="ghost" onClick={() => setShowTutorial(true)}>
-              How to play
-            </Button>
-          </>
-        )}
-        {phase === "running" && (
-          <p className="text-sm text-ink-soft" aria-live="polite">
-            Transmitting…
-          </p>
-        )}
-        {phase === "result" && delivered && (
-          <>
-            <p className="text-sm leading-6 text-signal" aria-live="polite">
-              <strong>
-                {isLastRound
-                  ? "Message delivered through every jammer! Floor cleared."
-                  : "Message delivered!"}
-              </strong>{" "}
-              <span className="text-ink-soft">{round.lesson}</span>
-            </p>
-            {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
-          </>
-        )}
-        {phase === "result" && !delivered && (
-          <>
-            <p
-              className="text-sm leading-6 text-copper-deep"
-              aria-live="polite"
-            >
-              <strong>Jammed!</strong>{" "}
-              {describeFailure(results[firstFailure], firstFailure)} Red dots
-              show everything it blocked.
-            </p>
-            <Button onClick={editPattern}>Try again</Button>
-          </>
-        )}
-      </div>
-    </div>
+    </>
   );
 }
 

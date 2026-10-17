@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { LogicTutorial } from "./LogicTutorial";
 import {
@@ -17,23 +17,6 @@ import {
 } from "./logic-rules";
 
 const GATES: Gate[] = ["AND", "OR", "NOT"];
-const SEEN_KEY = "hackher:floor3-tutorial-seen";
-
-function tutorialSeen(): boolean {
-  try {
-    return sessionStorage.getItem(SEEN_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function markTutorialSeen() {
-  try {
-    sessionStorage.setItem(SEEN_KEY, "1");
-  } catch {
-    // Storage unavailable; the tutorial just shows again next visit.
-  }
-}
 
 function Dot({ on }: { on: boolean | null }) {
   if (on === null) {
@@ -56,7 +39,8 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
   const [placed, setPlaced] = useState<Placed>(() => emptyPlaced(ROUNDS[0]));
   const [switches, setSwitches] = useState<Record<string, boolean>>({});
   const [message, setMessage] = useState<string | null>(null);
-  const [showTutorial, setShowTutorial] = useState(() => !tutorialSeen());
+  const [showTutorial, setShowTutorial] = useState(true);
+  const closeTutorial = useCallback(() => setShowTutorial(false), []);
 
   const round = ROUNDS[roundIndex];
   const isLastRound = roundIndex === ROUNDS.length - 1;
@@ -101,139 +85,135 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
     setMessage(null);
   }
 
-  function closeTutorial() {
-    markTutorialSeen();
-    setShowTutorial(false);
-  }
-
-  if (showTutorial) {
-    return <LogicTutorial onDone={closeTutorial} />;
-  }
-
   const rows = allRows(round);
   const activeRow = rows.findIndex((row) =>
     round.inputs.every((input) => row[input.id] === Boolean(switches[input.id])),
   );
 
   return (
-    <div className="grid gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm font-medium text-ink">
-          Round {roundIndex + 1} of {ROUNDS.length}: {round.title}
+    <>
+      {showTutorial && (
+        <LogicTutorial onDone={closeTutorial} />
+      )}
+      <div className="grid gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm font-medium text-ink">
+            Round {roundIndex + 1} of {ROUNDS.length}: {round.title}
+          </p>
+          <ol className="flex gap-1.5" aria-label="Round progress">
+            {ROUNDS.map((r, i) => (
+              <li
+                key={r.title}
+                className={`h-2 w-8 rounded-full ${
+                  i < roundIndex || (i === roundIndex && solved)
+                    ? "bg-signal"
+                    : i === roundIndex
+                      ? "bg-copper"
+                      : "bg-line"
+                }`}
+              />
+            ))}
+          </ol>
+        </div>
+
+        <p className="rounded-xl border border-copper/30 bg-copper/5 px-4 py-3 text-sm leading-6 text-ink">
+          <span className="font-semibold text-copper-deep">Rule: </span>
+          {round.story}
         </p>
-        <ol className="flex gap-1.5" aria-label="Round progress">
-          {ROUNDS.map((r, i) => (
-            <li
-              key={r.title}
-              className={`h-2 w-8 rounded-full ${
-                i < roundIndex || (i === roundIndex && solved)
-                  ? "bg-signal"
-                  : i === roundIndex
-                    ? "bg-copper"
-                    : "bg-line"
-              }`}
-            />
-          ))}
-        </ol>
-      </div>
 
-      <p className="rounded-xl border border-copper/30 bg-copper/5 px-4 py-3 text-sm leading-6 text-ink">
-        <span className="font-semibold text-copper-deep">Rule: </span>
-        {round.story}
-      </p>
-
-      <div
-        className="flex flex-wrap items-center gap-2"
-        role="group"
-        aria-label="Gate toolbox"
-      >
-        <span className="text-sm text-ink-soft">1. Pick a gate:</span>
-        {GATES.map((gate) => (
-          <button
-            key={gate}
-            type="button"
-            aria-pressed={armed === gate}
-            disabled={solved}
-            onClick={() => {
-              setArmed(armed === gate ? null : gate);
-              setMessage(null);
-            }}
-            className={`rounded-lg px-4 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-40 ${
-              armed === gate
-                ? "bg-copper text-paper-raised ring-2 ring-ink"
-                : "border border-line bg-paper-raised text-ink hover:border-ink"
-            }`}
-          >
-            {gate}
-          </button>
-        ))}
-        <span className="text-sm text-ink-soft">2. Tap a slot.</span>
-      </div>
-
-      <Board
-        round={round}
-        placed={placed}
-        signals={live}
-        switches={switches}
-        armed={armed}
-        onSwitch={(id) =>
-          setSwitches((prev) => ({ ...prev, [id]: !prev[id] }))
-        }
-        onSlot={placeGate}
-      />
-
-      <p className="min-h-5 text-sm text-copper-deep" aria-live="polite">
-        {message ?? " "}
-      </p>
-
-      <ul className="grid gap-1 text-sm text-ink-soft sm:grid-cols-2">
-        {round.inputs.map((input) => (
-          <li key={input.id}>
-            <span className="font-semibold text-ink">{input.id}</span> ={" "}
-            {input.label}
-          </li>
-        ))}
-      </ul>
-
-      <RequirementsTable
-        round={round}
-        placed={placed}
-        rows={rows}
-        activeRow={activeRow}
-      />
-
-      <div className="flex flex-wrap items-center gap-3">
-        {solved ? (
-          <>
-            <p className="text-sm leading-6 text-signal" aria-live="polite">
-              <strong>
-                {isLastRound
-                  ? "Cipher cracked! Floor cleared."
-                  : "Circuit works!"}
-              </strong>{" "}
-              <span className="text-ink-soft">{round.lesson}</span>
-            </p>
-            {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
-          </>
-        ) : (
-          <>
-            <Button
-              variant="secondary"
+        <div
+          className="flex flex-wrap items-center gap-2"
+          role="group"
+          aria-label="Gate toolbox"
+        >
+          <span className="text-sm text-ink-soft">1. Pick a gate:</span>
+          {GATES.map((gate) => (
+            <button
+              key={gate}
+              type="button"
+              aria-pressed={armed === gate}
+              disabled={solved}
               onClick={() => {
-                setPlaced(emptyPlaced(round));
+                setArmed(armed === gate ? null : gate);
                 setMessage(null);
               }}
-              disabled={Object.values(placed).every((gate) => gate === null)}
+              className={`rounded-lg px-4 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-40 ${
+                armed === gate
+                  ? "bg-copper text-paper-raised ring-2 ring-ink"
+                  : "border border-line bg-paper-raised text-ink hover:border-ink"
+              }`}
             >
-              Clear gates
-            </Button>
-            <Button variant="ghost" onClick={() => setShowTutorial(true)}>
-              How to play
-            </Button>
-          </>
-        )}
+              {gate}
+            </button>
+          ))}
+          <span className="text-sm text-ink-soft">2. Tap a slot.</span>
+        </div>
+
+        <Board
+          round={round}
+          placed={placed}
+          signals={live}
+          switches={switches}
+          armed={armed}
+          onSwitch={(id) =>
+            setSwitches((prev) => ({ ...prev, [id]: !prev[id] }))
+          }
+          onSlot={placeGate}
+        />
+
+        <p className="min-h-5 text-sm text-copper-deep" aria-live="polite">
+          {message ?? " "}
+        </p>
+
+        <ul className="grid gap-1 text-sm text-ink-soft sm:grid-cols-2">
+          {round.inputs.map((input) => (
+            <li key={input.id}>
+              <span className="font-semibold text-ink">{input.id}</span> ={" "}
+              {input.label}
+            </li>
+          ))}
+        </ul>
+
+        <RequirementsTable
+          round={round}
+          placed={placed}
+          rows={rows}
+          activeRow={activeRow}
+        />
+
+        <div className="flex flex-wrap items-center gap-3">
+          {solved ? (
+            <>
+              <p className="text-sm leading-6 text-signal" aria-live="polite">
+                <strong>
+                  {isLastRound
+                    ? "Cipher cracked! Floor cleared."
+                    : "Circuit works!"}
+                </strong>{" "}
+                <span className="text-ink-soft">{round.lesson}</span>
+              </p>
+              {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
+            </>
+          ) : (
+            <>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setPlaced(emptyPlaced(round));
+                  setMessage(null);
+                }}
+                disabled={Object.values(placed).every((gate) => gate === null)}
+              >
+                Clear gates
+              </Button>
+              <Button variant="ghost" onClick={() => setShowTutorial(true)}>
+                How to play
+              </Button>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

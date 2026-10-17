@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 
 type Step = { title: string; body: ReactNode; visual: ReactNode };
@@ -112,32 +112,44 @@ export function LogicTutorial({ onDone }: { onDone: () => void }) {
   const step = STEPS[index];
   const isLast = index === STEPS.length - 1;
 
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onDone();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onDone]);
+
   return (
-    <section
-      aria-label="How to play"
-      className="rounded-2xl border-2 border-copper/30 bg-paper p-5 sm:p-6"
-    >
-      <p className="text-xs font-medium tracking-[0.16em] text-copper uppercase">
-        How to play · {index + 1} of {STEPS.length}
-      </p>
-      <h2 className="mt-1 font-display text-2xl text-ink">{step.title}</h2>
-      <div className="my-5">{step.visual}</div>
-      <p className="text-[15px] leading-7 text-ink">{step.body}</p>
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-        <Button variant="ghost" onClick={onDone}>
-          Skip
-        </Button>
-        <div className="flex gap-2">
-          {index > 0 && (
-            <Button variant="secondary" onClick={() => setIndex(index - 1)}>
-              Back
-            </Button>
-          )}
-          <Button onClick={isLast ? onDone : () => setIndex(index + 1)}>
-            {isLast ? "Let's play!" : "Next"}
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-void/80 p-4 backdrop-blur-sm">
+      <section
+        role="dialog"
+        aria-modal="true"
+        aria-label="How to play"
+        className="max-h-full w-full max-w-lg overflow-y-auto rounded-2xl border-2 border-copper/40 bg-paper-raised p-5 shadow-2xl sm:p-6"
+      >
+        <p className="text-xs font-medium tracking-[0.16em] text-copper uppercase">
+          How to play · {index + 1} of {STEPS.length}
+        </p>
+        <h2 className="mt-1 font-display text-2xl text-ink">{step.title}</h2>
+        <div className="my-5">{step.visual}</div>
+        <p className="text-[15px] leading-7 text-ink">{step.body}</p>
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+          <Button variant="ghost" onClick={onDone}>
+            Skip
           </Button>
+          <div className="flex gap-2">
+            {index > 0 && (
+              <Button variant="secondary" onClick={() => setIndex(index - 1)}>
+                Back
+              </Button>
+            )}
+            <Button onClick={isLast ? onDone : () => setIndex(index + 1)}>
+              {isLast ? "Let's play!" : "Next"}
+            </Button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }

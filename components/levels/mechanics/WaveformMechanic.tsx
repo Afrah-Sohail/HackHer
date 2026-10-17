@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { WaveformTutorial } from "./WaveformTutorial";
 import {
   CHANNEL_COUNT,
   ROUNDS,
   STEP_COUNT,
+  describeFailure,
   isPlanComplete,
+  previewBlocked,
   simulate,
   type Plan,
   type StepResult,
@@ -18,14 +21,41 @@ const CHANNELS = Array.from({ length: CHANNEL_COUNT }, (_, i) => i + 1);
 const STEPS = Array.from({ length: STEP_COUNT }, (_, i) => i);
 const emptyPlan = (): Plan => Array.from({ length: STEP_COUNT }, () => null);
 
+const SEEN_KEY = "hackher:floor2-tutorial-seen";
+
+function tutorialSeen(): boolean {
+  try {
+    return sessionStorage.getItem(SEEN_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function markTutorialSeen() {
+  try {
+    sessionStorage.setItem(SEEN_KEY, "1");
+  } catch {
+    // Storage unavailable; the tutorial just shows again next visit.
+  }
+}
+
 export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
   const [roundIndex, setRoundIndex] = useState(0);
   const [plan, setPlan] = useState<Plan>(emptyPlan);
   const [phase, setPhase] = useState<Phase>("plan");
   const [results, setResults] = useState<StepResult[]>([]);
   const [revealed, setRevealed] = useState(0);
+  const [showTutorial, setShowTutorial] = useState(() => !tutorialSeen());
+  const [showPreview, setShowPreview] = useState(ROUNDS[0].previewByDefault);
 
   const round = ROUNDS[roundIndex];
+  const nextStep = plan.indexOf(null);
+  const filled = plan.filter((channel) => channel !== null).length;
+  const firstFailure = results.findIndex((r) => !r.ok);
+  const previews =
+    phase === "plan" && showPreview
+      ? STEPS.map((step) => previewBlocked(round, plan, step))
+      : [];
   const isLastRound = roundIndex === ROUNDS.length - 1;
   const delivered = results.length > 0 && results.every((r) => r.ok);
 
@@ -60,7 +90,13 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
     setPhase("running");
   }
 
+  function closeTutorial() {
+    markTutorialSeen();
+    setShowTutorial(false);
+  }
+
   function nextRound() {
+    setShowPreview(ROUNDS[roundIndex + 1].previewByDefault);
     setRoundIndex((index) => index + 1);
     setPlan(emptyPlan());
     setResults([]);
@@ -72,6 +108,10 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
     setResults([]);
     setRevealed(0);
     setPhase("plan");
+  }
+
+  if (showTutorial) {
+    return <WaveformTutorial onDone={closeTutorial} />;
   }
 
   return (
@@ -97,10 +137,16 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
       </div>
 
       <p className="rounded-xl border border-copper/30 bg-copper/5 px-4 py-3 text-sm leading-6 text-ink">
-        <span className="font-semibold text-copper-deep">Jammer: </span>
-        {round.rule} Pick one channel for each of the {STEP_COUNT} steps so
-        every step gets through. Your receiver hops on the same pattern, so
-        you stay in sync.
+        <span className="font-semibold text-copper-deep">Jammer rule: </span>
+        {round.rule}
+      </p>
+
+      <p className="text-sm text-ink-soft" aria-live="polite">
+        {phase === "plan"
+          ? nextStep === -1
+            ? "All 8 steps set. Press Transmit!"
+            : `Step ${nextStep + 1}: tap a channel in the highlighted column. (${filled} of ${STEP_COUNT} set)`
+          : "\u00a0"}
       </p>
 
       <div className="overflow-x-auto rounded-2xl border border-line bg-ink p-3 text-paper-raised sm:p-4">
@@ -112,12 +158,21 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
           role="group"
           aria-label="Hop pattern"
         >
-          <span aria-hidden="true" />
+          <span
+            aria-hidden="true"
+            className="self-end text-[10px] tracking-wide text-paper/60 uppercase"
+          >
+            Step
+          </span>
           {STEPS.map((step) => (
             <span
               key={step}
-              className="text-center text-xs text-paper/70"
               aria-hidden="true"
+              className={`rounded-md text-center text-xs leading-6 ${
+                phase === "plan" && step === nextStep
+                  ? "bg-copper font-semibold text-paper-raised"
+                  : "text-paper/70"
+              }`}
             >
               {step + 1}
             </span>
@@ -128,6 +183,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
               channel={channel}
               plan={plan}
               results={results}
+              previews={previews}
               revealed={phase === "plan" ? 0 : revealed}
               locked={phase !== "plan"}
               onPick={pick}
@@ -136,11 +192,35 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
         </div>
       </div>
 
+      {phase === "plan" && (
+        <label className="flex w-fit cursor-pointer items-center gap-2 text-sm text-ink">
+          <input
+            type="checkbox"
+            checked={showPreview}
+            onChange={(event) => setShowPreview(event.target.checked)}
+            className="h-4 w-4 accent-[var(--color-copper)]"
+          />
+          Show jammer&apos;s next move (red dots)
+        </label>
+      )}
+
       <div className="flex flex-wrap items-center gap-3">
         {phase === "plan" && (
-          <Button onClick={transmit} disabled={!isPlanComplete(plan)}>
-            Transmit
-          </Button>
+          <>
+            <Button onClick={transmit} disabled={!isPlanComplete(plan)}>
+              Transmit
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setPlan(emptyPlan())}
+              disabled={filled === 0}
+            >
+              Clear
+            </Button>
+            <Button variant="ghost" onClick={() => setShowTutorial(true)}>
+              How to play
+            </Button>
+          </>
         )}
         {phase === "running" && (
           <p className="text-sm text-ink-soft" aria-live="polite">
@@ -149,30 +229,29 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
         )}
         {phase === "result" && delivered && (
           <>
-            <p className="text-sm font-medium text-signal" aria-live="polite">
-              {isLastRound
-                ? "Message delivered through every jammer! Floor cleared."
-                : "Message delivered!"}
+            <p className="text-sm leading-6 text-signal" aria-live="polite">
+              <strong>
+                {isLastRound
+                  ? "Message delivered through every jammer! Floor cleared."
+                  : "Message delivered!"}
+              </strong>{" "}
+              <span className="text-ink-soft">{round.lesson}</span>
             </p>
             {!isLastRound && <Button onClick={nextRound}>Next round</Button>}
           </>
         )}
         {phase === "result" && !delivered && (
           <>
-            <p className="text-sm font-medium text-copper-deep" aria-live="polite">
-              Jammed! The red dots show what the jammer blocked.
+            <p
+              className="text-sm leading-6 text-copper-deep"
+              aria-live="polite"
+            >
+              <strong>Jammed!</strong>{" "}
+              {describeFailure(results[firstFailure], firstFailure)} Red dots
+              show everything it blocked.
             </p>
-            <Button onClick={editPattern}>Edit pattern</Button>
+            <Button onClick={editPattern}>Try again</Button>
           </>
-        )}
-        {phase === "plan" && (
-          <Button
-            variant="ghost"
-            onClick={() => setPlan(emptyPlan())}
-            disabled={plan.every((c) => c === null)}
-          >
-            Clear
-          </Button>
         )}
       </div>
     </div>
@@ -183,6 +262,7 @@ function ChannelRow({
   channel,
   plan,
   results,
+  previews,
   revealed,
   locked,
   onPick,
@@ -190,6 +270,7 @@ function ChannelRow({
   channel: number;
   plan: Plan;
   results: StepResult[];
+  previews: (number[] | null)[];
   revealed: number;
   locked: boolean;
   onPick: (step: number, channel: number) => void;
@@ -205,7 +286,8 @@ function ChannelRow({
       {STEPS.map((step) => {
         const selected = plan[step] === channel;
         const result = step < revealed ? results[step] : undefined;
-        const jammedHere = result?.blocked.includes(channel) ?? false;
+        const previewHere = previews[step]?.includes(channel) ?? false;
+        const jammedHere = (result?.blocked.includes(channel) ?? false) || previewHere;
         const outcome =
           selected && result ? (result.ok ? "clear" : "jammed") : null;
 
@@ -213,6 +295,7 @@ function ChannelRow({
         if (selected) style = "bg-copper text-paper-raised";
         if (outcome === "clear") style = "bg-signal text-paper-raised";
         if (outcome === "jammed") style = "bg-red-700 text-paper-raised";
+        if (selected && previewHere) style += " ring-2 ring-red-400";
 
         return (
           <button

@@ -251,7 +251,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
           <p className="mt-1 text-base text-ink-soft">{round.story}</p>
         </div>
 
-        <div className="grid gap-5 rounded-3xl border border-line bg-void p-5 sm:p-7">
+        <div className="grid gap-4 rounded-3xl border border-line bg-void p-4 sm:p-5 md:grid-cols-2 md:gap-8">
           <div>
             <p className="mb-2 text-xs font-medium tracking-wide text-ink-soft uppercase">
               Pattern

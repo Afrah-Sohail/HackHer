@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, type ReactNode } from "react";
 import type { LevelDefinition } from "@/level-manager/types";
 import { useGame } from "@/state/game-context";
 import { Button } from "@/components/ui/Button";
@@ -9,6 +9,9 @@ import { StarConfetti } from "@/components/ui/StarConfetti";
 import { PlanetBackdrop } from "@/components/story/PlanetBackdrop";
 import { JOURNEY } from "@/story/journey";
 import { LevelStatsProvider, scoreFor, useLevelStats } from "./LevelStats";
+
+// Extra height, in pixels, kept free for what appears as you play.
+const BOX_ROOM = 110;
 
 type ShellProps = {
   level: LevelDefinition;
@@ -38,7 +41,25 @@ function LevelShellInner({
   const canComplete = canCompleteProp ?? true;
   const isFinalLevel = level.floor === 6;
   const footerRef = useRef<HTMLElement>(null);
+  const articleRef = useRef<HTMLElement>(null);
   const story = JOURNEY[level.index];
+
+  // Keep the box one size while you play. It starts with room for the things
+  // that show up later (Sparkles' message, the next buttons) and only ever grows.
+  useLayoutEffect(() => {
+    const el = articleRef.current;
+    if (!el) return;
+    let floor = el.offsetHeight + BOX_ROOM;
+    el.style.minHeight = `${floor}px`;
+    const observer = new ResizeObserver(() => {
+      if (el.offsetHeight > floor) {
+        floor = el.offsetHeight;
+        el.style.minHeight = `${floor}px`;
+      }
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   // The Complete button only appears once the level is solved; bring it into
   // view so the player always sees what to do next.
@@ -50,7 +71,7 @@ function LevelShellInner({
   return (
     <>
     <PlanetBackdrop planet={story.planet} />
-    <article className="overflow-hidden rounded-3xl border border-line bg-paper-raised/75 shadow-sm">
+    <article ref={articleRef} className="overflow-hidden rounded-3xl border border-line bg-paper-raised/75 shadow-sm">
       <header className="relative flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-line px-5 py-2 sm:px-8">
         <h1 className="font-display text-xl leading-tight text-ink sm:text-2xl">
           <strong className="font-star font-normal tracking-wide">{level.pioneer}</strong>
@@ -81,7 +102,7 @@ function LevelShellInner({
             <strong className="text-copper">{score.total} points</strong>
             {" · "}clear {score.base}
             {score.clean > 0 ? ` · clean solve +${score.clean}` : ""}
-            {score.solo > 0 ? ` · no hints +${score.solo}` : ""}
+            {score.curious > 0 ? ` · curious +${score.curious}` : ""}
             {score.style > 0 ? ` · style +${score.style}` : ""}
           </p>
           <Button className="px-16 py-4 text-2xl" onClick={() => completeLevel(score.total)}>

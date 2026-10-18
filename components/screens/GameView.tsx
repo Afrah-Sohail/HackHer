@@ -8,7 +8,7 @@ const MIN_ZOOM = 0.7;
 const MIN_ZOOM_PHONE = 0.85; // phones just scroll, so keep the text readable
 const MAX_WIDTH = 1400; // the game box never gets wider than this, on screen
 // Room kept for Sparkles' feedback bubble, so the box does not resize when it shows.
-const RESERVE = 90;
+const RESERVE = 0;
 
 // Shrinks the game just enough to fit on one screen, so nobody has to scroll
 // up and down while playing.

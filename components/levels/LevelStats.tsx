@@ -29,27 +29,27 @@ const LevelStatsContext = createContext<LevelStats>(NOOP);
 
 export const CLEAN_BONUS = 40; // a flawless solve
 export const CLEAN_STEP = 8; // each slip costs a little of that bonus
-export const SOLO_BONUS = 20; // never opened Sparkles' guide
+export const CURIOUS_BONUS = 20; // opened Sparkles' guide to learn about the pioneer
 export const STYLE_CAP = 40; // level-specific style points
 
 export type ScoreBreakdown = {
   base: number;
   clean: number;
-  solo: number;
+  curious: number;
   style: number;
   total: number;
 };
 
 export function scoreFor(result: LevelResult): ScoreBreakdown {
   const clean = Math.max(0, CLEAN_BONUS - CLEAN_STEP * result.mistakes);
-  const solo = result.guideOpened ? 0 : SOLO_BONUS;
+  const curious = result.guideOpened ? CURIOUS_BONUS : 0;
   const style = Math.min(STYLE_CAP, result.bonus);
   return {
     base: CLEAR_SCORE,
     clean,
-    solo,
+    curious,
     style,
-    total: CLEAR_SCORE + clean + solo + style,
+    total: CLEAR_SCORE + clean + curious + style,
   };
 }
 

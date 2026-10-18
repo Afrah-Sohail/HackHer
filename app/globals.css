@@ -3,6 +3,7 @@
 @theme inline {
   --font-sans: var(--font-outfit), "Avenir Next", "Segoe UI", sans-serif;
   --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-star: var(--font-starcrush), var(--font-fraunces), Georgia, serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --color-ink: #f4f0ff;
   --color-ink-soft: #b7aed4;

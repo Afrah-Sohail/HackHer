@@ -62,7 +62,7 @@ export function VictoryScreen() {
     <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col justify-center gap-6 px-4 py-8 sm:px-6">
       {allCleared && home && <StarConfetti count={90} seed={11} />}
 
-      <h1 className="text-center font-display text-4xl text-ink sm:text-6xl">
+      <h1 className="text-center font-star text-4xl text-ink sm:text-6xl">
         {allCleared ? (home ? "You're home! 🏠" : "Blast off!") : `You reached ${JOURNEY[LEVEL_COUNT - 1].name}!`}
       </h1>
 
@@ -94,7 +94,7 @@ export function VictoryScreen() {
               so tap one on the map to fix the rest of the rocket.
             </Speech>
           )}
-          <p className="text-center font-display text-3xl text-ink">{score} pts</p>
+          <p className="text-center font-star text-3xl text-copper">{score} pts</p>
           <ul className="mx-auto grid w-full max-w-md gap-1 text-sm text-ink-soft sm:grid-cols-2 sm:gap-x-10">
             {JOURNEY.map((planet, i) => (
               <li key={planet.planet} className="flex justify-between gap-3">

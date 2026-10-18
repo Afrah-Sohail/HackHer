@@ -66,7 +66,7 @@ export const ROUNDS: readonly Round[] = [
     title: "Draw the blueprint",
     story:
       "A class is a blueprint.",
-    goal: "Add what every pet needs. Nothing extra.",
+    goal: "Pick the properties every pet should have.",
     mode: "design",
     baseProps: [],
     required: ["name", "species", "color"],
@@ -74,7 +74,7 @@ export const ROUNDS: readonly Round[] = [
     requests: [MOCHI, BAILEY, NOVA],
     objects: [],
     lesson:
-      "A blueprint lists what every object has.",
+      "A blueprint is the list of things every pet gets.",
   },
   {
     title: "Build the pets",
@@ -88,7 +88,7 @@ export const ROUNDS: readonly Round[] = [
     requests: [MOCHI, BAILEY, NOVA],
     objects: [],
     lesson:
-      "Same blueprint, different values.",
+      "Every pet follows the same blueprint, but each one has its own values.",
   },
   {
     title: "Teach them to talk",
@@ -102,13 +102,13 @@ export const ROUNDS: readonly Round[] = [
     requests: [MOCHI, BAILEY, NOVA],
     objects: [MOCHI, BAILEY, NOVA],
     lesson:
-      "Same method, but each pet uses its own values.",
+      "Every pet knows how to greet, and each one uses its own name and species.",
   },
   {
     title: "One change, every pet",
     story:
       "Vet rule: every pet must show vaccinated.",
-    goal: "Make all 4 pets show it with one change.",
+    goal: "Give all 4 pets the vet's new info with a single change.",
     mode: "design",
     baseProps: ["name", "species", "color"],
     required: ["name", "species", "color", "vaccinated"],
@@ -116,7 +116,7 @@ export const ROUNDS: readonly Round[] = [
     requests: [],
     objects: [MOCHI, BAILEY, NOVA, KIKI],
     lesson:
-      "Change the blueprint once and every object updates.",
+      "Change the blueprint once and every pet gets the update.",
   },
 ];
 

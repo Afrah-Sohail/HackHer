@@ -55,7 +55,7 @@ export const ROUNDS: readonly Round[] = [
     ],
     mustRun: ["critical"],
     lesson:
-      "The top of the queue gets memory first.",
+      "Whatever sits at the top of the queue grabs memory first.",
   },
   {
     title: "Big jobs, small memory",
@@ -71,7 +71,7 @@ export const ROUNDS: readonly Round[] = [
     ],
     mustRun: ["critical", "important"],
     lesson:
-      "A priority queue puts important jobs first.",
+      "A priority queue lets the important jobs go first.",
   },
   {
     title: "Apollo 11 alarms",
@@ -87,7 +87,7 @@ export const ROUNDS: readonly Round[] = [
     ],
     mustRun: ["critical", "important"],
     lesson:
-      "Apollo 11 dropped low-priority tasks and kept landing.",
+      "Apollo 11's computer dropped the low-priority jobs so the landing could keep going.",
   },
   {
     title: "Every alarm at once",
@@ -105,7 +105,7 @@ export const ROUNDS: readonly Round[] = [
     ],
     mustRun: ["critical", "important"],
     lesson:
-      "Operating systems use priority queues too.",
+      "Your phone and laptop use priority queues like this all the time.",
   },
   {
     title: "Squeeze it in",
@@ -122,7 +122,7 @@ export const ROUNDS: readonly Round[] = [
     mustRun: ["critical"],
     maximize: true,
     lesson:
-      "Priority isn't everything. A few small jobs can beat one big one.",
+      "Priority isn't the whole story: a few small jobs can add up to more than one big one.",
   },
 ];
 

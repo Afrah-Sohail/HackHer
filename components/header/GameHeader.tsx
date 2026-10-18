@@ -18,7 +18,7 @@ export function GameHeader() {
             type="button"
             data-plain
             onClick={showWelcome}
-            className="font-display text-xl tracking-tight text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-copper"
+            className="font-star text-xl tracking-wide text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-copper"
           >
             Lost in Computation
           </button>

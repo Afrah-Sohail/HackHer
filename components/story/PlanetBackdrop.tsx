@@ -1,5 +1,5 @@
 import type { PlanetId } from "@/story/journey";
-import { PlanetArt } from "./Planet";
+import { PlanetBackdropArt } from "./PlanetBackdropArt";
 
 // Radius of each planet's body inside the 100 x 100 clip-art box.
 const BODY_RADIUS: Record<PlanetId, number> = {
@@ -11,7 +11,7 @@ const BODY_RADIUS: Record<PlanetId, number> = {
   uranus: 32,
 };
 
-// The same clip-art planets as the map, drawn huge with the planet's center in
+// Detailed clip-art planets (a richer cousin of the map icons), drawn huge with the planet's center in
 // the bottom-left corner, as if the camera were sitting on it. It stays fixed
 // behind the page.
 export function PlanetBackdrop({ planet }: { planet: PlanetId }) {
@@ -33,7 +33,7 @@ export function PlanetBackdrop({ planet }: { planet: PlanetId }) {
           bottom: `calc(${size} / -2)`,
         }}
       >
-        <PlanetArt id={planet} uid="-backdrop" />
+        <PlanetBackdropArt id={planet} uid="-backdrop" />
       </svg>
       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-void/25 to-void/60" />
     </div>

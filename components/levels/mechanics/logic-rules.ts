@@ -67,7 +67,7 @@ export const ROUNDS: readonly Round[] = [
     outputLabel: "Stop machine",
     outputPos: { x: 80, y: 30 },
     target: (v) => v.A && v.B,
-    lesson: "AND needs both.",
+    lesson: "AND only turns on when both inputs are on.",
   },
   {
     title: "Either clue",
@@ -82,7 +82,7 @@ export const ROUNDS: readonly Round[] = [
     outputLabel: "Keep it",
     outputPos: { x: 80, y: 30 },
     target: (v) => v.A || v.B,
-    lesson: "OR needs just one.",
+    lesson: "OR turns on when at least one input is on.",
   },
   {
     title: "Exactly one",
@@ -96,7 +96,7 @@ export const ROUNDS: readonly Round[] = [
     outputLabel: "Stop machine",
     outputPos: { x: 80, y: 30 },
     target: (v) => v.A !== v.B,
-    lesson: "XOR is on when the inputs differ.",
+    lesson: "XOR turns on when the two inputs are different.",
   },
   {
     title: "Not both",
@@ -110,7 +110,7 @@ export const ROUNDS: readonly Round[] = [
     outputLabel: "Keep guess",
     outputPos: { x: 80, y: 30 },
     target: (v) => !(v.A && v.B),
-    lesson: "NOT on an AND gate makes NAND: on unless both are on.",
+    lesson: "A NOT on an AND gate makes NAND: it's on unless both inputs are on.",
   },
   {
     title: "Never itself",
@@ -122,7 +122,7 @@ export const ROUNDS: readonly Round[] = [
     outputLabel: "Keep it",
     outputPos: { x: 80, y: 30 },
     target: (v) => !v.A,
-    lesson: "NOT flips it.",
+    lesson: "NOT just flips a signal: on becomes off, off becomes on.",
   },
   {
     title: "The full rule",
@@ -142,7 +142,7 @@ export const ROUNDS: readonly Round[] = [
     outputLabel: "Keep it",
     outputPos: { x: 80, y: 35 },
     target: (v) => (v.A || v.B) && !v.C,
-    lesson: "Small gates chained together make big decisions.",
+    lesson: "Chain small gates together and they can make big decisions.",
   },
 ];
 

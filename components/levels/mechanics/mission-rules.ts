@@ -22,7 +22,7 @@ export const ROUNDS: readonly Round[] = [
     inputs: [1, 2, 3, 4],
     solution: { a: 1, b: 2 },
     lesson:
-      "A function turns an input into an output using a rule.",
+      "A function takes a number in and gives a number out, following a rule.",
   },
   {
     title: "Scale it up",
@@ -31,7 +31,7 @@ export const ROUNDS: readonly Round[] = [
     inputs: [1, 2, 3, 4],
     solution: { a: 3, b: 0 },
     lesson:
-      "Same input, same output. Every time.",
+      "Put the same number in and you always get the same number out.",
   },
   {
     title: "Both together",
@@ -40,7 +40,7 @@ export const ROUNDS: readonly Round[] = [
     inputs: [1, 2, 3, 4],
     solution: { a: 2, b: 1 },
     lesson:
-      "Functions can chain steps together.",
+      "A function can have more than one step, like multiply and then add.",
   },
   {
     title: "The real trajectory",
@@ -49,7 +49,7 @@ export const ROUNDS: readonly Round[] = [
     inputs: [1, 2, 3, 4, 5],
     solution: { a: 3, b: -2 },
     lesson:
-      "You found the rule behind the trajectory!",
+      "You cracked the rule behind the trajectory!",
   },
 ];
 

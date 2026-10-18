@@ -52,7 +52,7 @@ export const ROUNDS: readonly Round[] = [
     budget: 3,
     repeatAvailable: false,
     solution: [{ thread: "A" }, { thread: "B" }, { thread: "C" }],
-    lesson: "A sequence: steps in order.",
+    lesson: "That's a sequence: one step after another.",
   },
   {
     title: "Again and again",
@@ -63,7 +63,7 @@ export const ROUNDS: readonly Round[] = [
     repeatAvailable: true,
     solution: [{ repeat: 3, body: ["A", "B"] }],
     lesson:
-      "A loop: repeat steps instead of writing them again.",
+      "That's a loop: instead of writing the same steps over and over, you repeat them.",
   },
   {
     title: "A twist",
@@ -73,7 +73,7 @@ export const ROUNDS: readonly Round[] = [
     budget: 4,
     repeatAvailable: true,
     solution: [{ thread: "C" }, { repeat: 3, body: ["A", "B"] }],
-    lesson: "Sequences and loops work together.",
+    lesson: "See how a sequence and a loop team up? One step, then a loop.",
   },
   {
     title: "The big one",
@@ -84,7 +84,7 @@ export const ROUNDS: readonly Round[] = [
     repeatAvailable: true,
     solution: [{ repeat: 4, body: ["A", "A", "B"] }],
     lesson:
-      "A tiny loop makes a big pattern.",
+      "One tiny loop made that whole big pattern. Pretty handy, right?",
   },
 ];
 

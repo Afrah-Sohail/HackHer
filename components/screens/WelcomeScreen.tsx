@@ -14,7 +14,7 @@ export function WelcomeScreen() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6 py-10 text-center">
-      <h1 className="font-display text-5xl leading-tight tracking-tight text-ink drop-shadow-[0_0_28px_rgb(176_140_255_/_0.7)] sm:text-7xl">
+      <h1 className="font-star text-5xl leading-tight tracking-tight text-ink drop-shadow-[0_0_28px_rgb(176_140_255_/_0.7)] sm:text-7xl">
         Lost in Computation
       </h1>
       <p className="mt-3 text-sm font-medium tracking-[0.2em] text-copper uppercase">

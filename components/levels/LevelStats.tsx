@@ -8,18 +8,20 @@ import { CLEAR_SCORE } from "@/level-manager/types";
 export type LevelResult = {
   mistakes: number;
   bonus: number;
+  /** What the bonus was for, in a few words ("loop bonus"). */
+  bonusLabel: string;
   guideOpened: boolean;
 };
 
 type LevelStats = {
   result: LevelResult;
   mistake: () => void;
-  bonus: (points: number) => void;
+  bonus: (points: number, label: string) => void;
   guideOpened: () => void;
 };
 
 const NOOP: LevelStats = {
-  result: { mistakes: 0, bonus: 0, guideOpened: false },
+  result: { mistakes: 0, bonus: 0, bonusLabel: "", guideOpened: false },
   mistake: () => {},
   bonus: () => {},
   guideOpened: () => {},
@@ -29,27 +31,29 @@ const LevelStatsContext = createContext<LevelStats>(NOOP);
 
 export const CLEAN_BONUS = 40; // a flawless solve
 export const CLEAN_STEP = 8; // each slip costs a little of that bonus
-export const SOLO_BONUS = 20; // never opened Sparkles' guide
+export const CURIOUS_BONUS = 20; // opened Sparkles' guide to learn about the pioneer
 export const STYLE_CAP = 40; // level-specific style points
 
 export type ScoreBreakdown = {
   base: number;
   clean: number;
-  solo: number;
+  curious: number;
   style: number;
+  styleLabel: string;
   total: number;
 };
 
 export function scoreFor(result: LevelResult): ScoreBreakdown {
   const clean = Math.max(0, CLEAN_BONUS - CLEAN_STEP * result.mistakes);
-  const solo = result.guideOpened ? 0 : SOLO_BONUS;
+  const curious = result.guideOpened ? CURIOUS_BONUS : 0;
   const style = Math.min(STYLE_CAP, result.bonus);
   return {
     base: CLEAR_SCORE,
     clean,
-    solo,
+    curious,
     style,
-    total: CLEAR_SCORE + clean + solo + style,
+    styleLabel: result.bonusLabel,
+    total: CLEAR_SCORE + clean + curious + style,
   };
 }
 
@@ -62,7 +66,8 @@ export function LevelStatsProvider({ children }: { children: ReactNode }) {
     [],
   );
   const bonus = useCallback(
-    (points: number) => setResult((prev) => ({ ...prev, bonus: prev.bonus + points })),
+    (points: number, label: string) =>
+      setResult((prev) => ({ ...prev, bonus: prev.bonus + points, bonusLabel: label })),
     [],
   );
   const guideOpened = useCallback(

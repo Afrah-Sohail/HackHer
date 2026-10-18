@@ -22,30 +22,30 @@ function lastUsed(history: readonly number[], count: number): number[] {
 export const ROUNDS: readonly Round[] = [
   {
     title: "Parked jammer",
-    rule: "Jammer sits on Ch 4.",
+    rule: "The jammer sits on Ch 4.",
     blocked: () => [4],
-    lesson: "A jammer that never moves is easy to dodge.",
+    lesson: "That jammer never moved, so dodging it was easy.",
     previewByDefault: true,
   },
   {
     title: "Follower",
-    rule: "Jammer blocks the channel you just used.",
+    rule: "The jammer blocks whichever channel you just used.",
     blocked: (history) => lastUsed(history, 1),
-    lesson: "Stay put and you get jammed. Hop!",
+    lesson: "Stay on one channel and this jammer finds you, so keep hopping!",
     previewByDefault: true,
   },
   {
     title: "Pattern spotter",
-    rule: "Jammer blocks your last 2 channels.",
+    rule: "The jammer blocks your last 2 channels.",
     blocked: (history) => lastUsed(history, 2),
-    lesson: "Bouncing between just 2 channels gets you jammed: the jammer remembers your last 2. You need a 3rd channel.",
+    lesson: "Bouncing between two channels doesn't work here, since the jammer remembers your last two. A third channel saves you.",
     previewByDefault: false,
   },
   {
     title: "Mastermind",
-    rule: "Jammer blocks your last 3 channels.",
+    rule: "The jammer blocks your last 3 channels.",
     blocked: (history) => lastUsed(history, 3),
-    lesson: "The jammer remembers your last 3, so you need 4 different channels. Hedy and composer George Antheil patented hopping in 1942.",
+    lesson: "This jammer remembers your last three, so you need four different channels. Hedy Lamarr and composer George Antheil patented frequency hopping in 1942.",
     previewByDefault: false,
   },
 ];

@@ -1,32 +1,49 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { LEVELS } from "@/level-manager/catalog";
 import { useGame } from "@/state/game-context";
 
 const HIDE_KEY = "debug-hidden";
 
+// Whether the panel is hidden, kept outside React so the server render (always
+// "shown") and the browser (which knows its screen) can agree after hydration.
+let override: boolean | null = null;
+const listeners = new Set<() => void>();
+
+// Hidden by default on phones (until someone turns it on with Shift+D).
 function readHidden(): boolean {
+  if (override !== null) return override;
   try {
-    return window.localStorage.getItem(HIDE_KEY) === "1";
+    const saved = window.localStorage.getItem(HIDE_KEY);
+    if (saved !== null) return saved === "1";
   } catch {
-    return false;
+    // Fall through to the screen-size default.
   }
+  return window.innerWidth < 768;
+}
+
+function writeHidden(next: boolean) {
+  override = next;
+  try {
+    window.localStorage.setItem(HIDE_KEY, next ? "1" : "0");
+  } catch {
+    // The panel still changes for this visit if storage is blocked.
+  }
+  listeners.forEach((listener) => listener());
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
 }
 
 export function DebugPanel() {
   const { state, jumpToLevel, forceWin } = useGame();
   const [open, setOpen] = useState(false);
-  const [hidden, setHidden] = useState(readHidden);
-
-  function setHiddenSaved(next: boolean) {
-    setHidden(next);
-    try {
-      window.localStorage.setItem(HIDE_KEY, next ? "1" : "0");
-    } catch {
-      // The panel still hides for this visit if storage is blocked.
-    }
-  }
+  const hidden = useSyncExternalStore(subscribe, readHidden, () => false);
 
   // Shift+D hides or brings back the panel.
   useEffect(() => {
@@ -34,7 +51,7 @@ export function DebugPanel() {
       const tag = (event.target as HTMLElement | null)?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
       if (event.shiftKey && event.key.toLowerCase() === "d") {
-        setHiddenSaved(!hidden);
+        writeHidden(!hidden);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -87,7 +104,7 @@ export function DebugPanel() {
             </button>
             <button
               type="button"
-              onClick={() => setHiddenSaved(true)}
+              onClick={() => writeHidden(true)}
               title="Shift+D brings it back"
               className="rounded-full border border-line px-2.5 py-1 text-xs font-medium text-ink-soft hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper"
             >

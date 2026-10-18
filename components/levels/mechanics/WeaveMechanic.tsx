@@ -88,7 +88,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
       const timer = setTimeout(() => {
         setPhase("result");
         if (mismatch !== -1) mistake();
-        else if (round.repeatAvailable && used <= round.budget) bonus(10);
+        else if (round.repeatAvailable && used <= round.budget) bonus(10, "loop bonus");
         if (mismatch === -1 && roundIndex === ROUNDS.length - 1) onCleared?.();
       }, 350);
       return () => clearTimeout(timer);

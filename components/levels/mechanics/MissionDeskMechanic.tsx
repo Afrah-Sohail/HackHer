@@ -394,9 +394,6 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
                     Needed
                   </th>
                   <th scope="col" className="px-3 py-2 font-medium">
-                    Yours
-                  </th>
-                  <th scope="col" className="px-3 py-2 font-medium">
                     <span className="sr-only">Match</span>
                   </th>
                 </tr>
@@ -409,7 +406,6 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
                     <tr key={row.x} className="border-t border-line">
                       <td className="px-3 py-2 text-xl text-ink">{row.x}</td>
                       <td className="px-3 py-2 text-xl text-copper">{row.needed}</td>
-                      <td className="px-3 py-2 text-xl text-ink">{row.yours}</td>
                       <td className="px-3 py-2 text-xl font-semibold">
                         {marked ? (
                           row.ok ? (

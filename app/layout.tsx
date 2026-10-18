@@ -16,6 +16,13 @@ const starCrush = localFont({
   display: "swap",
 });
 
+// Pixelon: also free for personal use (see public/fonts/Pixelon-license.txt).
+const pixelon = localFont({
+  src: "../public/fonts/Pixelon.ttf",
+  variable: "--font-pixelon",
+  display: "swap",
+});
+
 const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
@@ -29,7 +36,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${outfit.variable} ${fraunces.variable} ${starCrush.variable} h-full`}>
+    <html lang="en" className={`${outfit.variable} ${fraunces.variable} ${starCrush.variable} ${pixelon.variable} h-full`}>
       <body className="min-h-full bg-paper font-sans text-ink antialiased">
         <Haptics />
         {children}

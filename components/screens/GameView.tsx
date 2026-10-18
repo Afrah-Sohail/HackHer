@@ -5,6 +5,8 @@ import { LevelRouter } from "@/components/levels/LevelRouter";
 import { useGame } from "@/state/game-context";
 
 const MIN_ZOOM = 0.7;
+const MIN_ZOOM_PHONE = 0.85; // phones just scroll, so keep the text readable
+const MAX_WIDTH = 1400; // the game box never gets wider than this, on screen
 // Room kept for Sparkles' feedback bubble, so the box does not resize when it shows.
 const RESERVE = 90;
 
@@ -28,12 +30,16 @@ export function GameView() {
       const room = window.innerHeight - (header?.getBoundingClientRect().height ?? 0);
       // Measure at full size, then pick the zoom (no paint in between).
       el.style.zoom = "1";
+      el.style.maxWidth = `${MAX_WIDTH}px`;
       const height = el.offsetHeight;
-      const clamp = (value: number) => Math.min(1, Math.max(MIN_ZOOM, value));
+      const floor = window.innerWidth < 768 ? MIN_ZOOM_PHONE : MIN_ZOOM;
+      const clamp = (value: number) => Math.min(1, Math.max(floor, value));
       // The first fit leaves room for the feedback bubble; after that the zoom
       // only drops if the content truly no longer fits.
       locked = locked === null ? clamp(room / (height + RESERVE)) : Math.min(locked, clamp(room / height));
       el.style.zoom = locked < 0.995 ? String(locked) : "1";
+      // Zoom shrinks pixel sizes too, so give the max width back what it lost.
+      if (locked < 0.995) el.style.maxWidth = `${MAX_WIDTH / locked}px`;
     };
 
     const refit = () => {
@@ -52,7 +58,7 @@ export function GameView() {
   }, [level.index]);
 
   return (
-    <div ref={ref} className="mx-auto w-full max-w-[1400px] px-4 py-3 sm:px-6">
+    <div ref={ref} className="mx-auto w-full px-4 py-3 sm:px-6">
       <LevelRouter level={level} />
     </div>
   );

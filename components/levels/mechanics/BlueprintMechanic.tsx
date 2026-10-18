@@ -334,7 +334,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                   </div>
                   <div className="min-w-0 flex-1">
                   {round.mode === "build" ? (
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-1 gap-2 min-[560px]:grid-cols-3">
                       {(["name", "species", "color"] as const).map((key) => (
                         <label key={key} className="grid min-w-0 gap-1 text-base text-ink-soft">
                           <span className="sr-only">{PROPS[key].label}</span>

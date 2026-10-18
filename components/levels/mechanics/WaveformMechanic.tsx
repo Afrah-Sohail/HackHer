@@ -305,7 +305,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
           )}
           {phase === "result" && delivered && (
             <>
-              <UnicornSays tone="happy" className="w-full">
+              <UnicornSays big tone="happy" className="w-full">
                 <span aria-live="polite" className="block">
                   <strong className="text-signal">
                     {isLastRound ? "Level cleared!" : "Delivered!"}
@@ -322,7 +322,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
           )}
           {phase === "result" && !delivered && (
             <>
-              <UnicornSays tone="oops" className="w-full">
+              <UnicornSays big tone="oops" className="w-full">
                 <span aria-live="polite" className="block">
                   <strong className="text-copper">Oh no, a little jam!</strong>{" "}
                   {describeFailure(results[firstFailure], firstFailure)}

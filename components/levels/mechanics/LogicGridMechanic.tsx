@@ -341,7 +341,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
         <div className="flex flex-wrap items-center gap-3">
           {solved ? (
             <>
-              <UnicornSays tone="happy" className="w-full">
+              <UnicornSays big tone="happy" className="w-full">
                 <span aria-live="polite" className="block">
                   <strong className="text-signal">
                     {isLastRound ? "Level cleared!" : "It works!"}

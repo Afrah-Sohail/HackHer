@@ -349,7 +349,7 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
         </div>
 
         {phase === "result" && allOk && (
-          <UnicornSays tone="happy" className="w-full">
+          <UnicornSays big tone="happy" className="w-full">
             <span aria-live="polite" className="block">
               <strong className="text-signal">
                 {isLastRound ? "Level cleared!" : "Perfect launch!"}
@@ -359,7 +359,7 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
           </UnicornSays>
         )}
         {phase === "result" && !allOk && firstMiss && (
-          <UnicornSays tone="oops" className="w-full">
+          <UnicornSays big tone="oops" className="w-full">
             <span aria-live="polite" className="block">
               <strong className="text-copper">Almost there!</strong> {describeMiss(firstMiss)}
             </span>

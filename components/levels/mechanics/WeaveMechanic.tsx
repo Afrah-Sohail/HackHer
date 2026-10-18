@@ -472,7 +472,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
           {phase === "result" && matches && (
             <>
               {canTeachLoop ? (
-                <UnicornSays tone="happy" className="w-full">
+                <UnicornSays big tone="happy" className="w-full">
                   <span aria-live="polite" className="block">
                     <strong className="text-signal">It works, great job! 🎉</strong>{" "}
                     Want to try something neat? Start over and use a 🔁 loop.
@@ -480,7 +480,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
                   </span>
                 </UnicornSays>
               ) : (
-                <UnicornSays tone="happy" className="w-full">
+                <UnicornSays big tone="happy" className="w-full">
                   <span aria-live="polite" className="block">
                     <strong className="text-signal">
                       {isLastRound ? "Level cleared!" : "Perfect!"}
@@ -507,7 +507,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
           )}
           {phase === "result" && !matches && (
             <>
-              <UnicornSays tone="oops" className="w-full">
+              <UnicornSays big tone="oops" className="w-full">
                 <span aria-live="polite" className="block">
                   <strong className="text-copper">Almost!</strong>{" "}
                   {describeMismatch(woven, round.target, mismatch)}

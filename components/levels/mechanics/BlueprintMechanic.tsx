@@ -395,7 +395,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
 
         <div aria-live="polite">
           {feedback && (
-            <UnicornSays tone={feedback.ok ? "happy" : "oops"}>
+            <UnicornSays big tone={feedback.ok ? "happy" : "oops"}>
               {feedback.ok ? (
                 <>
                   <strong className="text-signal">

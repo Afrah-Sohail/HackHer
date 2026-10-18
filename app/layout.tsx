@@ -16,10 +16,10 @@ const starCrush = localFont({
   display: "swap",
 });
 
-// Pixelon: also free for personal use (see public/fonts/Pixelon-license.txt).
-const pixelon = localFont({
-  src: "../public/fonts/Pixelon.ttf",
-  variable: "--font-pixelon",
+// Terminal Grotesque: open source, SIL Open Font License (public/fonts/TerminalGrotesque-license.md).
+const terminal = localFont({
+  src: "../public/fonts/TerminalGrotesque.ttf",
+  variable: "--font-terminal",
   display: "swap",
 });
 
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${outfit.variable} ${fraunces.variable} ${starCrush.variable} ${pixelon.variable} h-full`}>
+    <html lang="en" className={`${outfit.variable} ${fraunces.variable} ${starCrush.variable} ${terminal.variable} h-full`}>
       <body className="min-h-full bg-paper font-sans text-ink antialiased">
         <Haptics />
         {children}

@@ -40,7 +40,7 @@ export function WelcomeScreen() {
         <UnicornSays size={64}>
           <strong className="text-copper">Hi, I&apos;m {GUIDE_NAME}!</strong> I&apos;m{" "}
           your space unicorn. I can&apos;t fix a rocket with hooves,
-          but I can cheer you on and tell you about the women. Ready?
+          but I can cheer you on and teach you about these amazing women. Ready?
         </UnicornSays>
       </div>
 

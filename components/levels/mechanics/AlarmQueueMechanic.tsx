@@ -330,7 +330,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
           )}
           {phase === "result" && success && (
             <>
-              <UnicornSays tone="happy" className="w-full">
+              <UnicornSays big tone="happy" className="w-full">
                 <span aria-live="polite" className="block">
                   <strong className="text-signal">
                     {isLastRound ? "Level cleared!" : "All safe!"}
@@ -347,7 +347,7 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
           )}
           {phase === "result" && !success && (
             <>
-              <UnicornSays tone="oops" className="w-full">
+              <UnicornSays big tone="oops" className="w-full">
                 <span aria-live="polite" className="block">
                   <strong className="text-copper">{missedValue ? "So close!" : "Whoops!"}</strong>{" "}
                   {missedValue

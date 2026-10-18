@@ -137,10 +137,10 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
           <div className="mb-3 flex items-center gap-3">
             <UnicornAvatar size={52} />
             <div className="min-w-0">
-              <p className="text-[11px] font-medium tracking-[0.14em] text-copper uppercase">
+              <p className="text-sm font-medium tracking-[0.14em] text-copper uppercase">
                 {GUIDE_NAME} tells you about
               </p>
-              <p className="font-display text-lg leading-tight text-ink">
+              <p className="font-display text-xl leading-tight text-ink">
                 {level.pioneer}
               </p>
               <div className="mt-1">
@@ -157,23 +157,23 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
             </div>
           )}
           {!loading && failed && (
-            <p className="text-sm leading-6 text-ink-soft">
+            <p className="text-base leading-7 text-ink-soft">
               Couldn&apos;t reach the guide right now. Try again in a moment.
             </p>
           )}
           {!loading && !failed && body && (
-            <p className="text-[15px] leading-7 whitespace-pre-line text-ink">
+            <p className="text-lg leading-8 whitespace-pre-line text-ink">
               <RichText text={body} />
             </p>
           )}
 
           <div className="mt-4 border-t border-line pt-3">
-            <p className="mb-2 text-xs font-medium tracking-[0.14em] text-ink-soft uppercase">
+            <p className="mb-2 text-sm font-medium tracking-[0.14em] text-ink-soft uppercase">
               {view === "overview" ? "Learn more about…" : "Keep exploring"}
             </p>
             <div className="flex flex-wrap gap-2">
               {view !== "overview" && (
-                <Button variant="ghost" onClick={() => void show("overview")}>
+                <Button variant="ghost" className="text-base" onClick={() => void show("overview")}>
                   ← Overview
                 </Button>
               )}
@@ -183,6 +183,7 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
                 <Button
                   key={topic.id}
                   variant="secondary"
+                  className="text-base"
                   disabled={loading}
                   onClick={() => void show(topic.id)}
                 >
@@ -192,6 +193,7 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
               {HINTS_ENABLED && (
                 <Button
                   variant="secondary"
+                  className="text-base"
                   disabled={loading}
                   onClick={() => void show("hint")}
                 >
@@ -216,7 +218,7 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
           aria-expanded={false}
           aria-label={`Ask ${GUIDE_NAME}: ${question}`}
           title={question}
-          className="flex items-center gap-1.5 rounded-full bg-copper py-1 pr-4 pl-1.5 text-left text-base font-semibold text-paper-raised opacity-80 shadow-lg transition hover:bg-copper-deep hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper"
+          className="flex items-center gap-1.5 rounded-full bg-copper py-1 pr-4 pl-1.5 text-left text-xl font-semibold text-paper-raised opacity-80 shadow-lg transition hover:bg-copper-deep hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper"
         >
           <UnicornAvatar size={34} />
           Ask {GUIDE_NAME}

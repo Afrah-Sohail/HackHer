@@ -68,10 +68,27 @@ const STEPS: Step[] = [
     visual: <BlueprintDemo />,
   },
   {
+    title: "Methods and inheritance",
+    body: (
+      <>
+        A <strong>method</strong> is a message every object of the class
+        understands. A new class can <strong>inherit</strong> a blueprint and
+        add its own properties. Dog is a Pet, plus a breed.
+      </>
+    ),
+    visual: (
+      <p className="text-center text-2xl text-ink" aria-hidden="true">
+        Pet → Dog
+        <span className="mt-1 block text-base text-ink-soft">name · species · color · breed</span>
+      </p>
+    ),
+  },
+  {
     title: "How to play",
     body: (
       <>
-        Follow the goal, then press <strong>Check</strong>.
+        Follow the goal, then press <strong>Check</strong>. Some properties
+        are traps. A class only keeps what every object needs.
       </>
     ),
     visual: (

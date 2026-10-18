@@ -83,11 +83,11 @@ export const LEVELS = [
     title: "Adele Goldberg: The Object Blueprint",
     heading: "The Object Blueprint",
     pioneer: "Adele Goldberg",
-    concept: "Object-Oriented Programming (Classes & Objects)",
+    concept: "Classes, Objects & Inheritance",
     narrative:
-      "Adele Goldberg helped shape Smalltalk, where a class is a blueprint and an object is a living instance of that blueprint.",
+      "Adele Goldberg helped shape Smalltalk, where a class is a blueprint, an object is a living instance, and a new class can inherit that blueprint.",
     blurb:
-      "Did you know Adele Goldberg helped create **Smalltalk**, one of the first **object-oriented** languages? In it, a **class** is a blueprint and an **object** is a living copy built from it. Her team's ideas also shaped the windows and icons on your screen. 💻✨",
+      "Did you know Adele Goldberg helped create **Smalltalk**, one of the first **object-oriented** languages? In it, a **class** is a blueprint and an **object** is a living copy built from it. A new class can **inherit** that blueprint, and objects answer **messages** called methods. Her team's ideas also shaped the windows and icons on your screen. 💻✨",
     mechanicId: "blueprint",
     mechanicLabel: "Blueprint",
   },

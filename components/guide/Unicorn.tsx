@@ -80,7 +80,10 @@ export function UnicornSays({
   className?: string;
 }) {
   return (
-    <div className={`flex items-start gap-3 ${className}`}>
+    <div
+      data-fit-ignore={big ? "" : undefined}
+      className={`flex items-start gap-3 ${className}`}
+    >
       <UnicornAvatar size={big ? 96 : size} />
       <div
         className={`relative min-w-0 flex-1 rounded-2xl rounded-tl-sm border ${big ? "px-6 py-5 text-3xl leading-10" : small ? "px-3 py-2 text-base leading-6" : "px-4 py-3 text-lg leading-7"} text-ink ${TONE_CLASS[tone]}`}

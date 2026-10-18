@@ -32,7 +32,13 @@ export function GameView() {
       // Measure at full size, then pick the zoom (no paint in between).
       el.style.zoom = "1";
       el.style.maxWidth = `${MAX_WIDTH}px`;
-      const height = el.offsetHeight;
+      // Sparkles' comment is left out of the measurement. Counting it would
+      // zoom the whole level out, and the puzzle boxes would shrink.
+      let ignored = 0;
+      for (const node of el.querySelectorAll<HTMLElement>("[data-fit-ignore]")) {
+        ignored += node.offsetHeight;
+      }
+      const height = Math.max(0, el.offsetHeight - ignored);
       const floor = window.innerWidth < 768 ? MIN_ZOOM_PHONE : MIN_ZOOM;
       const clamp = (value: number) => Math.min(1, Math.max(floor, value));
       // The first fit leaves room for the feedback bubble; after that the zoom

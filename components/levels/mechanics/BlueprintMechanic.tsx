@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Tag } from "@/components/ui/Tag";
 import { UnicornSays } from "@/components/guide/Unicorn";
@@ -18,6 +18,7 @@ import {
   designCheck,
   greeting,
   petText,
+  speak,
   type MethodId,
   type Pet,
   type PropId,
@@ -39,7 +40,12 @@ function matchesRequest(round: { requests: readonly Pet[] }, pet: Pet): boolean 
 
 function valueOf(pet: Pet, id: PropId): string {
   if (id === "name" || id === "species" || id === "color") return pet[id] || "—";
+  if (id === "breed") return pet.breed || "—";
   return PROPS[id].fixed ?? "—";
+}
+
+function methodLine(method: MethodId | undefined, pet: Pet): string {
+  return method === "speak" ? speak(pet) : greeting(pet);
 }
 
 export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
@@ -51,6 +57,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
   const [solved, setSolved] = useState(false);
   const [showTutorial, setShowTutorial] = useState(true);
   const closeTutorial = useCallback(() => setShowTutorial(false), []);
+  const feedbackRef = useRef<HTMLDivElement>(null);
 
   const round = ROUNDS[roundIndex];
   const isLastRound = roundIndex === ROUNDS.length - 1;
@@ -122,12 +129,15 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
       return;
     }
 
-    // method mode
-    const wrong = methods.filter((m) => m !== "greet");
-    if (wrong.length > 0) {
+    const wanted = round.method ?? "greet";
+    const wrong = methods.filter((method) => method !== wanted);
+    const hasWanted = methods.includes(wanted);
+    if (!hasWanted && wrong.length === 0) {
+      fail(`Add ${wanted}() so each pet can answer.`);
+    } else if (!hasWanted) {
+      fail(`${describeWrongMethods(wrong)} Add ${wanted}() instead.`);
+    } else if (wrong.length > 0) {
       fail(describeWrongMethods(wrong));
-    } else if (!methods.includes("greet")) {
-      fail("Add a method so pets can say hi!");
     } else {
       win(round.lesson);
     }
@@ -142,7 +152,12 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
     setSolved(false);
   }
 
-  const showGreetings = round.mode === "method" && solved;
+  const showLines = round.mode === "method" && solved;
+
+  useEffect(() => {
+    if (!feedback) return;
+    feedbackRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [feedback]);
   const checkLabel =
     round.mode === "design"
       ? "Check"
@@ -200,12 +215,20 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
           )}
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2 md:items-start">
           <section
-            aria-label="Pet blueprint"
-            className="rounded-2xl border-2 border-dashed border-copper/60 bg-paper p-4"
+            aria-label={round.child ? `${round.child} blueprint` : "Pet blueprint"}
+            className="shrink-0 rounded-2xl border-2 border-dashed border-copper/60 bg-paper p-4"
           >
-            <h3 className="mb-4 font-display text-2xl text-copper">📐 Pet blueprint</h3>
+            <h3 className={`font-display text-2xl text-copper ${round.parent ? "" : "mb-4"}`}>
+              📐 {round.child ? `${round.child} blueprint` : "Pet blueprint"}
+            </h3>
+            {round.parent ? (
+              <p className="mt-1 mb-4 text-base text-ink-soft">
+                Inherits <strong className="text-copper">{round.parent}</strong>. The locked
+                properties come from {round.parent}.
+              </p>
+            ) : null}
 
             <p className="mb-2 text-sm tracking-wide text-ink-soft uppercase">
               Properties
@@ -263,7 +286,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
             {round.mode === "method" && (
               <div className="mt-3">
                 <p className="mb-2 text-sm tracking-wide text-ink-soft uppercase">
-                  Methods (things pets can do)
+                  Methods (messages every pet understands)
                 </p>
                 <div className="grid gap-1.5" role="group" aria-label="Method palette">
                   {(Object.keys(METHODS) as MethodId[]).map((id) => {
@@ -295,7 +318,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
 
           <section
             aria-label="Pets"
-            className="rounded-2xl border border-signal/40 bg-paper p-4"
+            className="shrink-0 rounded-2xl border border-signal/40 bg-paper p-4"
           >
             <h3 className="mb-4 font-display text-2xl text-signal">🐾 Pets</h3>
 
@@ -370,9 +393,9 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                       ))}
                     </dl>
                   )}
-                  {showGreetings && (
+                  {showLines && (
                     <p className="mt-2 rounded-xl bg-signal/15 px-4 py-2 text-xl text-signal">
-                      💬 {greeting(pet)}
+                      💬 {methodLine(round.method, pet)}
                     </p>
                   )}
                   </div>
@@ -393,7 +416,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
           </section>
         </div>
 
-        <div aria-live="polite">
+        <div ref={feedbackRef} aria-live="polite">
           {feedback && (
             <UnicornSays big tone={feedback.ok ? "happy" : "oops"}>
               {feedback.ok ? (

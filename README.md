@@ -2,7 +2,7 @@
 
 HackHer is a cosmic puzzle game about women who shaped computing. Six short levels each teach one computer science idea through a real pioneer's work: play the puzzle, read the story, and ask **Sparkles**, the unicorn guide, when you want more.
 
-Play it at [hack-her-two.vercel.app](https://hack-her-two.vercel.app).
+Play it at [lostincomputation.design](www.lostincomputation.design).
 
 ## How it plays
 
@@ -18,10 +18,21 @@ Finishing level 6 opens the victory screen with your score and the levels you cl
 | --- | --- | --- | --- |
 | 1 | Ada Lovelace | Sequences & loops | Weave a pattern on a loom by placing threads and repeat blocks |
 | 2 | Hedy Lamarr | Frequency hopping & encryption | Hop a radio signal across channels so a jammer cannot stay on it |
-| 3 | Joan Clarke | Logic gates (AND, OR, NOT) | Wire a cipher board so the output lamp follows the rule |
+| 3 | Joan Clarke | Logic gates (AND, OR, NOT, XOR) | Wire a cipher board so the output lamp follows the rule |
 | 4 | Katherine Johnson, Mary Jackson & Dorothy Vaughan | Compilers, aerodynamics & functions | Find the altitude rule mission control is using |
 | 5 | Margaret Hamilton | Priority queues & memory management | Reorder the Apollo alarm queue so the jobs that matter fit in memory |
 | 6 | Adele Goldberg | Classes & objects | Design a class blueprint, then build living objects from it |
+
+## Scripts
+
+- `npm run dev` — development server
+- `npm run build` — production build
+- `npm run start` — serve the production build
+- `npm run lint` — ESLint
+
+## Stack
+
+[Next.js](https://nextjs.org) 16 (App Router), React 19, TypeScript, Tailwind CSS, and ESLint. The game is one page: welcome, play, and victory are client state. No extra libraries beyond that stack.
 
 ## Run it locally
 
@@ -42,17 +53,6 @@ GEMINI_API_KEY=your-key
 The puzzles run without a key. Sparkles answers only after `GEMINI_API_KEY` is set. The route reads the key on the server, so leave the `NEXT_PUBLIC_` prefix off.
 
 On Vercel, add `GEMINI_API_KEY` as an environment variable for Production, then redeploy. Next.js reads the variable at build time.
-
-## Scripts
-
-- `npm run dev` — development server
-- `npm run build` — production build
-- `npm run start` — serve the production build
-- `npm run lint` — ESLint
-
-## Stack
-
-[Next.js](https://nextjs.org) 16 (App Router), React 19, TypeScript, Tailwind CSS, and ESLint. The game is one page: welcome, play, and victory are client state. No extra libraries beyond that stack.
 
 ## Credits
 

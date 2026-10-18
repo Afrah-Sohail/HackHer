@@ -38,6 +38,8 @@ export function GameView() {
       // only drops if the content truly no longer fits.
       locked = locked === null ? clamp(room / (height + RESERVE)) : Math.min(locked, clamp(room / height));
       el.style.zoom = locked < 0.995 ? String(locked) : "1";
+      // Lets parts of the page (like the Blast off footer) undo the shrink.
+      el.style.setProperty("--fit", locked < 0.995 ? String(locked) : "1");
       // Zoom shrinks pixel sizes too, so give the max width back what it lost.
       if (locked < 0.995) el.style.maxWidth = `${MAX_WIDTH / locked}px`;
     };

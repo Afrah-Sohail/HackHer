@@ -93,19 +93,19 @@ function LevelShellInner({
       {canComplete && (
         <footer
           ref={footerRef}
-          className="flex flex-col items-center gap-3 border-t border-line bg-paper px-5 py-4 text-center sm:px-8"
+          className="flex flex-col items-center gap-3 border-t border-line bg-paper px-5 py-4 text-center [zoom:calc(1/var(--fit,1))] sm:px-8"
         >
-          <p className="text-xl text-ink">
+          <p className="text-2xl text-ink">
             {story.fixed} {isFinalLevel ? "Time to fly home!" : "Ready to blast off?"}
           </p>
-          <p className="text-lg text-ink-soft" aria-live="polite">
+          <p className="text-xl text-ink-soft" aria-live="polite">
             <strong className="text-copper">{score.total} points</strong>
             {" · "}clear {score.base}
             {score.clean > 0 ? ` · clean solve +${score.clean}` : ""}
             {score.curious > 0 ? ` · curious +${score.curious}` : ""}
-            {score.style > 0 ? ` · style +${score.style}` : ""}
+            {score.style > 0 ? ` · ${score.styleLabel || "bonus"} +${score.style}` : ""}
           </p>
-          <Button className="px-16 py-4 text-2xl" onClick={() => completeLevel(score.total)}>
+          <Button className="min-w-[24rem] px-24 py-6 text-4xl" onClick={() => completeLevel(score.total)}>
             {isFinalLevel ? "Fly home 🚀" : "Blast off 🚀"}
           </Button>
         </footer>

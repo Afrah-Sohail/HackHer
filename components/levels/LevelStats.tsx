@@ -8,18 +8,20 @@ import { CLEAR_SCORE } from "@/level-manager/types";
 export type LevelResult = {
   mistakes: number;
   bonus: number;
+  /** What the bonus was for, in a few words ("loop bonus"). */
+  bonusLabel: string;
   guideOpened: boolean;
 };
 
 type LevelStats = {
   result: LevelResult;
   mistake: () => void;
-  bonus: (points: number) => void;
+  bonus: (points: number, label: string) => void;
   guideOpened: () => void;
 };
 
 const NOOP: LevelStats = {
-  result: { mistakes: 0, bonus: 0, guideOpened: false },
+  result: { mistakes: 0, bonus: 0, bonusLabel: "", guideOpened: false },
   mistake: () => {},
   bonus: () => {},
   guideOpened: () => {},
@@ -37,6 +39,7 @@ export type ScoreBreakdown = {
   clean: number;
   curious: number;
   style: number;
+  styleLabel: string;
   total: number;
 };
 
@@ -49,6 +52,7 @@ export function scoreFor(result: LevelResult): ScoreBreakdown {
     clean,
     curious,
     style,
+    styleLabel: result.bonusLabel,
     total: CLEAR_SCORE + clean + curious + style,
   };
 }
@@ -62,7 +66,8 @@ export function LevelStatsProvider({ children }: { children: ReactNode }) {
     [],
   );
   const bonus = useCallback(
-    (points: number) => setResult((prev) => ({ ...prev, bonus: prev.bonus + points })),
+    (points: number, label: string) =>
+      setResult((prev) => ({ ...prev, bonus: prev.bonus + points, bonusLabel: label })),
     [],
   );
   const guideOpened = useCallback(

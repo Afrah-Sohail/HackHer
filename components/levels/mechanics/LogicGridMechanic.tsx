@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPoi
 import { BodyPortal } from "@/components/ui/BodyPortal";
 import { Button } from "@/components/ui/Button";
 import { UnicornSays } from "@/components/guide/Unicorn";
+import { useLevelStats } from "../LevelStats";
+
 import { LogicTutorial } from "./LogicTutorial";
 import {
   GATE_ARITY,
@@ -62,6 +64,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
   const suppressClick = useRef(false);
   const closeTutorial = useCallback(() => setShowTutorial(false), []);
 
+  const { mistake } = useLevelStats();
   const round = ROUNDS[roundIndex];
   const isLastRound = roundIndex === ROUNDS.length - 1;
   const solved = isSolved(round, placed);
@@ -74,6 +77,7 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
     if (!slot || solved) return;
 
     if (GATE_ARITY[gate] !== slot.from.length) {
+      mistake();
       setMessage(
         gate === "NOT"
           ? "NOT only likes one wire, and this slot has two."
@@ -278,8 +282,8 @@ export function LogicGridMechanic({ onCleared }: { onCleared?: () => void }) {
           </span>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-[3fr_2fr] md:items-start">
-          <div className="grid gap-3">
+        <div className="grid gap-4 md:grid-cols-[3fr_2fr]">
+          <div className="flex flex-col gap-3">
         <Board
           round={round}
           placed={placed}
@@ -447,7 +451,7 @@ function Board({
   });
 
   return (
-    <div className="relative h-72 w-full rounded-3xl border border-line bg-paper sm:h-[22rem]">
+    <div className="relative min-h-72 w-full flex-1 rounded-3xl border border-line bg-paper sm:min-h-[22rem]">
       <svg
         viewBox="0 0 100 60"
         preserveAspectRatio="none"

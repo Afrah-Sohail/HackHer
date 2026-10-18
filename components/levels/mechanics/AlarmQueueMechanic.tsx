@@ -10,12 +10,16 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Tag } from "@/components/ui/Tag";
 import { UnicornSays } from "@/components/guide/Unicorn";
+import { useLevelStats } from "../LevelStats";
+
 import { QueueTutorial } from "./QueueTutorial";
 import {
   PRIORITY_LABEL,
   ROUNDS,
+  bestValue,
   describeMiss,
   missedTasks,
+  runValue,
   simulate,
   type Priority,
   type Task,
@@ -54,7 +58,11 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
   const isLastRound = roundIndex === ROUNDS.length - 1;
   const outcomes = simulate(round, queue);
   const missed = missedTasks(round, outcomes);
-  const success = missed.length === 0;
+  const { mistake } = useLevelStats();
+  const best = round.maximize ? bestValue(round) : 0;
+  const kept = runValue(outcomes);
+  const missedValue = missed.length === 0 && round.maximize && kept < best;
+  const success = missed.length === 0 && !missedValue;
   const shown = phase === "build" ? outcomes.length : revealed;
 
   useEffect(() => {
@@ -62,13 +70,14 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
     if (revealed >= queue.length) {
       const timer = setTimeout(() => {
         setPhase("result");
+        if (!success) mistake();
         if (success && roundIndex === ROUNDS.length - 1) onCleared?.();
       }, 450);
       return () => clearTimeout(timer);
     }
     const timer = setTimeout(() => setRevealed((count) => count + 1), 450);
     return () => clearTimeout(timer);
-  }, [phase, revealed, queue.length, success, roundIndex, onCleared]);
+  }, [phase, revealed, queue.length, success, roundIndex, onCleared, mistake]);
 
   function startDrag(event: ReactPointerEvent, id: string) {
     if (phase !== "build" || event.button !== 0) return;
@@ -340,7 +349,10 @@ export function AlarmQueueMechanic({ onCleared }: { onCleared?: () => void }) {
             <>
               <UnicornSays tone="oops" className="w-full">
                 <span aria-live="polite" className="block">
-                  <strong className="text-copper">Whoops!</strong> {describeMiss(missed)}
+                  <strong className="text-copper">{missedValue ? "So close!" : "Whoops!"}</strong>{" "}
+                  {missedValue
+                    ? `Everything critical runs, but you could keep ${best} points of work and this keeps ${kept}. Try putting smaller jobs ahead of the big one.`
+                    : describeMiss(missed)}
                 </span>
               </UnicornSays>
               <Button className="px-10 py-3.5 text-xl" onClick={tryAgain}>

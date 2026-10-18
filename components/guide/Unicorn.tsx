@@ -65,7 +65,7 @@ const TONE_CLASS = {
 export function UnicornSays({
   children,
   tone = "neutral",
-  size = 52,
+  size = 72,
   className = "",
 }: {
   children: ReactNode;

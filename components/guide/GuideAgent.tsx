@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { BodyPortal } from "@/components/ui/BodyPortal";
+import { useLevelStats } from "@/components/levels/LevelStats";
 import { GUIDE_NAME, HINTS_ENABLED } from "@/guide/config";
 import type { LevelDefinition } from "@/level-manager/types";
 import { Button } from "@/components/ui/Button";
@@ -72,6 +73,7 @@ function writeCache(key: string, value: string) {
 
 export function GuideAgent({ level }: { level: LevelDefinition }) {
   const [open, setOpen] = useState(false);
+  const { guideOpened } = useLevelStats();
   const [view, setView] = useState<View>("overview");
   const [texts, setTexts] = useState<Partial<Record<View, string>>>({});
   const [loading, setLoading] = useState(false);
@@ -207,18 +209,17 @@ export function GuideAgent({ level }: { level: LevelDefinition }) {
       ) : (
         <button
           type="button"
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            setOpen(true);
+            guideOpened();
+          }}
           aria-expanded={false}
           aria-label={`Ask ${GUIDE_NAME}: ${question}`}
-          className="flex max-w-60 items-center gap-2 rounded-2xl bg-copper py-1.5 pr-4 pl-1.5 text-left text-paper-raised shadow-lg hover:bg-copper-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper"
+          title={question}
+          className="flex items-center gap-1.5 rounded-full bg-copper py-1 pr-4 pl-1.5 text-left text-base font-semibold text-paper-raised opacity-80 shadow-lg transition hover:bg-copper-deep hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper"
         >
-          <UnicornAvatar size={36} />
-          <span className="leading-tight">
-            <span className="block text-[11px] font-medium opacity-80">
-              Ask {GUIDE_NAME}
-            </span>
-            <span className="block text-sm font-semibold">{question}</span>
-          </span>
+          <UnicornAvatar size={34} />
+          Ask {GUIDE_NAME}
         </button>
       )}
     </div>

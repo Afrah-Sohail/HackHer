@@ -43,6 +43,11 @@
   }
 }
 
+html {
+  /* Terminal Grotesque runs small, so everything (sized in rem) scales up a bit. */
+  font-size: 112.5%;
+}
+
 body {
   background-color: var(--color-paper);
   /* Milky Way photo, darkened so text on top stays readable. */

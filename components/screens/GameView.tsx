@@ -7,8 +7,9 @@ import { useGame } from "@/state/game-context";
 const MIN_ZOOM = 0.7;
 const MIN_ZOOM_PHONE = 0.85; // phones just scroll, so keep the text readable
 const MAX_WIDTH = 1240; // the game box never gets wider than this, on screen (the sides show the planet)
-// The game box keeps its own room for what shows up later, so no extra here.
-const RESERVE = 0;
+// Room kept in the zoom for what shows up later (Sparkles' message, the next
+// buttons), so the box can grow without the whole game zooming out.
+const RESERVE = 140;
 
 // Shrinks the game just enough to fit on one screen, so nobody has to scroll
 // up and down while playing.

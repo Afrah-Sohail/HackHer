@@ -55,8 +55,6 @@ export function WelcomeScreen() {
         Made with 💜 by <strong className="font-semibold text-ink">Afrah</strong>,{" "}
         <strong className="font-semibold text-ink">Emily</strong> &amp;{" "}
         <strong className="font-semibold text-ink">Valentina</strong>
-        <br />
-        Planet photos from NASA
       </p>
     </div>
   );

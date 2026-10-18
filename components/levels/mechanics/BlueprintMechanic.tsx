@@ -4,6 +4,8 @@ import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Tag } from "@/components/ui/Tag";
 import { UnicornSays } from "@/components/guide/Unicorn";
+import { useLevelStats } from "../LevelStats";
+
 import { ObjectTutorial } from "./ObjectTutorial";
 import { PetSprite } from "./PetSprite";
 import {
@@ -12,6 +14,7 @@ import {
   ROUNDS,
   buildCheck,
   describeDesign,
+  describeWrongMethods,
   designCheck,
   greeting,
   petText,
@@ -44,7 +47,6 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
   const [added, setAdded] = useState<PropId[]>([]);
   const [made, setMade] = useState<Pet[]>([]);
   const [methods, setMethods] = useState<MethodId[]>([]);
-  const [sent, setSent] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [solved, setSolved] = useState(false);
   const [showTutorial, setShowTutorial] = useState(true);
@@ -58,7 +60,6 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
 
   function touch() {
     setFeedback(null);
-    setSent(false);
   }
 
   function toggleProp(id: PropId) {
@@ -85,6 +86,13 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
     setMade((prev) => prev.map((pet, i) => (i === index ? { ...pet, [key]: value } : pet)));
   }
 
+  const { mistake } = useLevelStats();
+
+  function fail(text: string) {
+    mistake();
+    setFeedback({ ok: false, text });
+  }
+
   function win(text: string) {
     setFeedback({ ok: true, text });
     setSolved(true);
@@ -95,7 +103,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
     if (round.mode === "design") {
       const result = designCheck(round, blueprint);
       if (result.ok) win(round.lesson);
-      else setFeedback({ ok: false, text: describeDesign(result.missing, result.extra) });
+      else fail(describeDesign(result.missing, result.extra));
       return;
     }
 
@@ -106,26 +114,20 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
         return;
       }
       const need = round.requests.length - made.length;
-      setFeedback({
-        ok: false,
-        text:
-          need > 0
-            ? `Let's make ${need} more ${need === 1 ? "pet" : "pets"}!`
-            : `Hmm, no pet matches ${petText(result.unmatched[0])} yet.`,
-      });
+      fail(
+        need > 0
+          ? `Let's make ${need} more ${need === 1 ? "pet" : "pets"}!`
+          : `Hmm, no pet matches ${petText(result.unmatched[0])} yet.`,
+      );
       return;
     }
 
     // method mode
-    setSent(true);
-    const wrong = methods.find((m) => m !== "greet");
-    if (wrong) {
-      setFeedback({
-        ok: false,
-        text: `Pets don't need "${METHODS[wrong].label}", so let's take it off.`,
-      });
+    const wrong = methods.filter((m) => m !== "greet");
+    if (wrong.length > 0) {
+      fail(describeWrongMethods(wrong));
     } else if (!methods.includes("greet")) {
-      setFeedback({ ok: false, text: "Add a method so pets can say hi!" });
+      fail("Add a method so pets can say hi!");
     } else {
       win(round.lesson);
     }
@@ -136,12 +138,11 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
     setAdded([]);
     setMade([]);
     setMethods([]);
-    setSent(false);
     setFeedback(null);
     setSolved(false);
   }
 
-  const showGreetings = round.mode === "method" && sent && methods.includes("greet");
+  const showGreetings = round.mode === "method" && solved;
   const checkLabel =
     round.mode === "design"
       ? "Check"

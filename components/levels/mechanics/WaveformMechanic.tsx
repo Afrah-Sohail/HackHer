@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Tag } from "@/components/ui/Tag";
 import { UnicornSays } from "@/components/guide/Unicorn";
+import { useLevelStats } from "../LevelStats";
+
 import { WaveformTutorial } from "./WaveformTutorial";
 import {
   CHANNEL_COUNT,
@@ -36,6 +38,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
   const [showPreview, setShowPreview] = useState(ROUNDS[0].previewByDefault);
 
   const round = ROUNDS[roundIndex];
+  const { mistake } = useLevelStats();
   const nextStep = plan.indexOf(null);
   const filled = plan.filter((channel) => channel !== null).length;
   const firstFailure = results.findIndex((r) => !r.ok);
@@ -51,6 +54,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
     if (revealed >= STEP_COUNT) {
       const timer = setTimeout(() => {
         setPhase("result");
+        if (!results.every((r) => r.ok)) mistake();
         if (results.every((r) => r.ok) && roundIndex === ROUNDS.length - 1) {
           onCleared?.();
         }
@@ -59,7 +63,7 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
     }
     const timer = setTimeout(() => setRevealed((count) => count + 1), 350);
     return () => clearTimeout(timer);
-  }, [phase, revealed, results, roundIndex, onCleared]);
+  }, [phase, revealed, results, roundIndex, onCleared, mistake]);
 
   // Only the step you are on can be set; the last step you set can be undone.
   function pick(step: number, channel: number) {
@@ -91,7 +95,9 @@ export function WaveformMechanic({ onCleared }: { onCleared?: () => void }) {
     setPhase("plan");
   }
 
+  // Try again starts from a clean slate.
   function editPattern() {
+    setPlan(emptyPlan());
     setResults([]);
     setRevealed(0);
     setPhase("plan");

@@ -8,17 +8,31 @@ import { GuideAgent } from "@/components/guide/GuideAgent";
 import { StarConfetti } from "@/components/ui/StarConfetti";
 import { PlanetBackdrop } from "@/components/story/PlanetBackdrop";
 import { JOURNEY } from "@/story/journey";
+import { LevelStatsProvider, scoreFor, useLevelStats } from "./LevelStats";
 
-export function LevelShell({
-  level,
-  children,
-  canComplete: canCompleteProp,
-}: {
+type ShellProps = {
   level: LevelDefinition;
   children: ReactNode;
   canComplete?: boolean;
-}) {
+};
+
+// Tracks how the level goes (slips, hints, style) so the score can reflect it.
+export function LevelShell(props: ShellProps) {
+  return (
+    <LevelStatsProvider>
+      <LevelShellInner {...props} />
+    </LevelStatsProvider>
+  );
+}
+
+function LevelShellInner({
+  level,
+  children,
+  canComplete: canCompleteProp,
+}: ShellProps) {
   const { completeLevel } = useGame();
+  const { result } = useLevelStats();
+  const score = scoreFor(result);
   // Levels with a real game pass canComplete; stub levels leave it unset.
   const isStub = canCompleteProp === undefined;
   const canComplete = canCompleteProp ?? true;
@@ -63,7 +77,14 @@ export function LevelShell({
           <p className="text-xl text-ink">
             {story.fixed} {isFinalLevel ? "Time to fly home!" : "Ready to blast off?"}
           </p>
-          <Button className="px-16 py-4 text-2xl" onClick={() => completeLevel()}>
+          <p className="text-lg text-ink-soft" aria-live="polite">
+            <strong className="text-copper">{score.total} points</strong>
+            {" · "}clear {score.base}
+            {score.clean > 0 ? ` · clean solve +${score.clean}` : ""}
+            {score.solo > 0 ? ` · no hints +${score.solo}` : ""}
+            {score.style > 0 ? ` · style +${score.style}` : ""}
+          </p>
+          <Button className="px-16 py-4 text-2xl" onClick={() => completeLevel(score.total)}>
             {isFinalLevel ? "Fly home 🚀" : "Blast off 🚀"}
           </Button>
         </footer>

@@ -99,9 +99,23 @@ export const ROUNDS: readonly Round[] = [
     lesson: "XOR is on when the inputs differ.",
   },
   {
+    title: "Not both",
+    story: "Keep the guess unless BOTH clues are true. Tap NOT on the gate to flip it.",
+    inputs: [
+      { id: "A", label: "Letters match", x: 10, y: 18 },
+      { id: "B", label: "Rotors match", x: 10, y: 42 },
+    ],
+    slots: [{ id: "g1", from: ["A", "B"], x: 50, y: 30 }],
+    outputFrom: "g1",
+    outputLabel: "Keep guess",
+    outputPos: { x: 80, y: 30 },
+    target: (v) => !(v.A && v.B),
+    lesson: "NOT on an AND gate makes NAND: on unless both are on.",
+  },
+  {
     title: "Never itself",
     story:
-      "Enigma never turned a letter into itself. Toss those guesses!",
+      "Enigma never scrambled a letter into itself. If a guess does that, throw it out!",
     inputs: [{ id: "A", label: "Letter maps to itself", x: 10, y: 30 }],
     slots: [{ id: "g1", from: ["A"], x: 50, y: 30 }],
     outputFrom: "g1",

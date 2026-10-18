@@ -44,6 +44,16 @@ const SPARKS = Array.from({ length: 10 }, (_, i) => {
   return { dx: Math.cos(angle) * 52, dy: Math.sin(angle) * 52 };
 });
 
+// How far the path is hidden around each stop, so the dots end at the planet's
+// edge. Saturn and Uranus have small bodies inside their rings, so they get less.
+function maskRadius(index: number, R: number): number {
+  if (index === 0) return R + 3; // the Sun
+  if (index === 7) return 26; // Home
+  if (index === 5) return R * 0.66; // Saturn
+  if (index === 6) return R * 0.68; // Uranus
+  return R * 0.93;
+}
+
 export function Explosion({ x, y }: { x: number; y: number }) {
   return (
     <g transform={`translate(${x} ${y})`} aria-hidden="true">
@@ -115,7 +125,7 @@ function MapSvg({
         <mask id={`map-cut${uid}`} maskUnits="userSpaceOnUse" x="0" y="0" width={w} height={h}>
           <rect width={w} height={h} fill="white" />
           {pts.map((p, i) => (
-            <circle key={i} cx={p.x} cy={p.y} r={i === 0 ? R + 3 : i === 7 ? 26 : R * 0.93} fill="black" />
+            <circle key={i} cx={p.x} cy={p.y} r={maskRadius(i, R)} fill="black" />
           ))}
         </mask>
         <radialGradient id={`map-sun${uid}`} cx="40%" cy="38%" r="75%">

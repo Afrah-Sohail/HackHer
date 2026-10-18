@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { UnicornSays } from "@/components/guide/Unicorn";
+import { useLevelStats } from "../LevelStats";
+
 import { WeaveTutorial } from "./WeaveTutorial";
 import {
   MAX_CHIPS,
@@ -75,6 +77,7 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
   const isLastRound = roundIndex === ROUNDS.length - 1;
   const woven = expand(cards);
   const used = chipCount(cards);
+  const { mistake, bonus } = useLevelStats();
   const mismatch = firstMismatch(woven, round.target);
   const matches = woven.length > 0 && mismatch === -1;
   const stripLength = Math.max(round.target.length, woven.length);
@@ -84,13 +87,15 @@ export function WeaveMechanic({ onCleared }: { onCleared?: () => void }) {
     if (revealed >= woven.length) {
       const timer = setTimeout(() => {
         setPhase("result");
+        if (mismatch !== -1) mistake();
+        else if (round.repeatAvailable && used <= round.budget) bonus(10);
         if (mismatch === -1 && roundIndex === ROUNDS.length - 1) onCleared?.();
       }, 350);
       return () => clearTimeout(timer);
     }
     const timer = setTimeout(() => setRevealed((count) => count + 1), 250);
     return () => clearTimeout(timer);
-  }, [phase, revealed, woven.length, mismatch, roundIndex, onCleared]);
+  }, [phase, revealed, woven.length, mismatch, roundIndex, onCleared, mistake, bonus, round.repeatAvailable, round.budget, used]);
 
   function outOfChips(): boolean {
     if (used < MAX_CHIPS) return false;

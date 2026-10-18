@@ -28,7 +28,16 @@ export type Round = {
   tasks: readonly Task[];
   /** Every task with one of these priorities must run. */
   mustRun: readonly Priority[];
+  /** Also keep as much valuable work as the memory allows (a real puzzle). */
+  maximize?: boolean;
   lesson: string;
+};
+
+/** How much a running job is worth, for the "keep the most" rounds. */
+export const PRIORITY_VALUE: Record<Priority, number> = {
+  critical: 5,
+  important: 3,
+  routine: 1,
 };
 
 export const ROUNDS: readonly Round[] = [
@@ -98,6 +107,23 @@ export const ROUNDS: readonly Round[] = [
     lesson:
       "Operating systems use priority queues too.",
   },
+  {
+    title: "Squeeze it in",
+    story:
+      "8 squares, and not everything fits. Keep landing guidance, then as much important work as you can.",
+    capacity: 8,
+    tasks: [
+      { id: "nav", name: "Navigation update", priority: "important", cost: 4 },
+      { id: "data", name: "Data log", priority: "routine", cost: 1 },
+      { id: "display", name: "Crew display", priority: "important", cost: 2 },
+      { id: "landing", name: "Landing guidance", priority: "critical", cost: 3 },
+      { id: "hazard", name: "Hazard alert", priority: "important", cost: 2 },
+    ],
+    mustRun: ["critical"],
+    maximize: true,
+    lesson:
+      "Priority isn't everything. A few small jobs can beat one big one.",
+  },
 ];
 
 export type Outcome = { task: Task; runs: boolean; usedAfter: number };
@@ -116,6 +142,31 @@ export function missedTasks(round: Round, outcomes: readonly Outcome[]): Task[] 
   return outcomes
     .filter((o) => !o.runs && round.mustRun.includes(o.task.priority))
     .map((o) => o.task);
+}
+
+/** Total worth of the jobs that actually run. */
+export function runValue(outcomes: readonly Outcome[]): number {
+  return outcomes
+    .filter((o) => o.runs)
+    .reduce((sum, o) => sum + PRIORITY_VALUE[o.task.priority], 0);
+}
+
+/** The most worth that fits in memory (any job set that fits can be ordered first). */
+export function bestValue(round: Round): number {
+  let best = 0;
+  const count = round.tasks.length;
+  for (let mask = 0; mask < 1 << count; mask += 1) {
+    let cost = 0;
+    let value = 0;
+    for (let i = 0; i < count; i += 1) {
+      if (mask & (1 << i)) {
+        cost += round.tasks[i].cost;
+        value += PRIORITY_VALUE[round.tasks[i].priority];
+      }
+    }
+    if (cost <= round.capacity && value > best) best = value;
+  }
+  return best;
 }
 
 export function describeMiss(missed: readonly Task[]): string {

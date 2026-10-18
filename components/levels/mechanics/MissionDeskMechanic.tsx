@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { Tag } from "@/components/ui/Tag";
 import { UnicornSays } from "@/components/guide/Unicorn";
+import { useLevelStats } from "../LevelStats";
+
 import { MissionTutorial } from "./MissionTutorial";
 import {
   A_RANGE,
@@ -213,6 +215,7 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
   const isLastRound = roundIndex === ROUNDS.length - 1;
   const a = aValue;
   const b = bValue;
+  const { mistake } = useLevelStats();
   const rows = check(round, a, b);
   const allOk = rows.every((row) => row.ok);
   const firstMiss = rows.find((row) => !row.ok);
@@ -222,13 +225,14 @@ export function MissionDeskMechanic({ onCleared }: { onCleared?: () => void }) {
     if (revealed >= round.inputs.length) {
       const timer = setTimeout(() => {
         setPhase("result");
+        if (!allOk) mistake();
         if (allOk && roundIndex === ROUNDS.length - 1) onCleared?.();
       }, 450);
       return () => clearTimeout(timer);
     }
     const timer = setTimeout(() => setRevealed((count) => count + 1), 400);
     return () => clearTimeout(timer);
-  }, [phase, revealed, round.inputs.length, allOk, roundIndex, onCleared]);
+  }, [phase, revealed, round.inputs.length, allOk, roundIndex, onCleared, mistake]);
 
   function launch() {
     setRevealed(0);

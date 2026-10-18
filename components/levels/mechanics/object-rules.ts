@@ -58,7 +58,7 @@ export type Round = {
 
 const MOCHI: Pet = { name: "Mochi", species: "cat", color: "orange" };
 const BAILEY: Pet = { name: "Bailey", species: "dog", color: "brown" };
-const NOVA: Pet = { name: "Nova", species: "cat", color: "black" };
+const NOVA: Pet = { name: "Nova", species: "bunny", color: "black" };
 const KIKI: Pet = { name: "Kiki", species: "dog", color: "white" };
 
 export const ROUNDS: readonly Round[] = [
@@ -129,11 +129,28 @@ export function designCheck(
   return { ok: missing.length === 0 && extra.length === 0, missing, extra };
 }
 
+function quoteList(labels: readonly string[]): string {
+  const quoted = labels.map((label) => `"${label}"`);
+  if (quoted.length <= 1) return quoted.join("");
+  return `${quoted.slice(0, -1).join(", ")} and ${quoted[quoted.length - 1]}`;
+}
+
+/** Say everything that is off, not just the first thing. */
 export function describeDesign(missing: readonly PropId[], extra: readonly PropId[]): string {
+  const parts: string[] = [];
   if (missing.length > 0) {
-    return `Pets will need "${PROPS[missing[0]].label}" too!`;
+    parts.push(`Pets will need ${quoteList(missing.map((id) => PROPS[id].label))} too!`);
   }
-  return `Pets don't need "${PROPS[extra[0]].label}", so let's take it out.`;
+  if (extra.length > 0) {
+    parts.push(
+      `Pets don't need ${quoteList(extra.map((id) => PROPS[id].label))}, so let's take ${extra.length === 1 ? "it" : "them"} out.`,
+    );
+  }
+  return parts.join(" ");
+}
+
+export function describeWrongMethods(wrong: readonly MethodId[]): string {
+  return `Pets don't need ${quoteList(wrong.map((id) => METHODS[id].label))}, so let's take ${wrong.length === 1 ? "it" : "them"} off.`;
 }
 
 export function buildCheck(

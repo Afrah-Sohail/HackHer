@@ -23,6 +23,7 @@ import {
   type MethodId,
   type Pet,
   type PropId,
+  type Round,
 } from "./object-rules";
 
 type Feedback = { ok: boolean; text: string } | null;
@@ -41,60 +42,137 @@ function valueOf(pet: Pet, id: PropId): string {
   return PROPS[id].fixed ?? "—";
 }
 
-function classNameFor(pet: Pet): "Dog" | "Cat" {
-  return pet.species === "dog" ? "Dog" : "Cat";
-}
-
-function extraKey(pet: Pet): "breed" | "coat" {
-  return pet.breed !== undefined ? "breed" : "coat";
-}
-
 function methodLine(method: MethodId | undefined, pet: Pet): string {
   return method === "speak" ? speak(pet) : greeting(pet);
 }
 
-function ClassPetFields({
-  pet,
-  slot,
+function FamilyBoard({
+  round,
+  added,
   editable,
-  onChange,
+  onToggle,
 }: {
-  pet: Pet;
-  slot: Pet | undefined;
+  round: Round;
+  added: readonly PropId[];
   editable: boolean;
-  onChange: (key: keyof Pet, value: string) => void;
+  onToggle: (id: PropId) => void;
 }) {
-  const blueprint = slot ? classNameFor(slot) : classNameFor(pet);
-  const extra = slot ? extraKey(slot) : extraKey(pet);
+  const parent = round.parent ?? "Pet";
   return (
-    <div className="grid gap-2">
-      <p className="text-base text-copper">
-        {blueprint} blueprint
-        <span className="text-ink-soft"> · inherits Pet</span>
-      </p>
-      <p className="text-base text-ink-soft">
-        species <strong className="text-ink">{pet.species}</strong>
-        <span> · from {blueprint}</span>
-      </p>
-      <div className="grid grid-cols-1 gap-2 min-[560px]:grid-cols-3">
-        {(["name", "color", extra] as const).map((key) => (
-          <label key={key} className="grid min-w-0 gap-1 text-base text-ink-soft">
-            <span className="sr-only">{PROPS[key].label}</span>
-            <select
-              value={pet[key] ?? ""}
-              disabled={!editable}
-              onChange={(event) => onChange(key, event.target.value)}
-              className="w-full min-w-0 rounded-xl border border-line bg-void px-2 py-2 text-lg text-ink"
+    <div className="grid gap-4">
+      <section className="rounded-3xl border border-line bg-void p-4 text-center">
+        <p className="text-sm tracking-wide text-ink-soft uppercase">Parent class</p>
+        <p className="font-display text-3xl text-ink">{parent}</p>
+        <p className="text-lg text-ink-soft">
+          {round.baseProps.map((id) => PROPS[id].label).join(" · ")}
+        </p>
+        <p className="mt-1 text-base text-copper">passes these down to both children</p>
+      </section>
+
+      <div className="grid gap-4 md:grid-cols-2 md:items-start">
+        {round.children?.map((child) => {
+          const own = child.done ? [child.adds] : added;
+          const shown = [...round.baseProps, ...own];
+          return (
+            <section
+              key={child.name}
+              aria-label={`${child.name} class`}
+              className={`rounded-2xl border-2 bg-paper p-4 ${
+                child.done ? "border-line" : "border-dashed border-copper/60"
+              }`}
             >
-              <option value="">{PROPS[key].label}…</option>
-              {PROPS[key].options?.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </label>
-        ))}
+              <p className="text-sm tracking-wide text-ink-soft uppercase">
+                {child.done ? "Child class · already done" : "Child class · you finish this"}
+              </p>
+              <h3 className="font-display text-2xl text-copper">{child.name}</h3>
+              <p className="mb-3 text-base text-ink-soft">
+                {child.done
+                  ? `Keeps everything from ${parent}, and adds ${PROPS[child.adds].label}.`
+                  : `Keeps everything from ${parent}. Add only what is new.`}
+              </p>
+
+              <p className="mb-2 text-sm tracking-wide text-ink-soft uppercase">Properties</p>
+              <div className="flex flex-wrap gap-1.5">
+                {round.baseProps.map((id) => (
+                  <Tag key={id} size="md" className="py-2 text-xl">
+                    {PROPS[id].label}
+                    <span className="text-ink-soft"> · from {parent}</span>
+                  </Tag>
+                ))}
+                {own.map((id) =>
+                  child.done ? (
+                    <Tag key={id} tone="signal" size="md" className="py-2 text-xl">
+                      {PROPS[id].label}
+                      <span>{` · ${child.name}'s own`}</span>
+                    </Tag>
+                  ) : (
+                    <button
+                      key={id}
+                      type="button"
+                      disabled={!editable}
+                      onClick={() => onToggle(id)}
+                      aria-label={`Remove ${PROPS[id].label}`}
+                      className="rounded-full border border-copper bg-copper/15 px-4 py-2 text-xl text-copper hover:bg-copper/25"
+                    >
+                      {PROPS[id].label} ✕
+                    </button>
+                  ),
+                )}
+              </div>
+
+              {!child.done && (
+                <div className="mt-3">
+                  <p className="mb-2 text-sm tracking-wide text-ink-soft uppercase">
+                    Add a property
+                  </p>
+                  <div className="flex flex-wrap gap-1.5" role="group" aria-label="Property palette">
+                    {round.palette
+                      .filter((id) => !own.includes(id))
+                      .map((id) => (
+                        <button
+                          key={id}
+                          type="button"
+                          disabled={!editable}
+                          onClick={() => onToggle(id)}
+                          className="rounded-full border border-dashed border-ink-soft/60 px-4 py-2 text-xl text-ink transition hover:border-copper hover:text-copper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper disabled:opacity-40"
+                        >
+                          + {PROPS[id].label}
+                        </button>
+                      ))}
+                  </div>
+                </div>
+              )}
+
+              <ul className="mt-4 grid gap-2">
+                {child.pets.map((pet) => (
+                  <li
+                    key={pet.name}
+                    className="flex items-center gap-3 rounded-2xl border border-line bg-paper-raised/60 p-3 text-xl"
+                  >
+                    <PetSprite species={pet.species} color={pet.color} size={64} />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-base font-semibold text-signal">already made</p>
+                    <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5">
+                      {shown.map((id) => (
+                        <div key={id} className="contents">
+                          <dt className="text-base text-ink-soft">{PROPS[id].label}</dt>
+                          <dd
+                            className={
+                              round.baseProps.includes(id) ? "text-ink" : "font-medium text-signal"
+                            }
+                          >
+                            {valueOf(pet, id)}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        })}
       </div>
     </div>
   );
@@ -136,20 +214,6 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
   function makePet() {
     if (!editable || made.length >= round.requests.length) return;
     touch();
-    const request = round.requests[made.length];
-    if (round.fromClass && request) {
-      setMade((prev) => [
-        ...prev,
-        {
-          name: "",
-          species: request.species,
-          color: "",
-          ...(request.breed !== undefined ? { breed: "" } : {}),
-          ...(request.coat !== undefined ? { coat: "" } : {}),
-        },
-      ]);
-      return;
-    }
     setMade((prev) => [...prev, { ...EMPTY_PET }]);
   }
 
@@ -259,7 +323,11 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
           <p className="font-display text-2xl text-ink sm:text-3xl">{round.goal}</p>
         </div>
 
-        {round.chain ? (
+        {round.children ? (
+          <FamilyBoard round={round} added={added} editable={editable} onToggle={toggleProp} />
+        ) : null}
+
+        {!round.children && round.chain ? (
           <div className="grid gap-3 rounded-3xl border border-line bg-void p-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
             <div>
               <p className="text-sm tracking-wide text-ink-soft uppercase">Parent class</p>
@@ -286,6 +354,8 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
           </div>
         ) : null}
 
+        {!round.children ? (
+        <>
         <div className="rounded-3xl border border-line bg-void p-4 sm:p-5">
           <p className="mb-3 text-sm tracking-wide text-ink-soft uppercase">
             Wanted
@@ -307,28 +377,13 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
 
         <div className="grid gap-4 md:grid-cols-2 md:items-start">
           <section
-            aria-label={
-              round.fromClass
-                ? "Pet, already inherited"
-                : round.child
-                  ? `${round.child} blueprint`
-                  : "Pet blueprint"
-            }
+            aria-label={round.child ? `${round.child} blueprint` : "Pet blueprint"}
             className="shrink-0 rounded-2xl border-2 border-dashed border-copper/60 bg-paper p-4"
           >
-            <h3 className={`font-display text-2xl text-copper ${round.parent || round.fromClass ? "" : "mb-4"}`}>
-              📐{" "}
-              {round.fromClass
-                ? "Pet, already inherited"
-                : round.child
-                  ? `${round.child} blueprint`
-                  : "Pet blueprint"}
+            <h3 className={`font-display text-2xl text-copper ${round.parent ? "" : "mb-4"}`}>
+              📐 {round.child ? `${round.child} blueprint` : "Pet blueprint"}
             </h3>
-            {round.fromClass ? (
-              <p className="mt-1 mb-4 text-base text-ink-soft">
-                Dog and Cat already keep these. Fill in each child on the right.
-              </p>
-            ) : round.parent ? (
+            {round.parent ? (
               <p className="mt-1 mb-4 text-base text-ink-soft">
                 These locked properties already come from{" "}
                 <strong className="text-copper">{round.parent}</strong>. Leave them. Add only
@@ -466,14 +521,6 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                   </div>
                   <div className="min-w-0 flex-1">
                   {round.mode === "build" ? (
-                    round.fromClass ? (
-                      <ClassPetFields
-                        pet={pet}
-                        slot={round.requests[index]}
-                        editable={editable}
-                        onChange={(key, value) => editPet(index, key, value)}
-                      />
-                    ) : (
                     <div className="grid grid-cols-1 gap-2 min-[560px]:grid-cols-3">
                       {(["name", "species", "color"] as const).map((key) => (
                         <label key={key} className="grid min-w-0 gap-1 text-base text-ink-soft">
@@ -494,7 +541,6 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                         </label>
                       ))}
                     </div>
-                    )
                   ) : (
                     <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5">
                       {blueprint.map((id) => (
@@ -528,13 +574,13 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                 disabled={!editable || made.length >= round.requests.length}
                 onClick={makePet}
               >
-                {round.fromClass && round.requests[made.length]
-                  ? `Make a ${classNameFor(round.requests[made.length]).toLowerCase()}`
-                  : "Make a pet"}
+                Make a pet
               </Button>
             )}
           </section>
         </div>
+        </>
+        ) : null}
 
         <div ref={feedbackRef} aria-live="polite">
           {feedback && (

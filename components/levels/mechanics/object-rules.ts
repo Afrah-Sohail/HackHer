@@ -89,8 +89,16 @@ export type Round = {
     childAdds: string;
     sibling?: { name: string; adds: string };
   };
-  /** Build each pet from its child class. Species is already decided. */
-  fromClass?: boolean;
+  /**
+   * Both child classes, side by side. Pets already exist.
+   * A finished child already added its own property.
+   */
+  children?: readonly {
+    name: string;
+    adds: PropId;
+    done: boolean;
+    pets: readonly Pet[];
+  }[];
   /** Pets mission control asks for. */
   requests: readonly Pet[];
   /** Pets that already exist at the start of the round. */
@@ -166,25 +174,24 @@ export const ROUNDS: readonly Round[] = [
     lesson: "That's inheritance. Dog is a Pet, plus breed. The old properties come along for free.",
   },
   {
-    title: "Build from Dog and Cat",
-    story: "Cat is a Pet too, but it adds a coat instead of a breed.",
-    goal: "Make Bailey and Kiki from the Dog blueprint, and Mochi from the Cat blueprint. Species is already chosen for you.",
-    mode: "build",
-    fromClass: true,
-    who: "Pets",
+    title: "Two children of Pet",
+    story: "Dog and Cat are both child classes. The pets you already made stay as they are.",
+    goal: "Dog already added breed. Give Cat the one new thing only a cat has. Don't copy breed onto Cat.",
+    mode: "design",
+    parent: "Pet",
+    child: "Cat",
+    who: "Cats",
     baseProps: ["name", "species", "color"],
-    required: [],
-    palette: [],
-    chain: {
-      parent: "Pet",
-      parentProps: "name · species · color",
-      child: "Cat",
-      childAdds: "coat",
-      sibling: { name: "Dog", adds: "breed" },
-    },
-    requests: [BAILEY_HUSKY, KIKI_POODLE, MOCHI_TABBY],
+    required: ["name", "species", "color", "coat"],
+    palette: ["coat", "breed", "wheels", "wings"],
+    children: [
+      { name: "Dog", adds: "breed", done: true, pets: [BAILEY_HUSKY, KIKI_POODLE] },
+      { name: "Cat", adds: "coat", done: false, pets: [MOCHI_TABBY] },
+    ],
+    requests: [],
     objects: [],
-    lesson: "Bailey and Kiki are both built from Dog, and each one has a different breed. Mochi is built from Cat.",
+    lesson:
+      "Dog and Cat are both children of Pet. They keep the parent's properties, and each child adds its own.",
   },
 ];
 

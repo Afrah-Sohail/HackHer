@@ -96,6 +96,7 @@ function LevelShellInner({
       {canComplete && (
         <footer
           ref={footerRef}
+          data-fit-ignore=""
           className="flex flex-col items-center gap-3 border-t border-line bg-paper px-5 pt-4 pb-24 text-center sm:pb-5 [zoom:calc(1/var(--fit,1))] sm:px-8"
         >
           <p className="text-2xl text-ink">

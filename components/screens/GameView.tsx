@@ -25,30 +25,56 @@ export function GameView() {
     // goes down if a later round really needs it, so the game box stays the
     // same size as you play.
     let locked: number | null = null;
+    let fitting = false;
+
+    const apply = (zoom: number) => {
+      const text = zoom < 0.995 ? String(zoom) : "1";
+      if (el.style.zoom === text) return;
+      el.style.zoom = text;
+      // Lets parts of the page (like the Blast off footer) undo the shrink.
+      el.style.setProperty("--fit", text);
+      // Zoom shrinks pixel sizes too, so give the max width back what it lost.
+      el.style.maxWidth = zoom < 0.995 ? `${MAX_WIDTH / zoom}px` : `${MAX_WIDTH}px`;
+    };
 
     const fit = () => {
+      if (fitting) return;
+      fitting = true;
       const header = document.querySelector("header");
       const room = window.innerHeight - (header?.getBoundingClientRect().height ?? 0);
-      // Measure at full size, then pick the zoom (no paint in between).
-      el.style.zoom = "1";
-      el.style.maxWidth = `${MAX_WIDTH}px`;
-      // Sparkles' comment is left out of the measurement. Counting it would
-      // zoom the whole level out, and the puzzle boxes would shrink.
+      // Read the article, not the shell around it. The shell's height eases
+      // toward the content, and measuring that animation walks the zoom down
+      // so the puzzle boxes shrink while Sparkles appears.
+      const article = el.querySelector("article");
+      const shell = article?.parentElement ?? null;
+      const scope = article ?? el;
       let ignored = 0;
-      for (const node of el.querySelectorAll<HTMLElement>("[data-fit-ignore]")) {
+      for (const node of scope.querySelectorAll<HTMLElement>("[data-fit-ignore]")) {
         ignored += node.offsetHeight;
       }
-      const height = Math.max(0, el.offsetHeight - ignored);
+      const chrome = shell ? Math.max(0, el.offsetHeight - shell.offsetHeight) : 0;
+      const height = Math.max(1, scope.offsetHeight - ignored + chrome);
+      // Her comment is allowed to use the spare room, or scroll. It is not
+      // allowed to zoom the puzzle boxes down.
+      if (ignored > 0 && locked !== null) {
+        fitting = false;
+        return;
+      }
       const floor = window.innerWidth < 768 ? MIN_ZOOM_PHONE : MIN_ZOOM;
       const clamp = (value: number) => Math.min(1, Math.max(floor, value));
       // The first fit leaves room for the feedback bubble; after that the zoom
       // only drops if the content truly no longer fits.
-      locked = locked === null ? clamp(room / (height + RESERVE)) : Math.min(locked, clamp(room / height));
-      el.style.zoom = locked < 0.995 ? String(locked) : "1";
-      // Lets parts of the page (like the Blast off footer) undo the shrink.
-      el.style.setProperty("--fit", locked < 0.995 ? String(locked) : "1");
-      // Zoom shrinks pixel sizes too, so give the max width back what it lost.
-      if (locked < 0.995) el.style.maxWidth = `${MAX_WIDTH / locked}px`;
+      const needed =
+        locked === null ? clamp(room / (height + RESERVE)) : clamp(room / height);
+      const next = locked === null ? needed : Math.min(locked, needed);
+      // Sub-pixel jitter must not walk the zoom down when Sparkles appears.
+      if (locked !== null && next > locked - 0.01) {
+        fitting = false;
+        return;
+      }
+      locked = next;
+      apply(next);
+      fitting = false;
     };
 
     const refit = () => {

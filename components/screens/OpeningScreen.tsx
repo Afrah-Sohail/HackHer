@@ -94,10 +94,6 @@ export function OpeningScreen() {
         aria-label="Your rocket studies the Sun, then breaks down and heads for Mercury"
       >
         <defs>
-          {/* Mercury stays grey until you crash-land on it. */}
-          <filter id="open-gray">
-            <feColorMatrix type="saturate" values="0" />
-          </filter>
           <radialGradient id="sun-body" cx="40%" cy="38%" r="75%">
             <stop offset="0" stopColor="#fff7c2" />
             <stop offset="0.55" stopColor="#ffc93c" />
@@ -140,10 +136,7 @@ export function OpeningScreen() {
         )}
 
         <g transform={`translate(${MERCURY.x} ${MERCURY.y}) scale(${MERCURY.r / 46}) translate(-50 -50)`}>
-          <g
-            opacity={landed ? 1 : 0.4}
-            filter={landed ? undefined : "url(#open-gray)"}
-          >
+          <g opacity={landed ? 1 : 0.5}>
             <PlanetArt id="mercury" uid="-open" />
           </g>
         </g>

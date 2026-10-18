@@ -6,11 +6,9 @@ import { useGame } from "@/state/game-context";
 
 const MIN_ZOOM = 0.7;
 const MIN_ZOOM_PHONE = 0.85; // phones just scroll, so keep the text readable
-const MAX_WIDTH = 1400; // the game box never gets wider than this, on screen
-// Room kept in the zoom for what shows up later (Sparkles' message, a longer
-// pattern), so the zoom does not change while you play.
-const RESERVE = 140;
-const PADDING = 24; // the wrapper's top and bottom padding, in px
+const MAX_WIDTH = 1240; // the game box never gets wider than this, on screen (the sides show the planet)
+// The game box keeps its own room for what shows up later, so no extra here.
+const RESERVE = 0;
 
 // Shrinks the game just enough to fit on one screen, so nobody has to scroll
 // up and down while playing.
@@ -33,7 +31,6 @@ export function GameView() {
       // Measure at full size, then pick the zoom (no paint in between).
       el.style.zoom = "1";
       el.style.maxWidth = `${MAX_WIDTH}px`;
-      el.style.setProperty("--box-min", "0px");
       const height = el.offsetHeight;
       const floor = window.innerWidth < 768 ? MIN_ZOOM_PHONE : MIN_ZOOM;
       const clamp = (value: number) => Math.min(1, Math.max(floor, value));
@@ -45,9 +42,6 @@ export function GameView() {
       el.style.setProperty("--fit", locked < 0.995 ? String(locked) : "1");
       // Zoom shrinks pixel sizes too, so give the max width back what it lost.
       if (locked < 0.995) el.style.maxWidth = `${MAX_WIDTH / locked}px`;
-      // The game box always fills the screen, so it is the same size on every
-      // round (the extra room is just empty space inside it).
-      el.style.setProperty("--box-min", `${Math.max(0, room / locked - PADDING)}px`);
     };
 
     const refit = () => {

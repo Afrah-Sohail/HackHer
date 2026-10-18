@@ -38,11 +38,11 @@ export const LEVELS = [
     title: "Joan Clarke: The Bletchley Park Cipher Machine",
     heading: "The Bletchley Park Cipher Machine",
     pioneer: "Joan Clarke",
-    concept: "Logic Gates (AND / OR / NOT)",
+    concept: "Logic Gates (AND / OR / NOT / XOR)",
     narrative:
       "Joan Clarke was a cryptanalyst at Bletchley Park, where ciphers were broken by strict logical rules. This level is the board those rules will be built on.",
     blurb:
-      "Did you know a codebreaker helped crack Nazi messages at Bletchley Park? Joan Clarke used sharp **logic** to break Enigma ciphers. Computers still run on that kind of thinking: **AND, OR and NOT** gates that turn simple yes/no rules into big decisions. 🔐✨",
+      "Did you know a codebreaker helped crack Nazi messages at Bletchley Park? Joan Clarke used sharp **logic** to break Enigma ciphers. Computers still run on that kind of thinking: **AND, OR, NOT and XOR** gates that turn simple yes/no rules into big decisions. 🔐✨",
     mechanicId: "logic-grid",
     mechanicLabel: "Cipher board",
   },

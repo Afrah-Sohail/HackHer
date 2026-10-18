@@ -66,9 +66,9 @@ export const JOURNEY: readonly PlanetStory[] = [
       { speaker: "you", text: "Yikes, the ignition lock is all scrambled. I tried the code '1234' and it laughed at me." },
       {
         speaker: "woman",
-        text: "Welcome to Mars! I'm Joan Clarke. A scrambled lock is a puzzle I enjoy. We cracked secret codes with careful logic: AND, OR and NOT. Let's wire up the gates and see what opens it.",
+        text: "Welcome to Mars! I'm Joan Clarke. A scrambled lock is a puzzle I enjoy. We cracked secret codes with careful logic, using gates like AND, OR, NOT and XOR. You can even add a NOT to a gate to flip its answer. Let's wire them up and see what opens it.",
       },
-      { speaker: "sparkles", text: "AND, OR, NOT... that's exactly how I pick between snacks! Logic time, let's gooo!" },
+      { speaker: "sparkles", text: "AND, OR, NOT, XOR... that's exactly how I pick between snacks! Logic time, let's gooo!" },
     ],
     fixed: "Click! The ignition lock opens.",
     breakdown: "A thruster flies off and the rocket spins!",

@@ -18,6 +18,7 @@ import {
   designCheck,
   greeting,
   petText,
+  samePet,
   speak,
   type MethodId,
   type Pet,
@@ -30,22 +31,73 @@ const EMPTY_PET: Pet = { name: "", species: "", color: "" };
 
 // A built pet "is right" when it matches one of the pets mission asked for.
 function matchesRequest(round: { requests: readonly Pet[] }, pet: Pet): boolean {
-  return round.requests.some(
-    (request) =>
-      request.name === pet.name &&
-      request.species === pet.species &&
-      request.color === pet.color,
-  );
+  return round.requests.some((request) => samePet(pet, request));
 }
 
 function valueOf(pet: Pet, id: PropId): string {
   if (id === "name" || id === "species" || id === "color") return pet[id] || "—";
   if (id === "breed") return pet.breed || "—";
+  if (id === "coat") return pet.coat || "—";
   return PROPS[id].fixed ?? "—";
+}
+
+function classNameFor(pet: Pet): "Dog" | "Cat" {
+  return pet.species === "dog" ? "Dog" : "Cat";
+}
+
+function extraKey(pet: Pet): "breed" | "coat" {
+  return pet.breed !== undefined ? "breed" : "coat";
 }
 
 function methodLine(method: MethodId | undefined, pet: Pet): string {
   return method === "speak" ? speak(pet) : greeting(pet);
+}
+
+function ClassPetFields({
+  pet,
+  slot,
+  editable,
+  onChange,
+}: {
+  pet: Pet;
+  slot: Pet | undefined;
+  editable: boolean;
+  onChange: (key: keyof Pet, value: string) => void;
+}) {
+  const blueprint = slot ? classNameFor(slot) : classNameFor(pet);
+  const extra = slot ? extraKey(slot) : extraKey(pet);
+  return (
+    <div className="grid gap-2">
+      <p className="text-base text-copper">
+        {blueprint} blueprint
+        <span className="text-ink-soft"> · inherits Pet</span>
+      </p>
+      <p className="text-base text-ink-soft">
+        species <strong className="text-ink">{pet.species}</strong>
+        <span> · from {blueprint}</span>
+      </p>
+      <div className="grid grid-cols-1 gap-2 min-[560px]:grid-cols-3">
+        {(["name", "color", extra] as const).map((key) => (
+          <label key={key} className="grid min-w-0 gap-1 text-base text-ink-soft">
+            <span className="sr-only">{PROPS[key].label}</span>
+            <select
+              value={pet[key] ?? ""}
+              disabled={!editable}
+              onChange={(event) => onChange(key, event.target.value)}
+              className="w-full min-w-0 rounded-xl border border-line bg-void px-2 py-2 text-lg text-ink"
+            >
+              <option value="">{PROPS[key].label}…</option>
+              {PROPS[key].options?.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
@@ -84,6 +136,20 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
   function makePet() {
     if (!editable || made.length >= round.requests.length) return;
     touch();
+    const request = round.requests[made.length];
+    if (round.fromClass && request) {
+      setMade((prev) => [
+        ...prev,
+        {
+          name: "",
+          species: request.species,
+          color: "",
+          ...(request.breed !== undefined ? { breed: "" } : {}),
+          ...(request.coat !== undefined ? { coat: "" } : {}),
+        },
+      ]);
+      return;
+    }
     setMade((prev) => [...prev, { ...EMPTY_PET }]);
   }
 
@@ -110,7 +176,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
     if (round.mode === "design") {
       const result = designCheck(round, blueprint);
       if (result.ok) win(round.lesson);
-      else fail(describeDesign(result.missing, result.extra));
+      else fail(describeDesign(result.missing, result.extra, round.who));
       return;
     }
 
@@ -193,6 +259,33 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
           <p className="font-display text-2xl text-ink sm:text-3xl">{round.goal}</p>
         </div>
 
+        {round.chain ? (
+          <div className="grid gap-3 rounded-3xl border border-line bg-void p-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
+            <div>
+              <p className="text-sm tracking-wide text-ink-soft uppercase">Parent class</p>
+              <p className="font-display text-2xl text-ink">{round.chain.parent}</p>
+              <p className="text-lg text-ink-soft">{round.chain.parentProps}</p>
+              <p className="mt-1 text-base text-ink-soft">Every child keeps these.</p>
+            </div>
+            <p className="text-center text-lg text-copper">passes these down</p>
+            <div>
+              <p className="text-sm tracking-wide text-copper uppercase">Child class</p>
+              <p className="font-display text-2xl text-copper">{round.chain.child}</p>
+              <p className="text-lg text-ink-soft">
+                keeps all of {round.chain.parent}, and adds {round.chain.childAdds}
+              </p>
+              {round.chain.sibling ? (
+                <p className="mt-1 text-base text-ink-soft">
+                  {round.chain.sibling.name} already added {round.chain.sibling.adds}.{" "}
+                  {round.chain.child} does not get that.
+                </p>
+              ) : (
+                <p className="mt-1 text-base text-ink-soft">Nothing else gets copied in.</p>
+              )}
+            </div>
+          </div>
+        ) : null}
+
         <div className="rounded-3xl border border-line bg-void p-4 sm:p-5">
           <p className="mb-3 text-sm tracking-wide text-ink-soft uppercase">
             Wanted
@@ -208,25 +301,38 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
               ))}
             </ul>
           ) : (
-            <p className="text-xl text-ink">
-              🩺 Every pet must show{" "}
-              <strong className="text-copper">vaccinated: yes</strong>
-            </p>
+            <p className="text-xl text-ink">Follow the blueprint below.</p>
           )}
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 md:items-start">
           <section
-            aria-label={round.child ? `${round.child} blueprint` : "Pet blueprint"}
+            aria-label={
+              round.fromClass
+                ? "Pet, already inherited"
+                : round.child
+                  ? `${round.child} blueprint`
+                  : "Pet blueprint"
+            }
             className="shrink-0 rounded-2xl border-2 border-dashed border-copper/60 bg-paper p-4"
           >
-            <h3 className={`font-display text-2xl text-copper ${round.parent ? "" : "mb-4"}`}>
-              📐 {round.child ? `${round.child} blueprint` : "Pet blueprint"}
+            <h3 className={`font-display text-2xl text-copper ${round.parent || round.fromClass ? "" : "mb-4"}`}>
+              📐{" "}
+              {round.fromClass
+                ? "Pet, already inherited"
+                : round.child
+                  ? `${round.child} blueprint`
+                  : "Pet blueprint"}
             </h3>
-            {round.parent ? (
+            {round.fromClass ? (
               <p className="mt-1 mb-4 text-base text-ink-soft">
-                Inherits <strong className="text-copper">{round.parent}</strong>. The locked
-                properties come from {round.parent}.
+                Dog and Cat already keep these. Fill in each child on the right.
+              </p>
+            ) : round.parent ? (
+              <p className="mt-1 mb-4 text-base text-ink-soft">
+                These locked properties already come from{" "}
+                <strong className="text-copper">{round.parent}</strong>. Leave them. Add only
+                what is new.
               </p>
             ) : null}
 
@@ -242,6 +348,9 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                   return (
                     <Tag key={id} size="md" className="py-2 text-xl">
                       {PROPS[id].label}
+                      {round.parent ? (
+                        <span className="text-ink-soft"> · from {round.parent}</span>
+                      ) : null}
                     </Tag>
                   );
                 }
@@ -357,6 +466,14 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                   </div>
                   <div className="min-w-0 flex-1">
                   {round.mode === "build" ? (
+                    round.fromClass ? (
+                      <ClassPetFields
+                        pet={pet}
+                        slot={round.requests[index]}
+                        editable={editable}
+                        onChange={(key, value) => editPet(index, key, value)}
+                      />
+                    ) : (
                     <div className="grid grid-cols-1 gap-2 min-[560px]:grid-cols-3">
                       {(["name", "species", "color"] as const).map((key) => (
                         <label key={key} className="grid min-w-0 gap-1 text-base text-ink-soft">
@@ -377,6 +494,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                         </label>
                       ))}
                     </div>
+                    )
                   ) : (
                     <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5">
                       {blueprint.map((id) => (
@@ -384,7 +502,7 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
                           <dt className="text-base text-ink-soft">{PROPS[id].label}</dt>
                           <dd
                             className={
-                              id === "vaccinated" ? "font-medium text-signal" : "text-ink"
+                              round.baseProps.includes(id) ? "text-ink" : "font-medium text-signal"
                             }
                           >
                             {valueOf(pet, id)}
@@ -403,14 +521,16 @@ export function BlueprintMechanic({ onCleared }: { onCleared?: () => void }) {
               ))}
             </ul>
 
-            {round.mode === "build" && (
+            {round.mode === "build" && made.length < round.requests.length && (
               <Button
                 variant="secondary"
                 className="mt-4 px-6 py-3 text-lg"
                 disabled={!editable || made.length >= round.requests.length}
                 onClick={makePet}
               >
-                Make a pet
+                {round.fromClass && round.requests[made.length]
+                  ? `Make a ${classNameFor(round.requests[made.length]).toLowerCase()}`
+                  : "Make a pet"}
               </Button>
             )}
           </section>

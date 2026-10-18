@@ -68,27 +68,34 @@ const STEPS: Step[] = [
     visual: <BlueprintDemo />,
   },
   {
-    title: "Methods and inheritance",
+    title: "Inheritance",
     body: (
       <>
-        A <strong>method</strong> is a message every object of the class
-        understands. A new class can <strong>inherit</strong> a blueprint and
-        add its own properties. Dog is a Pet, plus a breed.
+        A new class can <strong>inherit</strong> an old one.{" "}
+        <strong>Dog</strong> and <strong>Cat</strong> are both Pets, so they
+        keep name, species, and color. Dog adds breed. Cat adds coat. You
+        don&apos;t copy the old properties.
       </>
     ),
     visual: (
-      <p className="text-center text-2xl text-ink" aria-hidden="true">
-        Pet → Dog
-        <span className="mt-1 block text-base text-ink-soft">name · species · color · breed</span>
-      </p>
+      <div className="grid gap-2 text-center text-ink" aria-hidden="true">
+        <p className="text-2xl">Pet</p>
+        <p className="text-base text-ink-soft">name · species · color</p>
+        <p className="text-copper">↓ inherits</p>
+        <p className="text-xl">
+          Dog <span className="text-ink-soft">+ breed</span>
+          <span className="px-3 text-ink-soft">·</span>
+          Cat <span className="text-ink-soft">+ coat</span>
+        </p>
+      </div>
     ),
   },
   {
     title: "How to play",
     body: (
       <>
-        Follow the goal, then press <strong>Check</strong>. Some properties
-        are traps. A class only keeps what every object needs.
+        Follow the goal, then press <strong>Check</strong>. Leave off wheels
+        and wings. Locked properties already come from the parent class.
       </>
     ),
     visual: (

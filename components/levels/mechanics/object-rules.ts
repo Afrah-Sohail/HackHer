@@ -3,8 +3,7 @@ export type PropId =
   | "species"
   | "color"
   | "breed"
-  | "vaccinated"
-  | "nickname"
+  | "coat"
   | "wheels"
   | "wings";
 
@@ -15,9 +14,8 @@ export const PROPS: Record<
   name: { label: "name", options: ["Mochi", "Bailey", "Nova", "Kiki"] },
   species: { label: "species", options: ["cat", "dog", "bunny"] },
   color: { label: "color", options: ["orange", "brown", "black", "white"] },
-  breed: { label: "breed" },
-  vaccinated: { label: "vaccinated", fixed: "yes" },
-  nickname: { label: "nickname" },
+  breed: { label: "breed", options: ["husky", "poodle", "mutt"] },
+  coat: { label: "coat", options: ["tabby", "solid", "spotted"] },
   wheels: { label: "wheels", fixed: "0" },
   wings: { label: "wings", fixed: "no" },
 };
@@ -31,10 +29,26 @@ export const METHODS: Record<MethodId, { label: string; description: string }> =
   recharge: { label: "recharge", description: "Charge its battery" },
 };
 
-export type Pet = { name: string; species: string; color: string; breed?: string };
+export type Pet = {
+  name: string;
+  species: string;
+  color: string;
+  breed?: string;
+  coat?: string;
+};
 
 export function petText(pet: Pet): string {
-  return [pet.name, pet.species, pet.color, pet.breed].filter(Boolean).join(" · ");
+  return [pet.name, pet.species, pet.color, pet.breed, pet.coat].filter(Boolean).join(" · ");
+}
+
+export function samePet(pet: Pet, request: Pet): boolean {
+  return (
+    pet.name === request.name &&
+    pet.species === request.species &&
+    pet.color === request.color &&
+    (request.breed === undefined || pet.breed === request.breed) &&
+    (request.coat === undefined || pet.coat === request.coat)
+  );
 }
 
 export function greeting(pet: Pet): string {
@@ -65,6 +79,18 @@ export type Round = {
   child?: string;
   /** Method rounds: the one method the class should answer. */
   method?: MethodId;
+  /** Who the feedback is about, so the hint can say "Dogs" or "Cats". */
+  who?: string;
+  /** Shown above the puzzle so a child class is easy to see. */
+  chain?: {
+    parent: string;
+    parentProps: string;
+    child: string;
+    childAdds: string;
+    sibling?: { name: string; adds: string };
+  };
+  /** Build each pet from its child class. Species is already decided. */
+  fromClass?: boolean;
   /** Pets mission control asks for. */
   requests: readonly Pet[];
   /** Pets that already exist at the start of the round. */
@@ -74,10 +100,10 @@ export type Round = {
 
 const MOCHI: Pet = { name: "Mochi", species: "cat", color: "orange" };
 const BAILEY: Pet = { name: "Bailey", species: "dog", color: "brown" };
-const NOVA: Pet = { name: "Nova", species: "bunny", color: "black" };
 const KIKI: Pet = { name: "Kiki", species: "dog", color: "white" };
 const BAILEY_HUSKY: Pet = { ...BAILEY, breed: "husky" };
 const KIKI_POODLE: Pet = { ...KIKI, breed: "poodle" };
+const MOCHI_TABBY: Pet = { ...MOCHI, coat: "tabby" };
 
 export const ROUNDS: readonly Round[] = [
   {
@@ -87,7 +113,8 @@ export const ROUNDS: readonly Round[] = [
     mode: "design",
     baseProps: [],
     required: ["name", "species", "color"],
-    palette: ["name", "species", "color", "nickname", "wheels", "wings"],
+    palette: ["name", "species", "color", "wheels", "wings"],
+    who: "Pets",
     requests: [MOCHI, BAILEY, KIKI],
     objects: [],
     lesson: "A class lists the properties every object gets. Not every idea belongs on it.",
@@ -118,30 +145,46 @@ export const ROUNDS: readonly Round[] = [
     lesson: "speak() is one method. Each object answers in its own way. That's polymorphism.",
   },
   {
-    title: "Dogs inherit from Pet",
-    story: "A subclass starts from a class it already has.",
-    goal: "Dog keeps every Pet property. Add the one thing only dogs need.",
+    title: "Dog is a kind of Pet",
+    story: "A child class starts from a class that already exists.",
+    goal: "Dog keeps name, species, and color from Pet. Don't copy them. Add the one new thing only a dog has.",
     mode: "design",
     parent: "Pet",
     child: "Dog",
+    who: "Dogs",
     baseProps: ["name", "species", "color"],
     required: ["name", "species", "color", "breed"],
-    palette: ["breed", "nickname", "wheels", "wings"],
+    palette: ["breed", "wheels", "wings"],
+    chain: {
+      parent: "Pet",
+      parentProps: "name · species · color",
+      child: "Dog",
+      childAdds: "breed",
+    },
     requests: [BAILEY_HUSKY, KIKI_POODLE],
     objects: [BAILEY_HUSKY, KIKI_POODLE],
-    lesson: "Inheritance: Dog is a kind of Pet. It keeps the old properties and adds breed.",
+    lesson: "That's inheritance. Dog is a Pet, plus breed. The old properties come along for free.",
   },
   {
-    title: "One change, every pet",
-    story: "Vet rule: every pet must show vaccinated.",
-    goal: "Update the class once so every object gets the new property.",
-    mode: "design",
+    title: "Build from Dog and Cat",
+    story: "Cat is a Pet too, but it adds a coat instead of a breed.",
+    goal: "Make Bailey from the Dog blueprint and Mochi from the Cat blueprint. Species is already chosen for you.",
+    mode: "build",
+    fromClass: true,
+    who: "Pets",
     baseProps: ["name", "species", "color"],
-    required: ["name", "species", "color", "vaccinated"],
-    palette: ["vaccinated", "nickname", "wheels", "wings"],
-    requests: [],
-    objects: [MOCHI, BAILEY, NOVA, KIKI],
-    lesson: "Change the class once, and every object made from it gets the update.",
+    required: [],
+    palette: [],
+    chain: {
+      parent: "Pet",
+      parentProps: "name · species · color",
+      child: "Cat",
+      childAdds: "coat",
+      sibling: { name: "Dog", adds: "breed" },
+    },
+    requests: [BAILEY_HUSKY, MOCHI_TABBY],
+    objects: [],
+    lesson: "Dog and Cat both inherit Pet. Each child adds one new thing, then you build a real pet from that child.",
   },
 ];
 
@@ -161,14 +204,18 @@ function quoteList(labels: readonly string[]): string {
 }
 
 /** Say everything that is off, not just the first thing. */
-export function describeDesign(missing: readonly PropId[], extra: readonly PropId[]): string {
+export function describeDesign(
+  missing: readonly PropId[],
+  extra: readonly PropId[],
+  who = "Pets",
+): string {
   const parts: string[] = [];
   if (missing.length > 0) {
-    parts.push(`Pets will need ${quoteList(missing.map((id) => PROPS[id].label))} too!`);
+    parts.push(`${who} will need ${quoteList(missing.map((id) => PROPS[id].label))} too!`);
   }
   if (extra.length > 0) {
     parts.push(
-      `Pets don't need ${quoteList(extra.map((id) => PROPS[id].label))}, so let's take ${extra.length === 1 ? "it" : "them"} out.`,
+      `${who} don't need ${quoteList(extra.map((id) => PROPS[id].label))}, so let's take ${extra.length === 1 ? "it" : "them"} out.`,
     );
   }
   return parts.join(" ");
@@ -185,12 +232,7 @@ export function buildCheck(
   const pool = [...objects];
   const unmatched: Pet[] = [];
   for (const request of round.requests) {
-    const index = pool.findIndex(
-      (pet) =>
-        pet.name === request.name &&
-        pet.species === request.species &&
-        pet.color === request.color,
-    );
+    const index = pool.findIndex((pet) => samePet(pet, request));
     if (index === -1) unmatched.push(request);
     else pool.splice(index, 1);
   }

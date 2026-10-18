@@ -85,7 +85,7 @@ export const LEVELS = [
     pioneer: "Adele Goldberg",
     concept: "Classes, Objects & Inheritance",
     narrative:
-      "Adele Goldberg helped shape Smalltalk, where a class is a blueprint, an object is a living instance, and a new class can inherit that blueprint.",
+      "Adele Goldberg helped shape Smalltalk, where a class is a blueprint and an object is a living instance. A child class inherits that blueprint: Dog and Cat are both Pets, and each adds something of its own.",
     blurb:
       "Did you know Adele Goldberg helped create **Smalltalk**, one of the first **object-oriented** languages? In it, a **class** is a blueprint and an **object** is a living copy built from it. A new class can **inherit** that blueprint, and objects answer **messages** called methods. Her team's ideas also shaped the windows and icons on your screen. 💻✨",
     mechanicId: "blueprint",

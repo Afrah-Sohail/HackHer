@@ -168,7 +168,7 @@ export const ROUNDS: readonly Round[] = [
   {
     title: "Build from Dog and Cat",
     story: "Cat is a Pet too, but it adds a coat instead of a breed.",
-    goal: "Make Bailey from the Dog blueprint and Mochi from the Cat blueprint. Species is already chosen for you.",
+    goal: "Make Bailey and Kiki from the Dog blueprint, and Mochi from the Cat blueprint. Species is already chosen for you.",
     mode: "build",
     fromClass: true,
     who: "Pets",
@@ -182,9 +182,9 @@ export const ROUNDS: readonly Round[] = [
       childAdds: "coat",
       sibling: { name: "Dog", adds: "breed" },
     },
-    requests: [BAILEY_HUSKY, MOCHI_TABBY],
+    requests: [BAILEY_HUSKY, KIKI_POODLE, MOCHI_TABBY],
     objects: [],
-    lesson: "Dog and Cat both inherit Pet. Each child adds one new thing, then you build a real pet from that child.",
+    lesson: "Bailey and Kiki are both built from Dog, and each one has a different breed. Mochi is built from Cat.",
   },
 ];
 
